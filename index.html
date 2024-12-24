@@ -86,6 +86,7 @@
         #mainsection{
             background-color: var(--blue);
             width: 95%;
+            max-width: 1000px;
             border-radius: 20px;
             height: fit-content;
             padding: 20px;
@@ -95,6 +96,20 @@
             justify-content: center;
             display: flex;
             flex-direction: column;
+        }
+        #images{
+            margin-top: 20px;
+            height: fit-content;
+            width: 100%;
+            border: solid 1px black;
+            justify-content: left;
+            display: flex;
+        }
+        .image{
+            height: 200px;
+            width: 25%;
+            border: solid 1px black;
+            padding: 10px;
         }
         footer{
             background-color: var(--black);
@@ -124,15 +139,25 @@
     <main>
     <section id="mainsection">
 
-            <p>Hello There</p>
-            <p> Description</p>
+        <p>Hello There</p>
+        <br>
+        <p> Pocket of Stuff is my little website where I put all my projects, interests, crazy ideas, and wacky thoughts in one place. Try out some games, read about nerdy things. So, have fun and make stuff.</p>
+
+        <section id="images">
+
+            <img class="image">
+            <img class="image">
+            <img class="image">
+            <img class="image">
+
+        </section>
 
 
     </section>
     </main>
     <footer>
 
-        <p> Thanks for looking at my pocket of stuff. Did you enjoy my projects, I hope so. Have fun, make stuff.</p>
+        <p> Thanks for looking at my pocket of stuff. Did you enjoy my projects, I hope so. Have fun and make stuff.</p>
 
     </footer>
     
