@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Pocket Of Stuff</title>
+
+    <link rel="icon" href="images/icon.png">
+
+    <style>
+        
+        *{
+            margin: 0px;
+            --white: #F7F7F8ff;
+            --orange: #f58d6dff;
+            --blue: #6c8eadff;
+            --black: #333333ff;
+        }
+        html{
+            background-color: var(--black);
+            display: table;
+            margin: auto;
+        }
+        ::selection{
+            background-color: var(--orange);
+            color: var(--blue);
+            border-radius: 200px;
+        }
+        body{
+            background-color: var(--black);
+            color: var(--orange);
+            font-family: Sora;
+            display: table-cell;
+        }
+        header {
+            background-color: var(--black);
+            padding: 20px;
+            height: fit-content;
+            text-align: center;
+        }
+        header p {
+            font-size: 50px;
+            font-weight: 900;
+            margin: 0;
+        }
+        nav {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+        nav a {
+            margin: 10px;
+            font-size: 35px;
+            border: solid 5px #f58d6d00;
+            transition: 0.5s;
+            transition-timing-function: ease-in;
+            padding: 10px;
+            display: inline-block;
+        }
+        nav a:hover {
+            margin: 10px;
+            font-weight: 700;
+            transition: 0.5s;
+            transition-timing-function: ease-out;
+            border: solid 5px #f58d6dff;
+            padding: 10px;
+            border-radius: 200px;
+        }
+        nav a:active{
+            background-color: var(--orange);
+            color: var(--blue);
+            transition: 0s;
+        }
+        main{
+            background-color: var(--black);
+            color: var(--white);
+            height: min-content;
+            align-self: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #mainsection{
+            background-color: var(--blue);
+            width: 95%;
+            border-radius: 20px;
+            height: fit-content;
+            padding: 20px;
+            margin: 20px;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
+        }
+        footer{
+            background-color: var(--black);
+            padding-left: 100px;
+            padding-right: 100px;
+            height: 70px;
+            text-align: center;
+        }
+    </style>
+
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <header> 
+
+        <p> Pocket Of Stuff</p>
+
+        <nav>
+            <a class="nav">Home</a>
+            <a class="nav">Stuff</a>
+            <a class="nav">Blog</a>
+        </nav>
+
+    </header>
+    <main>
+    <section id="mainsection">
+
+            <p>Hello There</p>
+            <p> Description</p>
+
+
+    </section>
+    </main>
+    <footer>
+
+        <p> Thanks for looking at my pocket of stuff. Did you enjoy my projects, I hope so. Have fun, make stuff.</p>
+
+    </footer>
+    
+</body>
+</html>
