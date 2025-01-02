@@ -116,31 +116,28 @@
             text-align: center;
         }
 
-        @media all and (max-width: 800px) {
-        }
-        @media all and (max-width: 500px) {
-        }
-        @media all and (max-width: 500px) {
-        }
-        .p-c {
-            width: 17em;
-        }
-        .project-card{
-            width: 17em;
-        }
-        .welcome{
-            height: 50vh;
-        }
-        .nav-item{
-            width: 100%;
-        }
-        .about-overflow{
-            padding-right: 10px;
-            padding-left: 5px;
-            flex-flow: column nowrap;
-            align-content: center;
-            align-items: center;
-            justify-items: space-around;
+        @media (max-width: 1000px) {
+            header p {
+                font-size: 200px;
+                margin: 50px;
+            }
+            nav{
+                flex-direction: column;
+            }
+            nav a {
+                font-size: 100px;
+            }
+            #mainsection {
+                width: 100%;
+                padding: 50px;
+                margin: 30px;
+                font-size: 40px;
+            }
+            footer {
+                padding-left: 20px;
+                padding-right: 20px;
+                font-size: 40px;
+            }
         }
     </style>
 

@@ -1,35 +1,21 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8" name="description" content="Pocket of Stuff is my little website where I put all my projects, interests, crazy ideas, and wacky thoughts in one place.">
-
     <title>Pocket Of Stuff</title>
-
     <link rel="icon" href="images/icon.png">
-
     <style>
-        
-        *{
-            margin: 0px;
-            --white: #F7F7F8ff;
-            --orange: #f58d6dff;
-            --blue: #6c8eadff;
-            --black: #333333ff;
-        }
-        html{
+        html {
             background-color: var(--black);
             display: table;
             margin: auto;
         }
-        ::selection{
+        ::selection {
             background-color: var(--orange);
             color: var(--blue);
             border-radius: 200px;
         }
-        body{
+        body {
             background-color: var(--black);
             color: var(--orange);
             font-family: Sora;
@@ -47,8 +33,10 @@
             margin: 0;
         }
         nav {
-            display: block;
-            text-align: center;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
             margin-top: 20px;
         }
         nav a {
@@ -70,12 +58,12 @@
             padding: 10px;
             border-radius: 20px;
         }
-        nav a:active{
+        nav a:active {
             background-color: var(--orange);
             color: var(--blue);
             transition: 0s;
         }
-        main{
+        main {
             background-color: var(--black);
             color: var(--white);
             height: min-content;
@@ -84,7 +72,7 @@
             justify-content: center;
             align-items: center;
         }
-        #mainsection{
+        #mainsection {
             background-color: var(--blue);
             width: 95%;
             max-width: 1000px;
@@ -98,7 +86,7 @@
             display: flex;
             flex-direction: column;
         }
-        footer{
+        footer {
             background-color: var(--black);
             padding-left: 100px;
             padding-right: 100px;
@@ -106,65 +94,60 @@
             text-align: center;
         }
 
-        @media all and (max-width: 800px) {
+        * {
+            margin: 0px;
+            --white: #F7F7F8ff;
+            --orange: #f58d6dff;
+            --blue: #6c8eadff;
+            --black: #333333ff;
         }
-        @media all and (max-width: 500px) {
-        }
-        @media all and (max-width: 500px) {
-        }
-        .p-c {
-            width: 17em;
-        }
-        .project-card{
-            width: 17em;
-        }
-        .welcome{
-            height: 50vh;
-        }
-        .nav-item{
-            width: 100%;
-        }
-        .about-overflow{
-            padding-right: 10px;
-            padding-left: 5px;
-            flex-flow: column nowrap;
-            align-content: center;
-            align-items: center;
-            justify-items: space-around;
+
+        /* Breakpoints */
+
+        @media (max-width: 1000px) {
+            header p {
+                font-size: 200px;
+                margin: 50px;
+            }
+            nav{
+                flex-direction: column;
+            }
+            nav a {
+                font-size: 100px;
+            }
+            #mainsection {
+                width: 100%;
+                padding: 50px;
+                margin: 30px;
+                font-size: 40px;
+            }
+            footer {
+                padding-left: 20px;
+                padding-right: 20px;
+                font-size: 40px;
+            }
         }
     </style>
-
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
-
 </head>
 <body>
-
     <header> 
-
-        <p> Pocket Of Stuff</p>
-
+        <p>Pocket Of Stuff</p>
         <nav>
             <a class="nav">Home</a>
             <a class="nav">Stuff</a>
             <a class="nav">Blog</a>
         </nav>
-
     </header>
     <main>
-    <section id="mainsection">
-
+        <section id="mainsection">
             <p>Hello There</p>
             <br>
-            <p> Description</p>
-
-
-    </section>
+            <p>Description</p>
+        </section>
     </main>
     <footer>
-
-        <p> Thanks for looking at my pocket of stuff. Did you enjoy my projects, I hope so. Have fun, make stuff.</p>
-
+        <p>Thanks for looking at my pocket of stuff. Did you enjoy my projects, I hope so. Have fun, make stuff.</p>
     </footer>
-    
 </body>
 </html>
