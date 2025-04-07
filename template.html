@@ -1,153 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" name="description" content="Pocket of Stuff is my little website where I put all my projects, interests, crazy ideas, and wacky thoughts in one place.">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pocket Of Stuff</title>
-    <link rel="icon" href="images/icon.png">
+
+    <link rel="stylesheet" href="https://use.typekit.net/mmu3wvl.css">
+    <link rel="icon" type="image/x-icon" href="images/icon.png">
+
     <style>
-        html {
-            background-color: var(--black);
-            display: table;
-            margin: auto;
+
+        #bar{
+            width: 40px;
+            height: 100vh;
+            position: fixed;
+            left: 0px;
+            background-color: red;
         }
-        ::selection {
-            background-color: var(--orange);
-            color: var(--blue);
-            border-radius: 200px;
+        #overlay{
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100vh;
+            background: url(images/overlay.jpg);
+            filter: brightness(30%);
+            opacity: 35%;
+            mix-blend-mode: screen;
+            z-index: 50;
+            pointer-events: none;
         }
-        body {
-            background-color: var(--black);
-            color: var(--orange);
-            font-family: Sora;
-            display: table-cell;
+
+        *{
+            margin: 0px;
+            font-family: "futura-pt", sans-serif;
         }
-        header {
-            background-color: var(--black);
-            padding: 20px;
-            height: fit-content;
-            text-align: center;
+        body{
+            background-color: #FAF0EB;
+            padding-left: 50px;
         }
-        header p {
-            font-size: 50px;
-            font-weight: 900;
-            margin: 0;
-        }
-        nav {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
+        header{
+            height: 100px;
             align-items: center;
-            margin-top: 20px;
-        }
-        nav a {
-            margin: 10px;
-            font-size: 35px;
-            border: solid 5px #f58d6d00;
-            transition: 0.5s;
-            transition-timing-function: ease-in;
-            padding: 10px;
-            display: inline-block;
-            cursor: pointer;
-        }
-        nav a:hover {
-            margin: 10px;
-            font-weight: 700;
-            transition: 0.2s;
-            transition-timing-function: ease-out;
-            border: solid 5px #f58d6dff;
-            padding: 10px;
-            border-radius: 20px;
-        }
-        nav a:active {
-            background-color: var(--orange);
-            color: var(--blue);
-            transition: 0s;
-        }
-        main {
-            background-color: var(--black);
-            color: var(--white);
-            height: min-content;
+            justify-content: center;
             align-self: center;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            border-bottom: solid 10px black;
+            color: black;
+            display: flex;
+            width: 90%;
         }
-        #mainsection {
-            background-color: var(--blue);
-            width: 95%;
-            max-width: 1000px;
-            border-radius: 20px;
-            height: fit-content;
-            padding: 20px;
-            margin: 20px;
+        nav{
+            display: flex;
             align-items: center;
-            text-align: center;
+            justify-content: center;
+            width: 65%;
+            gap: 5%;
+            height: 100%;
+        }
+        a{
+            height: 100%;
+            align-items: center;
             justify-content: center;
             display: flex;
-            flex-direction: column;
+            box-shadow: inset 0px 0px 0px 0 black;
+            transition: 0.3s;
+            width: 150px;
+            color: black;
+            text-decoration: none;
         }
-        footer {
-            background-color: var(--black);
-            padding-left: 100px;
-            padding-right: 100px;
-            height: 70px;
-            text-align: center;
-        }
-
-        * {
-            margin: 0px;
-            --white: #F7F7F8ff;
-            --orange: #f58d6dff;
-            --blue: #6c8eadff;
-            --black: #333333ff;
+        a:hover{
+            box-shadow: inset 0px -100px 0px 0 black;
+            transition: 0.5s;
+            color: #FAF0EB;
         }
 
-        /* Breakpoints */
 
-        @media (max-width: 1000px) {
-            header p {
-                font-size: 200px;
-                margin: 50px;
-            }
-            nav{
-                flex-direction: column;
-            }
-            nav a {
-                font-size: 100px;
-            }
-            #mainsection {
-                width: 100%;
-                padding: 50px;
-                margin: 30px;
-                font-size: 40px;
-            }
-            footer {
-                padding-left: 20px;
-                padding-right: 20px;
-                font-size: 40px;
-            }
+
+
+        strong{
+            color: red;
         }
+        h1{
+            font-size: 50px;
+        }
+        h2{
+            font-size: 35px;
+        }
+        h3{
+            font-size: 25px;
+        }
+
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+
 </head>
 <body>
-    <header> 
-        <p>Pocket of Stuff</p>
+
+    <sec id="bar"></sec>
+    <sec id="overlay"></sec>
+
+    <header>
+        <h1 width="35%"><strong>P</strong>ocket of <strong>S</strong>tuff</h1>
+
         <nav>
-            <a class="nav">Home</a>
-            <a class="nav">Stuff</a>
-            <a class="nav">Blog</a>
+            <a href="#"><h3>Home</h3></a>
+            <a href="#"><h3>Projects</h3></a>
+            <a href="#"><h3>Ideas</h3></a>
+            <a href="#"><h3>Contact</h3></a>
         </nav>
+
     </header>
-    <main>
-        <section id="mainsection">
-            <p>Hello There</p>
-            <br>
-            <p>Description</p>
-        </section>
-    </main>
+
     <footer>
-        <p>Thanks for looking at my pocket of stuff. Did you enjoy my projects, I hope so. Have fun, make stuff.</p>
+        
     </footer>
+
 </body>
 </html>
