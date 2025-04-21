@@ -7,7 +7,7 @@
     <meta http-equiv='cache-control' content='no-cache'> 
     <meta http-equiv='expires' content='0'> 
     <meta http-equiv='pragma' content='no-cache'>
-    
+
     <title>Pocket Of Stuff</title>
 
     <link rel="stylesheet" href="https://use.typekit.net/mmu3wvl.css">
@@ -23,20 +23,6 @@
             left: 0px;
             background-color: red;
         }
-        #overlay{
-            position: fixed;
-            top: 0px;
-            left: 0px;
-            width: 100%;
-            height: 100vh;
-            background: url(images/overlay.jpg);
-            filter: brightness(30%);
-            opacity: 35%;
-            mix-blend-mode: screen;
-            z-index: 50;
-            pointer-events: none;
-        }
-
         *{
             margin: 0px;
             font-family: "futura-pt", sans-serif;
@@ -44,6 +30,7 @@
         body{
             background-color: #FAF0EB;
             padding-left: 50px;
+            height: 20000vh;
         }
         header{
             height: 100px;
@@ -82,7 +69,13 @@
         }
 
 
-
+        ::selection{
+            background-color: black;
+            color: #FAF0EB;
+        }
+        strong::selection{
+            color: red;
+        }
 
         strong{
             color: red;
@@ -103,8 +96,7 @@
 <body>
 
     <sec id="bar"></sec>
-    <sec id="overlay"></sec>
-
+    
     <header>
         <h1 width="35%"><strong>P</strong>ocket of <strong>S</strong>tuff</h1>
 
