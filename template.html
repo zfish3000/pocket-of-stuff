@@ -27,10 +27,13 @@
             margin: 0px;
             font-family: "futura-pt", sans-serif;
         }
+        html{
+            overflow-x: hidden;
+        }
         body{
             background-color: #FAF0EB;
             padding-left: 50px;
-            height: 20000vh;
+            height: fit-content;
         }
         header{
             height: 100px;
@@ -68,16 +71,37 @@
             color: #FAF0EB;
         }
 
+        #main{
+            width: 97%;
+            padding: 20px;
+            height: 1000vh;
+        }
+
+        footer{
+            height: 100px;
+            align-items: center;
+            justify-content: center;
+            align-self: center;
+            display: flex;
+            color: #FAF0EB;
+            background-color: red;
+            position: absolute;
+            left: 0px;
+            bottom: 0;
+            display: flex;
+            width: 100%;
+        }
+
 
         ::selection{
             background-color: black;
             color: #FAF0EB;
         }
-        strong::selection{
+        span::selection{
             color: red;
         }
 
-        strong{
+        span{
             color: red;
         }
         h1{
@@ -97,8 +121,10 @@
 
     <sec id="bar"></sec>
     
+    <main>
+
     <header>
-        <h1 width="35%"><strong>P</strong>ocket of <strong>S</strong>tuff</h1>
+        <h1 width="35%"><span>P</span>ocket of <span>S</span>tuff</h1>
 
         <nav>
             <a href="#"><h3>Home</h3></a>
@@ -109,9 +135,22 @@
 
     </header>
 
-    <footer>
-        <p>zfish3000@pocketofstuff.com</p>
-    </footer>
+    <section id="main">
+
+        <p>Hello</p>
+
+        <p> Welcome To Pocket Of Stuff.</p>
+        <p> We make video games and interactive experiences.</p>
+
+    </section>
+
+    </main>
 
 </body>
+
+<footer>
+    <p>zfish3000@pocketofstuff.com</p>
+
+</footer>
+
 </html>
