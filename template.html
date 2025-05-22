@@ -56,6 +56,14 @@
         }
         a{
             height: 100%;
+            box-shadow: inset 0px 0px 0px 0 black;
+            transition: 0.3s;
+            width: 150px;
+            color: black;
+            text-decoration: underline;
+        }
+        nav a{
+            height: 100%;
             align-items: center;
             justify-content: center;
             display: flex;
@@ -63,7 +71,7 @@
             transition: 0.3s;
             width: 150px;
             color: black;
-            text-decoration: none;
+            text-decoration: none; 
         }
         a:hover{
             box-shadow: inset 0px -100px 0px 0 black;
@@ -85,11 +93,9 @@
             display: flex;
             color: #FAF0EB;
             background-color: red;
-            position: absolute;
-            left: 0px;
-            bottom: 0;
             display: flex;
-            width: 100%;
+            width: 101%;
+            transform: translateX(-10px);
         }
 
 
@@ -140,7 +146,7 @@
         <p>Hello</p>
 
         <p> Welcome To Pocket Of Stuff.</p>
-        <p> We make video games and interactive experiences.</p>
+        <p> We make video games and interactive experiences using the <a href="https://godotengine.org/">godot game engine.</a></p>
 
     </section>
 
