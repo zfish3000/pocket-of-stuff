@@ -7,7 +7,7 @@
     <meta http-equiv='cache-control' content='no-cache'> 
     <meta http-equiv='expires' content='0'> 
     <meta http-equiv='pragma' content='no-cache'>
-    
+
     <title>Pocket Of Stuff</title>
 
     <link rel="stylesheet" href="https://use.typekit.net/mmu3wvl.css">
@@ -23,27 +23,17 @@
             left: 0px;
             background-color: red;
         }
-        #overlay{
-            position: fixed;
-            top: 0px;
-            left: 0px;
-            width: 100%;
-            height: 100vh;
-            background: url(images/overlay.jpg);
-            filter: brightness(30%);
-            opacity: 35%;
-            mix-blend-mode: screen;
-            z-index: 50;
-            pointer-events: none;
-        }
-
         *{
             margin: 0px;
             font-family: "futura-pt", sans-serif;
         }
+        html{
+            overflow-x: hidden;
+        }
         body{
             background-color: #FAF0EB;
             padding-left: 50px;
+            height: fit-content;
         }
         header{
             height: 100px;
@@ -66,6 +56,14 @@
         }
         a{
             height: 100%;
+            box-shadow: inset 0px 0px 0px 0 black;
+            transition: 0.3s;
+            width: 150px;
+            color: black;
+            text-decoration: underline;
+        }
+        nav a{
+            height: 100%;
             align-items: center;
             justify-content: center;
             display: flex;
@@ -73,7 +71,7 @@
             transition: 0.3s;
             width: 150px;
             color: black;
-            text-decoration: none;
+            text-decoration: none; 
         }
         a:hover{
             box-shadow: inset 0px -100px 0px 0 black;
@@ -81,10 +79,35 @@
             color: #FAF0EB;
         }
 
+        #main{
+            width: 97%;
+            padding: 20px;
+            height: 1000vh;
+        }
+
+        footer{
+            height: 100px;
+            align-items: center;
+            justify-content: center;
+            align-self: center;
+            display: flex;
+            color: #FAF0EB;
+            background-color: red;
+            display: flex;
+            width: 101%;
+            transform: translateX(-10px);
+        }
 
 
+        ::selection{
+            background-color: black;
+            color: #FAF0EB;
+        }
+        span::selection{
+            color: red;
+        }
 
-        strong{
+        span{
             color: red;
         }
         h1{
@@ -103,10 +126,11 @@
 <body>
 
     <sec id="bar"></sec>
-    <sec id="overlay"></sec>
+    
+    <main>
 
     <header>
-        <h1 width="35%"><strong>P</strong>ocket of <strong>S</strong>tuff</h1>
+        <h1 width="35%"><span>P</span>ocket of <span>S</span>tuff</h1>
 
         <nav>
             <a href="#"><h3>Home</h3></a>
@@ -117,9 +141,22 @@
 
     </header>
 
-    <footer>
-        <p>zfish3000@pocketofstuff.com</p>
-    </footer>
+    <section id="main">
+
+        <p>Hello</p>
+
+        <p> Welcome To Pocket Of Stuff.</p>
+        <p> We make video games and interactive experiences using the <a href="https://godotengine.org/">godot game engine.</a></p>
+
+    </section>
+
+    </main>
 
 </body>
+
+<footer>
+    <p>zfish3000@pocketofstuff.com</p>
+
+</footer>
+
 </html>
