@@ -1,184 +1,94 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv='cache-control' content='no-cache'> 
-    <meta http-equiv='expires' content='0'> 
-    <meta http-equiv='pragma' content='no-cache'>
+    <title>Pocket of Stuff</title>
 
-    <title>Pocket Of Stuff</title>
-
-    <link rel="stylesheet" href="https://use.typekit.net/mmu3wvl.css">
-    <link rel="icon" type="image/x-icon" href="images/icon.png">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
     <style>
-
-        #bar{
-            width: 40px;
-            height: 100vh;
-            position: fixed;
-            left: 0px;
-            background-color: red;
-        }
-        *{
-            margin: 0px;
-            font-family: "futura-pt", sans-serif;
+        :root{
+            --dark: #0d1b2a;
+            --light-Blue: #415a77;
+            --accent: #f17d39;
+            --light: #e0dfdc;
         }
         html{
-            overflow-x: hidden;
+            background-color: var(--dark);
+            border-left: solid 1em var(--accent);            border-right: solid 1em var(--accent);
         }
-        body{
-            background-color: #FAF0EB;
-            padding-left: 50px;
-            height: fit-content;
-        }
-        header{
-            height: 100px;
-            align-items: center;
-            /*justify-content: center;*/
-            align-self: center;
-            display: flex;
-            border-bottom: solid 10px black;
-            color: black;
-            display: flex;
-            width: 90%;
-            padding-left: 20px;
-            gap: 5%;
-        }
-        nav{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 65%;
-            padding-left: 10px;
-            gap: 5%;
-            height: 100%;
-        }
-        a{
-            height: 100%;
-            box-shadow: inset 0px 0px 0px 0 black;
-            transition: 0.3s;
-            width: 150px;
-            color: black;
-            text-decoration: underline;
-        }
-        nav a{
-            height: 100%;
-            align-items: center;
-            justify-content: center;
-            display: flex;
-            box-shadow: inset 0px 0px 0px 0 black;
-            transition: 0.3s;
-            width: 150px;
-            color: black;
-            text-decoration: none; 
-        }
-        a:hover{
-            box-shadow: inset 0px -100px 0px 0 black;
-            transition: 0.5s;
-            color: #FAF0EB;
-        }
-
-        #main{
-            width: 97%;
-            padding: 20px;
-            height: fit-content;
-        }
-
-        footer{
-            height: 100px;
-            align-items: center;
-            justify-content: center;
-            align-self: center;
-            display: flex;
-            color: #FAF0EB;
-            background-color: red;
-            display: flex;
-            width: 101%;
-            transform: translateX(-10px);
-        }
-
-
-        ::selection{
-            background-color: black;
-            color: #FAF0EB;
-        }
-        span::selection{
-            color: red;
-        }
-
-        span{
-            color: red;
-        }
-        p{
-            font-size: 20px;
+        *{
+            font-family: 'Josefin Sans','Sans Serif';
+            color: var(--light);
+            padding: 0px;
+            margin: 0px;
         }
         h1{
-            font-size: 50px;
+            align-self: center;
+            justify-self: center;
+            text-align: center;
+            font-size: 5em;
         }
-        h2{
-            font-size: 35px;
+        body{
+            padding: 10px;
+            width: 50%;
+            min-width: 400px;
+            align-self: center;
+            justify-self: center;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            flex-direction: row;
         }
-        h3{
-            font-size: 25px;
+        .game{
+            border: solid 5px var(--light-Blue);
+            border-radius: 20px;
+            height: 400px;
+            width: 100%;
+            margin-bottom: 50px;
+            scale: 100%;
+            transition: 0.3s;
         }
+        .game:hover{
+            border: solid 5px var(--accent);
+            scale: 101%;
+            transition: 0.2s;
 
+        }
     </style>
 
+
 </head>
+
 <body>
 
-    <sec id="bar"></sec>
+    <br><br><br>
+
+    <h1> POCKET<br>OF<br>STUFF</h1>
+
     
-    <main>
-
-    <header>
-        <h1 width="35%"><span>P</span>ocket of <span>S</span>tuff</h1>
-
-        <nav>
-            <a href="index.html"><h3>Home</h3></a>
-            <a href="projects.html"><h3>Projects</h3></a>
-            <a href="about.html"><h3>About Us</h3></a>
-            <a href="events.html"><h3>Events</h3></a>
-            <a href="contact.html"><h3>Contact</h3></a>
-        </nav>
-
-    </header>
-
-    <section id="main">
-
-        <p>Hello</p>
-
-        <p> Welcome To Pocket Of Stuff.</p>
-        <p> We make video games and interactive experiences using the <a href="https://godotengine.org/" target="_blank">godot game engine.</a></p>
-
-        <br>
-
-        <a href="void.html"><img src="images/void.png" width="100%"></a>
-
-        <br><br>
-
-        <p>We have only created demos so far, but we've already gained a large following, join <a href="reddit.com">r/pocketofstuff</a>to become part of this ever growing community.</p>
-        <p>We make all types of games, from <a href="lair.html">quirky and fun</a> games to <a href="void.html">story rich</a> and serious games. You can experience many types of games thorugh pocket of stuff, and for now, all of our games are free of charge, and able to be played on our website.</p>
-
-        <br>
-
-        <a href="lair.html"><img src="images/lair.png" width="100%"></a>
-
-        <br>
-
+    <br><br><br>
+    <section class="game">
+ 
+    </section>
+    <section class="game">
+ 
+    </section>
+    <section class="game">
+ 
+    </section>
+    <section class="game">
+ 
     </section>
 
-    </main>
+    <footer>
+    <h3>Zachary Fisher <br> 2025 </h3>
+    <br><br>
+    </footer>
 
 </body>
-
-<footer>
-    <p>zfish3000@pocketofstuff.com</p>
-
-</footer>
 
 </html>
