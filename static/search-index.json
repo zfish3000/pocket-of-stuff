@@ -1,0 +1,117 @@
+[
+  {
+    "title": "Hiking",
+    "url": "/interests/hiking/",
+    "body": "Hiking I have always loved hiking. It\u2019s a way to be outside and enjoy nature, and just take it all in . I know that sounds cliche, but I find it really enjoyable. Here\u2019s a compilation of some of my favorite hiking forests."
+  },
+  {
+    "title": "Sailing",
+    "url": "/interests/sailing/",
+    "body": "Sailing I enjoy a little bit of sailing, which is one of the perks of living in Florida. Here are some photos of me sailing a 420 sailboat, which is a small two person boat."
+  },
+  {
+    "title": "Whitewater Rafting",
+    "url": "/interests/whitewater-rafting/",
+    "body": "Whitewater Rafting Cold water"
+  },
+  {
+    "title": "Hiking",
+    "url": "/interests-2/hiking/",
+    "body": "Hiking I have always loved hiking. It\u2019s a way to be outside and enjoy nature, and just take it all in . I know that sounds cliche, but I find it really enjoyable. Here\u2019s a compilation of some of my favorite hiking forests."
+  },
+  {
+    "title": "Sailing",
+    "url": "/interests-2/sailing/",
+    "body": "Sailing I enjoy a little bit of sailing, which is one of the perks of living in Florida. Here are some photos of me sailing a 420 sailboat, which is a small two person boat."
+  },
+  {
+    "title": "Whitewater Rafting",
+    "url": "/interests-2/whitewater-rafting/",
+    "body": "Whitewater Rafting Cold water"
+  },
+  {
+    "title": "Interests",
+    "url": "/interests-2c39ac21beb281b4a0c6fa8164a37b48-2/",
+    "body": "Interests Hiking Whitewater Rafting Sailing"
+  },
+  {
+    "title": "Interests",
+    "url": "/interests/",
+    "body": "Interests Hiking Whitewater Rafting Sailing"
+  },
+  {
+    "title": "Halloween 2025",
+    "url": "/projects/halloween-2025/",
+    "body": "Halloween 2025 For Halloween 2025 I decided to be the Knight from Hollow Knight, which turned into a much bigger project than I originally expected. It involved way too much cardboard, lots of cuts, and paper mache"
+  },
+  {
+    "title": "Navrim SO-101",
+    "url": "/projects/navrim-so-101/",
+    "body": "Navrim SO-101 I built and trained the Navrim SO-101 robot arm system. Its a small AI powered robot arm which you can train to do tasks. It works with a \u201cleader arm\u201d, which you control, and a \u201cfollower arm\u201d, which follows leader. Using this system, you can train the follower to pick up objects and do certain tasks. It can then recreate these tasks using an AI model."
+  },
+  {
+    "title": "Rigel",
+    "url": "/projects/rigel/",
+    "body": "Rigel Rigel is a 2D space shooter about fighting off an evil alien race, similar to asteroids. It was made ground up using the Godot Game engine. It took me about a year to make it and it was finished March 2025. You can play it on itch.io . It was my first game with Godot, and I learned quite a bit while doing so. I taught myself GD Script, instantiation, shaders, particle systems, and a little bit of blender for the backgrounds."
+  },
+  {
+    "title": "This Website!",
+    "url": "/projects/this-website/",
+    "body": "This Website! This website started out from inconvenience. All my ideas and projects were on this organizational program called Notion. So eventually the idea popped into my head that it would be quite convenient if I could turn my Notion pages directly into HTML for the website. Now, Notion does have it\u2019s own built in website publisher, but I didn\u2019t want to use that for two main reasons. I wanted to use my own domain name. I wanted to be able to style and customize the pages. I didn\u2019t want to pay extra to remove the Notion Watermark. So I decided to utilize the export as markdown function in Notion, and turn that into HTML suitable for this website. I created a python program which: Reads all the markdown files Defines page titles and URLs Rewrites the links between pages Rewrites image and video links Extract page metadata Renders an HTML page using Template files and a json file which links those templates to specific pages. Builds a search index. Copies and process assets. This essentially turns Notion into a CMS for me to use. If I ever want to change the content, all I need to do is write it in Notion, re-export, run it through the python program, and move the export into the pocket-of-stuff Github repo. Search was one of the hardest things to implement, and it uses Lunr.js. When building the website, the built script creates a file called search-index.json. The browser then loads that index and uses Lunr.js to search for content. Try out Notion, its well designed, easy to use, and completely free with most features."
+  },
+  {
+    "title": "Wheres My Lair",
+    "url": "/projects/wheres-my-lair/",
+    "body": "Wheres My Lair Where\u2019s My Lair is the current game project I\u2019m working on, and its a silly real time strategy game about being an evil supervillain and trying to take over an unexplored world. It\u2019s my first 3D game and I used blender to create the models. The main problem I\u2019m having with this game is focusing more on the art than the gameplay. It started as a random test for procedural generation, and slowly evolved into the strategy game it is today. I\u2019m still working on it, but I\u2019m hoping to release it by summer 2026."
+  },
+  {
+    "title": "Zachcade",
+    "url": "/projects/zachcade/",
+    "body": "Zachcade Using a kit made from laser cut plywood, a raspberry pi and arcade parts, I put together this miniature arcade cabinet, called Zachade. Its running the RetroPie, a package containing emulation software for Raspberry Pi computers. I configured it to run arcade games with Mame, NES, SEGA Master, and N64 games. It was made from a kit with laser-cut plywood pieces. This is the first \u201cbig\u201d project I did, combining a bunch of skills. I used mild woodworking skills to glue these pieces together, graphic design skills for the intro video and signs, and some soldering for the electronics (which I\u2019m still not very good at). All in all it was a fun project and I think it adds a lot of life to my room"
+  },
+  {
+    "title": "Halloween 2025",
+    "url": "/projects-2/halloween-2025/",
+    "body": "Halloween 2025 For Halloween 2025 I decided to be the Knight from Hollow Knight, which turned into a much bigger project than I originally expected. It involved way too much cardboard,"
+  },
+  {
+    "title": "Navrim SO-101",
+    "url": "/projects-2/navrim-so-101/",
+    "body": "Navrim SO-101 I built and trained the Navrim SO-101 robot arm system. Its a small AI powered robot arm which you can train to do tasks. It works with a \u201cleader arm\u201d, which you control, and a \u201cfollower arm\u201d, which follows leader. Using this system, you can train the follower to pick up objects and do certain tasks. It can then recreate these tasks using an AI model."
+  },
+  {
+    "title": "Rigel",
+    "url": "/projects-2/rigel/",
+    "body": "Rigel Complete Rigel is a 2D space shooter about fighting off an evil alien race, similar to asteroids. It was made ground up using the Godot Game engine. It took me about a year to make it and it was finished March 2025. It was my first game with Godot, and I learned quite a bit while doing so. I taught myself GD Script, instantiation, shaders, particle systems, and a little bit of blender for the backgrounds. It was a lot of fun to make, and you can play it on itch.io ."
+  },
+  {
+    "title": "This Website!",
+    "url": "/projects-2/this-website/",
+    "body": "This Website! This website started out from inconvenience. All my ideas and projects were on this organizational program called Notion. So eventually the idea popped into my head that it would be quite convenient if I could turn my Notion pages directly into HTML for the website. Now, Notion does have it\u2019s own built in website publisher, but I didn\u2019t want to use that for two main reasons. I wanted to use my own domain name. I wanted to be able to style and customize the pages. I didn\u2019t want to pay extra to remove the Notion Watermark. So I decided to utilize the export as markdown function in Notion, and turn that into HTML suitable for this website. I created a python file which: Reads all the markdown files Defines page titles and URLs Rewrites the links between pages Rewrites image and video links Extract page metadata Renders an HTML page using Template files and a json file which links those templates to specific pages. Builds a search index. Copies and process assets. This essentially turns Notion into a CMS for me to use. If I ever want to change the content, all I need to do is write it in Notion, re-export, run it through the python program, and move the export into the pocket-of-stuff Github repo. Search was one of the hardest things to implement, and it uses Lunr.js. When building the website, the built script creates a file called search-index.json. The browser then loads that index and uses Lunr.js to search for content. If you want to see how this website would\u2019ve looked if I just use Notion\u2019s built in publisher, it\u2019s right here . Try out Notion, its well designed, easy to use, and completely free with most features."
+  },
+  {
+    "title": "Wheres My Lair",
+    "url": "/projects-2/wheres-my-lair/",
+    "body": "Wheres My Lair In Progress Where\u2019s My Lair is the current game project I\u2019m working on, and its a silly real time strategy game about being an evil supervillain and trying to take over an unexplored world. It\u2019s my first 3D game and I used blender to create the models. The main problem I\u2019m having with this game is focusing more on the art than the gameplay. It started as a random test for procedural generation, and slowly evolved into the strategy game it is today. I\u2019m still working on it, but I\u2019m hoping to release it by summer 2026."
+  },
+  {
+    "title": "Zachcade",
+    "url": "/projects-2/zachcade/",
+    "body": "Zachcade Complete Using a kit made from laser cut plywood, a raspberry pi and arcade parts, I put together this miniature arcade cabinet, called Zachade. Its running the RetroPie, a package containing emulation software for Raspberry Pi computers. I configured it to run arcade games with Mame, NES, SEGA Master, and N64 games. It was made from a kit with laser-cut plywood pieces. This is the first \u201cbig\u201d project I did, combining a bunch of skills. I used mild woodworking skills to glue these pieces together, graphic design skills for the intro video and signs, and some soldering for the electronics (which I\u2019m still not very good at). All in all it was a fun project and I think it adds a lot of life to my room"
+  },
+  {
+    "title": "Projects",
+    "url": "/projects-2c39ac21beb281a58fb1e6474f64f02c-2/",
+    "body": "Projects Game Rigel Wheres My Lair Software This Website! Design Zachcade Navrim SO-101 Halloween 2025"
+  },
+  {
+    "title": "Projects",
+    "url": "/projects/",
+    "body": "Projects Gamedev Rigel Wheres My Lair Software This Website! Design Zachcade Navrim SO-101 Halloween 2025"
+  },
+  {
+    "title": "Pocket of Stuff",
+    "url": "/",
+    "body": "Hi, my name is Zachary Fisher. I\u2019m an eighth grade student in United States, Florida. I love creating things and this is my little pocket of stuff. Projects Interests"
+  }
+]

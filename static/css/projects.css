@@ -1,0 +1,646 @@
+/* ==========================================================================
+   1. BASE THEME & RESET
+   ========================================================================== */
+
+:root {
+  --bg: #ffc7c7;
+  --fg: #555353;
+  --accent: #77ff00;
+  --accent-soft: #ff8c003c;
+  --border: #dddddd;
+  --muted: #777777;
+}
+
+html[data-theme="dark"] {
+  --bg: #0b0c10;
+  --fg: #f7f7f7;
+  --accent: #7fb4ff;
+  --accent-soft: #17233a;
+  --border: #333741;
+  --muted: #a0a4b2;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+}
+
+/* Remove default link colors; we’ll style contextually */
+a {
+  color: inherit;
+}
+
+/* ==========================================================================
+   2. GLOBAL LAYOUT
+   ========================================================================== */
+
+.site-header {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.site-header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  border-bottom: none;
+  font-size: 0.875rem;
+  color: var(--muted);
+  padding: 1rem;
+  text-align: center;
+}
+
+.site-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Flexible layout used by note/base templates (sidebar + content) */
+.layout {
+  display: block;
+}
+
+/* ==========================================================================
+   3. BRAND + HEADER CONTROLS
+   ========================================================================== */
+
+.site-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: var(--fg);
+}
+
+.site-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.site-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* Header controls: search icon + theme toggle (and nav toggle on other templates) */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;               /* a bit more space between search and theme */
+}
+
+/* Simple round search icon button (no underline, stable position) */
+.header-search-icon,
+.header-search-icon:link,
+.header-search-icon:visited,
+.header-search-icon:hover,
+.header-search-icon:active {
+  text-decoration: none;      /* never underlined */
+}
+
+.header-search-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  background: transparent;
+  flex-shrink: 0;             /* don’t let layout squeeze this */
+}
+
+.header-search-icon:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* ==========================================================================
+   3.1 Header Search Bar (home/note/base templates)
+   - Hidden on mobile
+   - Right-aligned next to theme toggle on desktop
+   ========================================================================== */
+
+/* Mobile: no header search bar */
+.header-search-form {
+  display: none;
+}
+
+/* Search input styling */
+.header-search-form input[type="search"] {
+  width: 100%;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   3.2 Theme Toggle
+   ========================================================================== */
+
+.theme-toggle {
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.55rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  min-width: 42px;            /* keep stable width so search icon doesn't shift */
+  flex-shrink: 0;
+}
+
+.theme-toggle-icon {
+  display: inline-block;
+}
+
+/* ==========================================================================
+   3.3 Mobile Nav Toggle (base/note/home templates)
+   ========================================================================== */
+
+.nav-toggle {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 32px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+}
+
+.nav-toggle-line {
+  height: 2px;
+  width: 16px;
+  margin: 0 auto;
+  border-radius: 999px;
+  background: var(--fg);
+}
+
+/* ==========================================================================
+   4. TOP NAV (used on base/note/home templates)
+   ========================================================================== */
+
+.site-nav {
+  display: none; /* mobile: hidden until toggled */
+  padding: 0.25rem 1rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+/* Shown when toggled on small screens */
+.site-nav.open {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.site-nav-link,
+.site-nav-link:link,
+.site-nav-link:visited {
+  display: block;
+  text-decoration: none;
+  color: #000000; /* black when not active */
+  padding: 0.4rem 0;
+}
+
+.site-nav-link.active {
+  font-weight: 600;
+  text-decoration: underline;
+  color: var(--accent); /* active link uses accent */
+}
+
+/* Search link with small icon in nav (hidden on desktop later) */
+.site-nav-link--search::after {
+  content: "⌕";
+  margin-left: 0.35rem;
+  font-size: 0.85em;
+  color: var(--muted);
+}
+
+/* ==========================================================================
+   5. SECTION SIDEBAR (note/base templates)
+   ========================================================================== */
+
+.section-nav {
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  padding: 0.75rem 0.85rem;
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.section-nav-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.section-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.section-nav-item + .section-nav-item {
+  margin-top: 0.35rem;
+}
+
+.section-nav-link {
+  text-decoration: none;
+  font-size: 0.95rem;
+  color: var(--fg);
+}
+
+/* ==========================================================================
+   6. BREADCRUMBS
+   ========================================================================== */
+
+.breadcrumbs {
+  font-size: 0.85rem;
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+}
+
+.breadcrumbs a {
+  text-decoration: none;
+  color: var(--accent);
+}
+
+.breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.crumb-separator {
+  margin: 0 0.25rem;
+}
+
+/* ==========================================================================
+   7. NOTION CONTENT (shared by all templates)
+   ========================================================================== */
+
+.notion-content {
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.notion-content p {
+  margin: 0.5rem 0;
+}
+
+/* Headings inside content */
+.notion-content h1,
+.notion-content h2,
+.notion-content h3 {
+  margin: 1.2rem 0 0.5rem;
+}
+
+.notion-content h1 {
+  font-size: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.25rem;
+}
+
+.notion-content h2 {
+  font-size: 1.25rem;
+}
+
+.notion-content h3 {
+  font-size: 1.1rem;
+}
+
+/* Links inside content */
+.notion-content a {
+  color: var(--accent);
+}
+
+.notion-content a:hover {
+  text-decoration: underline;
+}
+
+/* Inline code */
+.notion-content code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.9em;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 0.1rem 0.25rem;
+  border-radius: 3px;
+}
+
+/* Code blocks */
+.notion-content pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.9em;
+  background: rgba(0, 0, 0, 0.08);
+  padding: 0.75rem;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+/* Last updated label */
+.last-updated {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0 0 0.75rem;
+}
+
+/* ==========================================================================
+   7.1 CONTENT MEDIA (images + videos)
+   ========================================================================== */
+
+/* Page media: keep inside text column */
+.notion-content img,
+.notion-content video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0.75rem auto;
+}
+
+/* Images: zoom cursor + 640px cap on wide screens */
+.notion-content img {
+  max-width: min(100%, 640px); /* keeps large images from getting huge in-page */
+  cursor: zoom-in;             /* hint that clicking will zoom */
+}
+
+/* Lists */
+.notion-content ul,
+.notion-content ol {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+/* ==========================================================================
+   8. IMAGE LIGHTBOX OVERLAY (used by main.js)
+   ========================================================================== */
+
+.image-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85); /* muted/dim background */
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.image-lightbox-overlay.open {
+  display: flex;
+}
+
+.image-lightbox-inner {
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.image-lightbox-inner img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 4px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+  cursor: zoom-out;
+}
+
+/* ==========================================================================
+   9. CALLOUT / INFO BOXES
+   ========================================================================== */
+
+.callout {
+  border-left: 4px solid var(--accent);
+  padding: 0.5rem 0.75rem;
+  background: var(--accent-soft);
+  border-radius: 4px;
+  margin: 0.75rem 0;
+}
+
+/* ==========================================================================
+   10. SEARCH PAGE
+   ========================================================================== */
+
+.search-box {
+  margin: 0.75rem 0;
+}
+
+.search-box input[type="search"] {
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+
+.search-results {
+  margin-top: 0.75rem;
+}
+
+.search-result-item + .search-result-item {
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.5rem;
+}
+
+.search-result-title {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+
+.search-result-title a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.search-result-title a:hover {
+  text-decoration: underline;
+}
+
+.search-result-snippet {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* ==========================================================================
+   11. HOME / SPECIAL TEMPLATES
+   ========================================================================== */
+
+.home-page .site-main {
+  padding-top: 1.25rem;
+}
+
+/* 11.1 Home hero & embedded media (from previous home.css) */
+
+.hero {
+  background: linear-gradient(135deg, var(--accent-soft), #ffffff);
+  border-bottom: 1px solid var(--border);
+}
+
+.hero-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2.5rem 1rem 2rem;
+}
+
+.hero-title {
+  font-size: 2rem;
+  margin: 0 0 0.25rem;
+}
+
+.hero-subtitle {
+  margin: 0 0 1rem;
+  color: var(--muted);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.hero-button {
+  display: inline-block;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.hero-button-ghost {
+  background: transparent;
+  color: var(--accent);
+}
+
+.hero-button:hover {
+  opacity: 0.9;
+}
+
+.embedded-video,
+.embedded-audio {
+  display: block;
+  max-width: 100%;
+  margin: 1rem auto;
+}
+
+.embedded-video {
+  width: 100%;
+  height: auto;
+}
+
+/* ==========================================================================
+   12. UTILITIES
+   ========================================================================== */
+
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================================================
+   13. RESPONSIVE BEHAVIOR
+   ========================================================================== */
+
+@media (min-width: 768px) {
+  .site-header-inner {
+    gap: 1rem;
+  }
+
+  .site-main {
+    padding: 2rem 1.5rem 3rem;
+  }
+
+  /* On desktop, layout becomes sidebar + content for note/base pages */
+  .layout {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+
+  .section-nav {
+    grid-column: 1 / 2;
+    align-self: flex-start;
+  }
+
+  .notion-content {
+    grid-column: 2 / 3;
+  }
+
+  /* Desktop nav placement: horizontal under header */
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    border-bottom: none;
+    padding: 0.25rem 1.5rem 0.75rem;
+    max-width: 960px;
+    margin: 0 auto;
+    background: transparent;
+  }
+
+  .site-nav-link {
+    padding: 0;
+  }
+
+  /* Hide the Search link from desktop navs; search bar is in the header (on those templates) */
+  .site-nav-link--search {
+    display: none;
+  }
+
+  .header-search-form {
+    display: block;
+    max-width: 320px;
+    width: 100%;
+    margin-left: auto;   /* pushes search (and then controls) to the right */
+  }
+
+  .header-controls {
+    margin-left: 0;
+  }
+
+  /* On desktop, header search is used, so hide the in-page search box on templates
+     that already have a header search bar (home + note pages). */
+  body.home-page .search-box,
+  body.note-page .search-box {
+    display: none;
+  }
+
+  /* Home main: small top padding only (no special band styling) */
+  .home-main {
+    padding-top: 0.5rem;
+  }
+}

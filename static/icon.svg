@@ -1,0 +1,18 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Gradient for light blue denim shading -->
+  <defs>
+    <linearGradient id="denimGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a0c4ff" />
+      <stop offset="100%" stop-color="#89b3e6" />
+    </linearGradient>
+  </defs>
+
+  <!-- Pocket shape with denim fill -->
+  <path d="M16 10H48V36C48 46 38 54 32 54C26 54 16 46 16 36V10Z"
+        fill="url(#denimGradient)" stroke="#2d5d9f" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- Tighter, smaller stitching -->
+  <path d="M17.5 11.5H46.5V36C46.5 44 38 50 32 50C26 50 17.5 44 17.5 36V11.5Z"
+        fill="none" stroke="#ffffff" stroke-width="0.8" stroke-dasharray="2 2" stroke-linecap="round"/>
+
+</svg>

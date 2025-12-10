@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Search · Pocket of Stuff</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="description" content="Search across the site." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Search · Pocket of Stuff">
+  <meta property="og:description" content="Search across the site.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="/search/">
+
+  <link rel="stylesheet" href="/static/css/style.css" />
+
+<!-- Favicon from static/icon.svg -->
+<link rel="icon"
+      href="/static/icon.svg"
+      type="image/svg+xml"
+      sizes="any">
+<link rel="shortcut icon"
+      href="/static/icon.svg"
+      type="image/svg+xml">
+
+
+  
+</head>
+<body class="default-page search-page"
+      data-root-url="/"
+      data-static-prefix="/static">
+
+  <!-- Simple header: brand + search icon + theme toggle (no nav bar) -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-brand" href="/">
+        <img src="/static/icon.svg" alt="" class="site-icon">
+        <span class="site-title">Pocket of Stuff</span>
+      </a>
+
+      <div class="header-controls">
+        <!-- Search icon link (before theme toggle) -->
+        <a class="header-search-icon"
+           href="/search/"
+           aria-label="Search">
+          ⌕
+        </a>
+
+        <button class="theme-toggle" aria-label="Toggle color theme">
+          <span class="theme-toggle-icon">☾</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main default-main">
+
+    <!-- no Breadcrumbs 
+    
+    
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        
+          
+          
+            <a href="/">Pocket of Stuff</a>
+          
+        
+          
+            <span class="crumb-separator">/</span>
+          
+          
+            <span>Search</span>
+          
+        
+      </nav>
+    
+    -->
+
+    <article class="notion-content default-content">
+  <!-- no last updated 
+      
+   -->
+      
+<h1>Search</h1>
+<div class="search-box">
+  <input id="search-input"
+         type="search"
+         placeholder="Search…"
+         autocomplete="off" />
+</div>
+<div id="search-results" class="search-results"></div>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2025 Pocket of Stuff</p>
+  </footer>
+
+  <!-- JS: theme toggle, image lightbox, search wiring -->
+  <script src="https://unpkg.com/lunr/lunr.js"></script>
+  <script src="/static/js/main.js" defer></script>
+  <script src="/static/js/search.js" defer></script>
+</body>
+</html>
