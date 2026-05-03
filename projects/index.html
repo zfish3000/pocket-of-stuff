@@ -217,14 +217,16 @@
     .project-description {
       display: block;
       max-width: 17rem;
-      margin: 8px auto 0;
+      max-height: 0;
+      margin: 0 auto;
       padding-bottom: 0;
       font-size: 0.82rem;
       line-height: 1.16;
       text-align: center;
       opacity: 0;
+      overflow: hidden;
       transform: translateY(8px);
-      transition: opacity 260ms ease, transform 260ms ease;
+      transition: max-height 260ms ease, margin 260ms ease, opacity 260ms ease, transform 260ms ease;
     }
 
     .project-card:hover::before,
@@ -237,10 +239,10 @@
       transform: scaleX(1);
     }
 
-    .project-card:hover .project-title,
-    .project-card:focus-visible .project-title,
     .project-card:hover .project-description,
     .project-card:focus-visible .project-description {
+      max-height: 3rem;
+      margin-top: 8px;
       opacity: 1;
       transform: translateY(0);
     }
