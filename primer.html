@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#e9efe7" />
+  <title>Primer</title>
+  <style>
+    :root {
+      --bg: #eef2ec;
+      --panel: rgba(255,255,255,.78);
+      --text: #172018;
+      --muted: #667066;
+      --line: rgba(23,32,24,.12);
+      --accent: #315c3c;
+      --accent-2: #dbe7d9;
+      --rest: #87642c;
+      --rest-bg: #f4e9d6;
+      --danger: #9b3f36;
+      --shadow: 0 22px 70px rgba(41,61,45,.12);
+      --radius: 28px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Avenir Next", Avenir, "Trebuchet MS", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(255,255,255,.95), transparent 32%),
+        radial-gradient(circle at 85% 85%, rgba(205,222,205,.65), transparent 36%),
+        var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      overflow: hidden;
+    }
+
+    button { font: inherit; }
+
+    .app {
+      width: min(1120px, 100%);
+      height: min(760px, calc(100vh - 32px));
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,.9);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+      border-radius: 36px;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      min-height: 0;
+      overflow: hidden;
+      padding: 22px 20px;
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .brand {
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: 650;
+      letter-spacing: -.025em;
+      font-size: 22px;
+    }
+
+    .summary {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.55);
+      border: 1px solid var(--line);
+    }
+
+    .summary-label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .13em;
+      font-weight: 750;
+    }
+
+    .summary-value {
+      margin-top: 7px;
+      font-size: 24px;
+      font-weight: 760;
+      letter-spacing: -.04em;
+    }
+
+    .sections {
+      display: grid;
+      gap: 8px;
+    }
+
+    .section-item {
+      appearance: none;
+      border: 0;
+      width: 100%;
+      text-align: left;
+      padding: 14px 15px;
+      border-radius: 17px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      transition: .18s ease;
+    }
+
+    .section-item:hover { background: rgba(255,255,255,.6); }
+
+    .section-item.active {
+      background: var(--accent-2);
+      color: var(--text);
+    }
+
+    .section-item.complete { color: var(--accent); }
+
+    .section-number {
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 750;
+      background: rgba(255,255,255,.56);
+    }
+
+    .section-name {
+      font-weight: 680;
+      font-size: 14px;
+    }
+
+    .section-meta {
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .main {
+      position: relative;
+      min-height: 0;
+      overflow: hidden;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .13em;
+    }
+
+    .round-pill {
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--muted);
+      background: rgba(255,255,255,.55);
+    }
+
+    .progress-track {
+      height: 8px;
+      margin-top: 14px;
+      border-radius: 999px;
+      background: rgba(23,32,24,.08);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: inherit;
+      transition: width .35s ease;
+    }
+
+    .stage {
+      flex: 1;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+      padding: 10px 0 8px;
+    }
+
+    .phase-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: var(--accent-2);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .11em;
+    }
+
+    .phase-badge.rest {
+      background: var(--rest-bg);
+      color: var(--rest);
+    }
+
+    h1 {
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-weight: 600;
+      font-size: clamp(38px, 5.4vw, 72px);
+      line-height: .98;
+      letter-spacing: -.065em;
+      margin: 14px 0 8px;
+      max-width: 760px;
+    }
+
+    .description {
+      max-width: 650px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
+      min-height: 44px;
+      margin: 0;
+    }
+
+    .timer-wrap {
+      position: relative;
+      width: min(190px, 24vh);
+      height: min(190px, 24vh);
+      margin: 14px 0 14px;
+      display: grid;
+      place-items: center;
+    }
+
+    .timer-ring {
+      position: absolute;
+      inset: 0;
+      transform: rotate(-90deg);
+    }
+
+    .timer-ring circle {
+      fill: none;
+      stroke-width: 10;
+    }
+
+    .timer-ring .track { stroke: rgba(23,32,24,.09); }
+    .timer-ring .value {
+      stroke: var(--accent);
+      stroke-linecap: round;
+      transition: stroke-dashoffset .25s linear, stroke .2s ease;
+    }
+
+    .timer-wrap.rest .value { stroke: var(--rest); }
+
+    .timer {
+      font-size: clamp(48px, 7vh, 62px);
+      font-weight: 760;
+      letter-spacing: -.06em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .next-up {
+      color: var(--muted);
+      font-size: 13px;
+      min-height: 20px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .control {
+      min-width: 118px;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 0 18px;
+      background: rgba(255,255,255,.72);
+      color: var(--text);
+      font-weight: 720;
+      cursor: pointer;
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    .control:hover { transform: translateY(-1px); background: white; }
+
+    .control.primary {
+      min-width: 150px;
+      background: var(--accent);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 10px 24px rgba(49,92,60,.20);
+    }
+
+    .control.danger { color: var(--danger); }
+
+    .exercise-list {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.46);
+    }
+
+    .exercise-list-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 13px;
+    }
+
+    .exercise-list-title { font-weight: 750; }
+    .exercise-list-meta { font-size: 13px; color: var(--muted); }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 3px;
+      scrollbar-width: thin;
+    }
+
+    .chip {
+      flex: 0 0 auto;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      border: 1px solid transparent;
+      background: rgba(23,32,24,.045);
+    }
+
+    .chip.active {
+      background: var(--accent-2);
+      color: var(--accent);
+      border-color: rgba(49,92,60,.15);
+      font-weight: 750;
+    }
+
+    .chip.done { opacity: .5; text-decoration: line-through; }
+
+    .complete-screen {
+      display: none;
+      flex: 1;
+      place-items: center;
+      text-align: center;
+    }
+
+    .complete-screen.show { display: grid; }
+    .workout-view { min-height: 0; height: 100%; display: flex; flex-direction: column; }
+    .workout-view.hide { display: none; }
+
+    .check {
+      width: 92px;
+      height: 92px;
+      border-radius: 28px;
+      background: var(--accent-2);
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      font-size: 42px;
+      margin: 0 auto 22px;
+    }
+
+    .complete-screen h2 {
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-weight: 600;
+      font-size: clamp(38px, 6vw, 68px);
+      margin: 0 0 12px;
+      letter-spacing: -.055em;
+    }
+
+    .complete-screen p {
+      color: var(--muted);
+      max-width: 500px;
+      line-height: 1.6;
+      margin: 0 auto 28px;
+    }
+
+    @media (max-width: 820px) {
+      body { padding: 0; }
+      .app {
+        height: calc(100vh - 16px);
+        min-height: 0;
+        border-radius: 24px;
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        padding: 10px 14px;
+        gap: 8px;
+      }
+      .summary, .sidebar-footer { display: none; }
+      .sections {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+      }
+      .section-item {
+        display: block;
+        text-align: center;
+        padding: 10px 6px;
+      }
+      .section-number { margin: 0 auto 5px; }
+      .section-meta { display: none; }
+      .main { padding: 14px 16px 16px; min-height: 0; }
+      .exercise-list { margin-top: 10px; }
+    }
+
+
+    @media (max-height: 690px) {
+      .exercise-list { display: none; }
+      .sidebar-footer { display: none; }
+      .stage { padding-top: 4px; }
+      h1 { font-size: clamp(34px, 6vh, 56px); }
+      .description { font-size: 14px; line-height: 1.45; }
+    }
+
+    @media (max-width: 520px) {
+      .brand { justify-content: center; }
+      .timer-wrap { width: min(170px, 22vh); height: min(170px, 22vh); }
+      .timer { font-size: 58px; }
+      h1 { font-size: 40px; }
+      .description { font-size: 14px; }
+      .control { min-width: 90px; flex: 1; }
+      .control.primary { min-width: 130px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <aside class="sidebar">
+      <div class="brand">Primer</div>
+
+      <div class="summary">
+        <div class="summary-label">Estimated duration</div>
+        <div class="summary-value" id="durationSummary">27 min</div>
+      </div>
+
+      <nav class="sections" id="sectionNav"></nav>
+
+      <div class="sidebar-footer">
+        Move at a comfortable pace. Stop for sharp pain, dizziness, chest pain, or unusual breathing difficulty.
+      </div>
+    </aside>
+
+    <section class="main">
+      <div class="workout-view" id="workoutView">
+        <header class="topbar">
+          <div>
+            <div class="eyebrow" id="sectionLabel">Warmup</div>
+          </div>
+          <div class="round-pill" id="roundLabel">Round 1 of 1</div>
+        </header>
+
+        <div class="progress-track" aria-label="Workout progress">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <section class="stage">
+          <div class="phase-badge" id="phaseBadge">Ready</div>
+          <h1 id="exerciseName">March In Place</h1>
+          <p class="description" id="exerciseDescription"></p>
+
+          <div class="timer-wrap" id="timerWrap">
+            <svg class="timer-ring" viewBox="0 0 220 220" aria-hidden="true">
+              <circle class="track" cx="110" cy="110" r="98"></circle>
+              <circle class="value" id="timerRing" cx="110" cy="110" r="98"></circle>
+            </svg>
+            <div class="timer" id="timer">40</div>
+          </div>
+
+          <div class="next-up" id="nextUp"></div>
+        </section>
+
+        <div class="controls">
+          <button class="control danger" id="resetBtn">Reset</button>
+          <button class="control primary" id="startPauseBtn">Start</button>
+          <button class="control" id="skipBtn">Skip</button>
+        </div>
+
+        <section class="exercise-list">
+          <div class="exercise-list-header">
+            <span class="exercise-list-title" id="listTitle">Warmup exercises</span>
+            <span class="exercise-list-meta" id="listMeta">40 sec work · 20 sec rest</span>
+          </div>
+          <div class="chips" id="exerciseChips"></div>
+        </section>
+      </div>
+
+      <section class="complete-screen" id="completeScreen">
+        <div>
+          <div class="check">✓</div>
+          <h2>Workout complete.</h2>
+          <p>You finished every section. Take a breath, drink some water, and start the day.</p>
+          <button class="control primary" id="restartBtn">Do it again</button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const workout = [
+      {
+        name: "Warmup",
+        rounds: 1,
+        work: 40,
+        rest: 20,
+        exercises: [
+          ["March In Place", "Stand tall and march at an easy pace. Swing your arms naturally and gradually lift your knees a little higher."],
+          ["Arm Circles", "Extend your arms to the sides. Make small controlled circles, then gradually make them larger. Switch direction halfway through."],
+          ["Shoulder Rolls", "Relax your arms. Roll both shoulders slowly up, back, and down. Reverse direction halfway through."],
+          ["Hip Circles", "Stand with feet about shoulder-width apart and hands on your hips. Draw slow circles with your hips, then switch direction."],
+          ["Easy Jumping Jacks", "Step or lightly jump your feet apart while raising your arms overhead, then return. Keep the movement relaxed and low-impact."]
+        ]
+      },
+      {
+        name: "Circuit",
+        rounds: 3,
+        work: 40,
+        rest: 20,
+        exercises: [
+          ["Bodyweight Squats", "Stand with feet roughly shoulder-width apart. Push your hips back, bend your knees, keep your chest lifted, then stand tall."],
+          ["Knee Push-Ups", "Start on your hands and knees with a straight line from knees to head. Lower your chest under control, then press back up."],
+          ["Reverse Lunges", "Step one foot backward and lower both knees comfortably. Push through the front foot to return, then alternate legs."],
+          ["Bird Dogs", "From hands and knees, extend one arm and the opposite leg. Keep your torso still, return slowly, and alternate sides."]
+        ]
+      },
+      {
+        name: "Cardio",
+        rounds: 4,
+        work: 20,
+        rest: 10,
+        exercises: [
+          ["Fast Marching", "March briskly in place, pumping your arms. Keep your posture upright and choose a pace you can control."],
+          ["High Knees", "Jog or march in place while lifting your knees toward hip height. Land softly and reduce the height if needed."]
+        ]
+      },
+      {
+        name: "Stretch",
+        rounds: 2,
+        work: 30,
+        rest: 10,
+        exercises: [
+          ["Standing Fold", "Soften your knees and hinge forward from your hips. Let your head and arms relax without forcing the stretch."],
+          ["Chest Opening Stretch", "Clasp your hands behind your back or hold opposite elbows. Gently draw your shoulders back and lift your chest."],
+          ["Standing Side Stretch", "Reach one arm overhead and lean gently to the opposite side. Switch sides halfway through."],
+          ["Wall Centers", "Face a wall and place both palms against it. Step back slightly, lengthen your spine, and gently press your chest downward."],
+          ["Slow Breathing", "Stand or sit comfortably. Inhale slowly through your nose, then exhale longer and more gently than you inhaled."]
+        ]
+      }
+    ];
+
+    const els = {
+      sectionNav: document.getElementById("sectionNav"),
+      durationSummary: document.getElementById("durationSummary"),
+      sectionLabel: document.getElementById("sectionLabel"),
+      roundLabel: document.getElementById("roundLabel"),
+      progressFill: document.getElementById("progressFill"),
+      phaseBadge: document.getElementById("phaseBadge"),
+      exerciseName: document.getElementById("exerciseName"),
+      exerciseDescription: document.getElementById("exerciseDescription"),
+      timer: document.getElementById("timer"),
+      timerWrap: document.getElementById("timerWrap"),
+      timerRing: document.getElementById("timerRing"),
+      nextUp: document.getElementById("nextUp"),
+      startPauseBtn: document.getElementById("startPauseBtn"),
+      skipBtn: document.getElementById("skipBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      restartBtn: document.getElementById("restartBtn"),
+      listTitle: document.getElementById("listTitle"),
+      listMeta: document.getElementById("listMeta"),
+      exerciseChips: document.getElementById("exerciseChips"),
+      workoutView: document.getElementById("workoutView"),
+      completeScreen: document.getElementById("completeScreen")
+    };
+
+    let state;
+    let intervalId = null;
+    let audioContext = null;
+    const circumference = 2 * Math.PI * 98;
+    els.timerRing.style.strokeDasharray = circumference;
+
+    function initialState(section = 0) {
+      return {
+        section,
+        round: 0,
+        exercise: 0,
+        phase: "work",
+        remaining: workout[section].work,
+        phaseDuration: workout[section].work,
+        running: false,
+        finished: false,
+        elapsedSteps: countStepsBefore(section, 0, 0)
+      };
+    }
+
+    function countStepsBefore(sectionIndex, roundIndex, exerciseIndex) {
+      let steps = 0;
+      for (let s = 0; s < sectionIndex; s++) {
+        steps += workout[s].rounds * workout[s].exercises.length;
+      }
+      steps += roundIndex * workout[sectionIndex].exercises.length + exerciseIndex;
+      return steps;
+    }
+
+    function totalExerciseSteps() {
+      return workout.reduce((sum, section) => sum + section.rounds * section.exercises.length, 0);
+    }
+
+    function totalDuration() {
+      return workout.reduce((total, section) =>
+        total + section.rounds * section.exercises.length * (section.work + section.rest), 0);
+    }
+
+    function formatDuration(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return secs ? `${minutes} min ${secs} sec` : `${minutes} min`;
+    }
+
+    function buildNav() {
+      els.sectionNav.innerHTML = "";
+      workout.forEach((section, index) => {
+        const button = document.createElement("button");
+        button.className = "section-item";
+        button.dataset.index = index;
+        button.innerHTML = `
+          <span class="section-number">${index + 1}</span>
+          <span class="section-name">${section.name}</span>
+          <span class="section-meta">${section.rounds}×</span>
+        `;
+        button.addEventListener("click", () => jumpToSection(index));
+        els.sectionNav.appendChild(button);
+      });
+    }
+
+    function render() {
+      const section = workout[state.section];
+      const exercise = section.exercises[state.exercise];
+
+      [...els.sectionNav.children].forEach((item, index) => {
+        item.classList.toggle("active", index === state.section && !state.finished);
+        item.classList.toggle("complete", index < state.section || state.finished);
+      });
+
+      if (state.finished) {
+        els.workoutView.classList.add("hide");
+        els.completeScreen.classList.add("show");
+        return;
+      }
+
+      els.workoutView.classList.remove("hide");
+      els.completeScreen.classList.remove("show");
+      els.sectionLabel.textContent = section.name;
+      els.roundLabel.textContent = `Round ${state.round + 1} of ${section.rounds}`;
+      els.listTitle.textContent = `${section.name} exercises`;
+      els.listMeta.textContent = `${section.work} sec work · ${section.rest} sec rest`;
+
+      if (state.phase === "work") {
+        els.phaseBadge.textContent = state.running ? "Exercise" : "Ready";
+        els.phaseBadge.classList.remove("rest");
+        els.timerWrap.classList.remove("rest");
+        els.exerciseName.textContent = exercise[0];
+        els.exerciseDescription.textContent = exercise[1];
+      } else {
+        els.phaseBadge.textContent = "Rest";
+        els.phaseBadge.classList.add("rest");
+        els.timerWrap.classList.add("rest");
+        els.exerciseName.textContent = "Recover";
+        els.exerciseDescription.textContent = "Breathe steadily, loosen your shoulders, and get ready for the next movement.";
+      }
+
+      els.timer.textContent = state.remaining;
+      const fraction = Math.max(0, Math.min(1, state.remaining / state.phaseDuration));
+      els.timerRing.style.strokeDashoffset = circumference * (1 - fraction);
+      els.startPauseBtn.textContent = state.running ? "Pause" : (state.remaining < state.phaseDuration ? "Resume" : "Start");
+
+      const progress = ((state.elapsedSteps + (state.phase === "rest" ? 1 : 0)) / totalExerciseSteps()) * 100;
+      els.progressFill.style.width = `${Math.min(progress, 100)}%`;
+
+      renderChips();
+      renderNext();
+    }
+
+    function renderChips() {
+      const section = workout[state.section];
+      els.exerciseChips.innerHTML = "";
+      section.exercises.forEach((exercise, index) => {
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.textContent = exercise[0];
+        if (index === state.exercise) chip.classList.add("active");
+        if (index < state.exercise) chip.classList.add("done");
+        els.exerciseChips.appendChild(chip);
+      });
+    }
+
+    function getNextExercise() {
+      const section = workout[state.section];
+      if (state.exercise + 1 < section.exercises.length) {
+        return section.exercises[state.exercise + 1][0];
+      }
+      if (state.round + 1 < section.rounds) {
+        return section.exercises[0][0];
+      }
+      if (state.section + 1 < workout.length) {
+        return workout[state.section + 1].exercises[0][0];
+      }
+      return "Workout complete";
+    }
+
+    function renderNext() {
+      if (state.phase === "rest") {
+        els.nextUp.textContent = `Next: ${getNextExercise()}`;
+      } else {
+        els.nextUp.textContent = `Up next: ${getNextExercise()}`;
+      }
+    }
+
+    async function requestWakeLock() {
+      try {
+        if ("wakeLock" in navigator && state.running) {
+          await navigator.wakeLock.request("screen");
+        }
+      } catch (_) {}
+    }
+
+    function beep(frequency = 660, duration = 0.12) {
+      try {
+        audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        oscillator.frequency.value = frequency;
+        gain.gain.setValueAtTime(0.08, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + duration);
+      } catch (_) {}
+    }
+
+    function toggleTimer() {
+      state.running = !state.running;
+      if (state.running) {
+        requestWakeLock();
+        startInterval();
+      } else {
+        stopInterval();
+      }
+      render();
+    }
+
+    function startInterval() {
+      stopInterval();
+      intervalId = setInterval(() => {
+        state.remaining--;
+        if (state.remaining <= 0) {
+          beep(state.phase === "work" ? 720 : 920, .14);
+          advancePhase();
+        }
+        render();
+      }, 1000);
+    }
+
+    function stopInterval() {
+      if (intervalId) clearInterval(intervalId);
+      intervalId = null;
+    }
+
+    function advancePhase() {
+      const section = workout[state.section];
+
+      if (state.phase === "work") {
+        state.phase = "rest";
+        state.remaining = section.rest;
+        state.phaseDuration = section.rest;
+        return;
+      }
+
+      state.elapsedSteps++;
+
+      if (state.exercise + 1 < section.exercises.length) {
+        state.exercise++;
+      } else if (state.round + 1 < section.rounds) {
+        state.round++;
+        state.exercise = 0;
+      } else if (state.section + 1 < workout.length) {
+        state.section++;
+        state.round = 0;
+        state.exercise = 0;
+      } else {
+        finishWorkout();
+        return;
+      }
+
+      state.phase = "work";
+      state.remaining = workout[state.section].work;
+      state.phaseDuration = workout[state.section].work;
+    }
+
+    function skip() {
+      beep(800, .08);
+      advancePhase();
+      if (state.finished) stopInterval();
+      render();
+    }
+
+    function jumpToSection(index) {
+      stopInterval();
+      state = initialState(index);
+      render();
+    }
+
+    function resetWorkout() {
+      stopInterval();
+      state = initialState(0);
+      render();
+    }
+
+    function finishWorkout() {
+      state.finished = true;
+      state.running = false;
+      stopInterval();
+      beep(880, .15);
+      setTimeout(() => beep(1100, .18), 180);
+    }
+
+    els.startPauseBtn.addEventListener("click", toggleTimer);
+    els.skipBtn.addEventListener("click", skip);
+    els.resetBtn.addEventListener("click", resetWorkout);
+    els.restartBtn.addEventListener("click", resetWorkout);
+
+    document.addEventListener("keydown", event => {
+      if (event.code === "Space") {
+        event.preventDefault();
+        toggleTimer();
+      }
+      if (event.code === "ArrowRight") skip();
+    });
+
+    els.durationSummary.textContent = formatDuration(totalDuration());
+    buildNav();
+    state = initialState();
+    render();
+  </script>
+</body>
+</html>
