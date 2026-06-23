@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f2eee7" />
+  <title>Settle</title>
+  <style>
+    :root {
+      --bg: #ebe9ef;
+      --panel: rgba(255,255,255,.80);
+      --text: #24222a;
+      --muted: #706b78;
+      --line: rgba(36,34,42,.12);
+      --accent: #5f587d;
+      --accent-2: #e2deee;
+      --rest: #766884;
+      --rest-bg: #ece5f1;
+      --danger: #8e4b55;
+      --shadow: 0 22px 70px rgba(58,50,76,.13);
+      --radius: 28px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Avenir Next", Avenir, "Trebuchet MS", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 14% 10%, rgba(255,255,255,.96), transparent 32%),
+        radial-gradient(circle at 86% 88%, rgba(193,184,218,.52), transparent 35%),
+        var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      overflow: hidden;
+    }
+
+    button { font: inherit; }
+
+    .app {
+      width: min(1120px, 100%);
+      height: min(760px, calc(100vh - 32px));
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,.9);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+      border-radius: 36px;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      min-height: 0;
+      overflow: hidden;
+      padding: 22px 20px;
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .brand {
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: 650;
+      letter-spacing: -.025em;
+      font-size: 22px;
+    }
+
+    .summary {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.55);
+      border: 1px solid var(--line);
+    }
+
+    .summary-label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .13em;
+      font-weight: 750;
+    }
+
+    .summary-value {
+      margin-top: 7px;
+      font-size: 24px;
+      font-weight: 760;
+      letter-spacing: -.04em;
+    }
+
+    .sections {
+      display: grid;
+      gap: 8px;
+    }
+
+    .section-item {
+      appearance: none;
+      border: 0;
+      width: 100%;
+      text-align: left;
+      padding: 14px 15px;
+      border-radius: 17px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      transition: .18s ease;
+    }
+
+    .section-item:hover { background: rgba(255,255,255,.6); }
+
+    .section-item.active {
+      background: var(--accent-2);
+      color: var(--text);
+    }
+
+    .section-item.complete { color: var(--accent); }
+
+    .section-number {
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 750;
+      background: rgba(255,255,255,.56);
+    }
+
+    .section-name {
+      font-weight: 680;
+      font-size: 14px;
+    }
+
+    .section-meta {
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .main {
+      position: relative;
+      min-height: 0;
+      overflow: hidden;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .13em;
+    }
+
+    .round-pill {
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--muted);
+      background: rgba(255,255,255,.55);
+    }
+
+    .progress-track {
+      height: 8px;
+      margin-top: 14px;
+      border-radius: 999px;
+      background: rgba(23,32,24,.08);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: inherit;
+      transition: width .35s ease;
+    }
+
+    .stage {
+      flex: 1;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+      padding: 10px 0 8px;
+    }
+
+    .phase-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: var(--accent-2);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .11em;
+    }
+
+    .phase-badge.rest {
+      background: var(--rest-bg);
+      color: var(--rest);
+    }
+
+    h1 {
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-weight: 600;
+      font-size: clamp(38px, 5.4vw, 72px);
+      line-height: .98;
+      letter-spacing: -.065em;
+      margin: 14px 0 8px;
+      max-width: 760px;
+    }
+
+    .description {
+      max-width: 650px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
+      min-height: 44px;
+      margin: 0;
+    }
+
+    .timer-wrap.rest .value { stroke: var(--rest); }
+
+    .next-up {
+      color: var(--muted);
+      font-size: 13px;
+      min-height: 20px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .control {
+      min-width: 118px;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 0 18px;
+      background: rgba(255,255,255,.72);
+      color: var(--text);
+      font-weight: 720;
+      cursor: pointer;
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    .control:hover { transform: translateY(-1px); background: white; }
+
+    .control.primary {
+      min-width: 150px;
+      background: var(--accent);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 10px 24px rgba(49,92,60,.20);
+    }
+
+    .control.danger { color: var(--danger); }
+
+    .exercise-list {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.46);
+    }
+
+    .exercise-list-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 13px;
+    }
+
+    .exercise-list-title { font-weight: 750; }
+    .exercise-list-meta { font-size: 13px; color: var(--muted); }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 3px;
+      scrollbar-width: thin;
+    }
+
+    .chip {
+      flex: 0 0 auto;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      border: 1px solid transparent;
+      background: rgba(23,32,24,.045);
+    }
+
+    .chip.active {
+      background: var(--accent-2);
+      color: var(--accent);
+      border-color: rgba(49,92,60,.15);
+      font-weight: 750;
+    }
+
+    .chip.done { opacity: .5; text-decoration: line-through; }
+
+    .complete-screen {
+      display: none;
+      flex: 1;
+      place-items: center;
+      text-align: center;
+    }
+
+    .complete-screen.show { display: grid; }
+    .workout-view { min-height: 0; height: 100%; display: flex; flex-direction: column; }
+    .workout-view.hide { display: none; }
+
+    .check {
+      width: 92px;
+      height: 92px;
+      border-radius: 28px;
+      background: var(--accent-2);
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      font-size: 42px;
+      margin: 0 auto 22px;
+    }
+
+    .complete-screen h2 {
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-weight: 600;
+      font-size: clamp(38px, 6vw, 68px);
+      margin: 0 0 12px;
+      letter-spacing: -.055em;
+    }
+
+    .complete-screen p {
+      color: var(--muted);
+      max-width: 500px;
+      line-height: 1.6;
+      margin: 0 auto 28px;
+    }
+
+    @media (max-width: 820px) {
+      body { padding: 0; }
+      .app {
+        height: calc(100vh - 16px);
+        min-height: 0;
+        border-radius: 24px;
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        padding: 10px 14px;
+        gap: 8px;
+      }
+      .summary, .sidebar-footer { display: none; }
+      .sections {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+      }
+      .section-item {
+        display: block;
+        text-align: center;
+        padding: 10px 6px;
+      }
+      .section-number { margin: 0 auto 5px; }
+      .section-meta { display: none; }
+      .main { padding: 14px 16px 16px; min-height: 0; }
+      .exercise-list { margin-top: 10px; }
+    }
+
+
+    @media (max-height: 690px) {
+      .exercise-list { display: none; }
+      .sidebar-footer { display: none; }
+      .stage { padding-top: 4px; }
+      h1 { font-size: clamp(34px, 6vh, 56px); }
+      .description { font-size: 14px; line-height: 1.45; }
+    }
+
+    @media (max-width: 520px) {
+      .brand { justify-content: center; }
+      h1 { font-size: 40px; }
+      .description { font-size: 14px; }
+      .control { min-width: 90px; flex: 1; }
+      .control.primary { min-width: 130px; }
+    }
+  
+
+    /* Launch-specific elements, styled to match Primer */
+    .step-pill {
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--muted);
+      background: rgba(255,255,255,.55);
+    }
+
+    .type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: var(--accent-2);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .11em;
+    }
+
+    .task-list {
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.46);
+    }
+
+    .task-list-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 11px;
+    }
+
+    .task-list-title {
+      font-weight: 750;
+    }
+
+    .task-list-meta {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .complete-mark {
+      width: 92px;
+      height: 92px;
+      border-radius: 28px;
+      background: var(--accent-2);
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      font-size: 42px;
+      margin: 0 auto 22px;
+    }
+
+    .routine-view {
+      min-height: 0;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    .routine-view.hide {
+      display: none;
+    }
+
+    @media (max-width: 820px) {
+      .task-list {
+        margin-top: 11px;
+        padding: 13px;
+      }
+    }
+
+    @media (max-height: 700px) and (min-width: 821px) {
+
+      .task-list {
+        margin-top: 10px;
+        padding: 13px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .task-list-meta {
+        display: none;
+      }
+    }
+
+    .status-card {
+      width: min(520px, 92%);
+      margin: clamp(16px, 3vh, 28px) 0 clamp(12px, 2vh, 20px);
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 18px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.56);
+      text-align: left;
+    }
+
+    .status-stat {
+      display: grid;
+      gap: 6px;
+    }
+
+    .status-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .status-value {
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -.03em;
+    }
+
+    .status-divider {
+      width: 1px;
+      height: 44px;
+      background: var(--line);
+    }
+
+    .status-next {
+      grid-column: 1 / -1;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .status-next strong {
+      font-size: 14px;
+      text-align: right;
+    }
+
+    @media (max-width: 520px) {
+      .status-card {
+        width: 100%;
+        padding: 16px;
+        gap: 13px;
+      }
+
+      .status-value {
+        font-size: 20px;
+      }
+
+      .status-next {
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-height: 700px) and (min-width: 821px) {
+      .status-card {
+        margin: 10px 0;
+        padding: 15px 18px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <main class="app">
+    <aside class="sidebar">
+      <div class="brand">Settle</div>
+
+      <div class="summary">
+        <div class="summary-label">Night checklist</div>
+        <div class="summary-value" id="durationSummary">11 steps</div>
+      </div>
+
+      <nav class="sections" id="sectionNav"></nav>
+
+      <div class="sidebar-footer">
+        A simple sequence for closing out the day and making sleep easier.
+      </div>
+    </aside>
+
+    <section class="main">
+      <div class="routine-view" id="routineView">
+        <header class="topbar">
+          <div>
+            <div class="eyebrow" id="sectionLabel">Close</div>
+          </div>
+          <div class="step-pill" id="stepLabel">Step 1 of 11</div>
+        </header>
+
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <section class="stage">
+          <div class="type-badge" id="typeBadge">Quick check</div>
+          <h1 id="taskName">Finish the Day</h1>
+          <p class="description" id="taskDescription"></p>
+          <div class="status-card" id="statusCard">
+            <div class="status-stat">
+              <span class="status-label">Section remaining</span>
+              <strong class="status-value" id="sectionRemaining">2 steps</strong>
+            </div>
+            <div class="status-divider"></div>
+            <div class="status-stat">
+              <span class="status-label">Routine remaining</span>
+              <strong class="status-value" id="routineRemaining">11 steps</strong>
+            </div>
+            <div class="status-next">
+              <span class="status-label">Up next</span>
+              <strong id="nextUp">Set Tomorrow Up</strong>
+            </div>
+          </div>
+        </section>
+
+        <div class="controls">
+          <button class="control danger" id="resetBtn">Reset</button>
+          <button class="control primary" id="mainBtn">Done</button>
+          <button class="control" id="skipBtn">Done Later</button>
+        </div>
+
+        <section class="task-list">
+          <div class="task-list-header">
+            <span class="task-list-title" id="listTitle">Reset steps</span>
+            <span class="task-list-meta" id="listMeta">3 steps</span>
+          </div>
+          <div class="chips" id="taskChips"></div>
+        </section>
+      </div>
+
+      <section class="complete-screen" id="completeScreen">
+        <div>
+          <div class="complete-mark">✓</div>
+          <h2>Day complete.</h2>
+          <p>Your bedtime routine is complete. Put the day away and let yourself rest.</p>
+          <button class="control primary" id="restartBtn">Restart routine</button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const routine = [
+      {
+        name: "Close",
+        tasks: [
+          {
+            name: "Finish the Day",
+            description: "Wrap up what you are doing and avoid starting anything new. Save your work and decide what can wait until tomorrow."
+          },
+          {
+            name: "Set Tomorrow Up",
+            description: "Pack your bag, choose your clothes, and place anything important where you will see it in the morning."
+          },
+          {
+            name: "Check Tomorrow",
+            description: "Review your calendar and first commitment so you know what the morning will require."
+          }
+        ]
+      },
+      {
+        name: "Reset",
+        tasks: [
+          {
+            name: "Tidy the Room",
+            description: "Put away obvious clutter, clear the floor, and return a few misplaced items. Keep it brief rather than turning it into a full cleaning session."
+          },
+          {
+            name: "Dim the Room",
+            description: "Lower the lights, close the blinds or curtains, and make the room feel quieter and less stimulating."
+          },
+          {
+            name: "Put Devices Away",
+            description: "Plug in your phone and other devices away from the bed. Silence nonessential notifications."
+          }
+        ]
+      },
+      {
+        name: "Ready",
+        tasks: [
+          {
+            name: "Brush Teeth",
+            description: "Brush and floss, wash your face, and finish any basic nighttime hygiene."
+          },
+          {
+            name: "Change for Bed",
+            description: "Put on comfortable sleep clothes and make sure the room temperature and bedding feel comfortable."
+          },
+          {
+            name: "Fill Water",
+            description: "Fill a glass or bottle of water and place it nearby so you do not need to get up later."
+          }
+        ]
+      },
+      {
+        name: "Settle",
+        tasks: [
+          {
+            name: "Light Stretch",
+            description: "Do a few gentle shoulder, neck, back, or leg stretches. Keep the movement slow and comfortable."
+          },
+          {
+            name: "Quiet Activity",
+            description: "Read, journal, or listen to something calm for a short while. Avoid bright screens and anything that feels activating."
+          },
+          {
+            name: "Lights Out",
+            description: "Get into bed, turn off the remaining lights, and let the day end without checking anything else."
+          }
+        ]
+      }
+    ];
+
+    const els = {
+      sectionNav: document.getElementById("sectionNav"),
+      durationSummary: document.getElementById("durationSummary"),
+      sectionLabel: document.getElementById("sectionLabel"),
+      stepLabel: document.getElementById("stepLabel"),
+      progressFill: document.getElementById("progressFill"),
+      typeBadge: document.getElementById("typeBadge"),
+      taskName: document.getElementById("taskName"),
+      taskDescription: document.getElementById("taskDescription"),
+      sectionRemaining: document.getElementById("sectionRemaining"),
+      routineRemaining: document.getElementById("routineRemaining"),
+      nextUp: document.getElementById("nextUp"),
+      mainBtn: document.getElementById("mainBtn"),
+      skipBtn: document.getElementById("skipBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      restartBtn: document.getElementById("restartBtn"),
+      listTitle: document.getElementById("listTitle"),
+      listMeta: document.getElementById("listMeta"),
+      taskChips: document.getElementById("taskChips"),
+      routineView: document.getElementById("routineView"),
+      completeScreen: document.getElementById("completeScreen")
+    };
+
+    let state;
+
+    function allTasks() {
+      return routine.flatMap((section, sectionIndex) =>
+        section.tasks.map((task, taskIndex) => ({ ...task, sectionIndex, taskIndex }))
+      );
+    }
+
+    const flatTasks = allTasks();
+
+    function initialState(sectionIndex = 0) {
+      const flatIndex = flatTasks.findIndex(task => task.sectionIndex === sectionIndex);
+      return {
+        flatIndex,
+        finished: false
+      };
+    }
+
+    function currentTask() {
+      return flatTasks[state.flatIndex];
+    }
+
+    function buildNav() {
+      els.sectionNav.innerHTML = "";
+      routine.forEach((section, index) => {
+        const button = document.createElement("button");
+        button.className = "section-item";
+        button.dataset.index = index;
+        button.innerHTML = `
+          <span class="section-number">${index + 1}</span>
+          <span class="section-name">${section.name}</span>
+          <span class="section-meta">${section.tasks.length}</span>
+        `;
+        button.addEventListener("click", () => jumpToSection(index));
+        els.sectionNav.appendChild(button);
+      });
+    }
+
+    function render() {
+      if (state.finished) {
+        els.routineView.classList.add("hide");
+        els.completeScreen.classList.add("show");
+        [...els.sectionNav.children].forEach(item => item.classList.add("complete"));
+        return;
+      }
+
+      els.routineView.classList.remove("hide");
+      els.completeScreen.classList.remove("show");
+
+      const task = currentTask();
+      const section = routine[task.sectionIndex];
+
+      [...els.sectionNav.children].forEach((item, index) => {
+        item.classList.toggle("active", index === task.sectionIndex);
+        item.classList.toggle("complete", index < task.sectionIndex);
+      });
+
+      els.sectionLabel.textContent = section.name;
+      els.stepLabel.textContent = `Step ${state.flatIndex + 1} of ${flatTasks.length}`;
+      els.progressFill.style.width = `${(state.flatIndex / flatTasks.length) * 100}%`;
+      els.taskName.textContent = task.name;
+      els.taskDescription.textContent = task.description;
+      els.typeBadge.textContent = "Checklist step";
+      els.mainBtn.textContent = "Done";
+      els.listTitle.textContent = `${section.name} steps`;
+      els.listMeta.textContent = `${section.tasks.length} steps`;
+
+      const next = flatTasks[state.flatIndex + 1];
+      const sectionRemaining = section.tasks.length - task.taskIndex - 1;
+      const routineRemaining = flatTasks.length - state.flatIndex - 1;
+
+      els.sectionRemaining.textContent =
+        `${sectionRemaining} ${sectionRemaining === 1 ? "step" : "steps"}`;
+      els.routineRemaining.textContent =
+        `${routineRemaining} ${routineRemaining === 1 ? "step" : "steps"}`;
+      els.nextUp.textContent = next ? next.name : "Routine complete";
+
+      renderChips();
+    }
+
+    function renderChips() {
+      const task = currentTask();
+      const section = routine[task.sectionIndex];
+      els.taskChips.innerHTML = "";
+
+      section.tasks.forEach((item, index) => {
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.textContent = item.name;
+        if (index === task.taskIndex) chip.classList.add("active");
+        if (index < task.taskIndex) chip.classList.add("done");
+        els.taskChips.appendChild(chip);
+      });
+    }
+
+    function completeStep() {
+      if (state.flatIndex + 1 >= flatTasks.length) {
+        state.finished = true;
+        render();
+        return;
+      }
+      state.flatIndex++;
+      render();
+    }
+
+    function resetRoutine() {
+      state = initialState();
+      render();
+    }
+
+    function jumpToSection(sectionIndex) {
+      state = initialState(sectionIndex);
+      render();
+    }
+
+    els.mainBtn.addEventListener("click", completeStep);
+    els.skipBtn.addEventListener("click", completeStep);
+    els.resetBtn.addEventListener("click", resetRoutine);
+    els.restartBtn.addEventListener("click", resetRoutine);
+
+    document.addEventListener("keydown", event => {
+      if (event.code === "Space" || event.code === "ArrowRight") {
+        event.preventDefault();
+        completeStep();
+      }
+    });
+
+    els.durationSummary.textContent = `${flatTasks.length} steps`;
+    buildNav();
+    state = initialState();
+    render();
+  </script>
+</body>
+</html>
