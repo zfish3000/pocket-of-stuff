@@ -83,20 +83,21 @@
           context.fillRect(x, y, size, size);
 
           if (hoverAmount > 0.02) {
-            maskRects.push({ x, y, size });
+            maskRects.push({ x, y, size, alpha: hoverAmount });
           }
         }
       }
 
       if (maskRects.length) {
-        context.save();
-        context.beginPath();
         maskRects.forEach((rect) => {
-          context.rect(rect.x, rect.y, rect.size, rect.size);
+          const sourceRectX = sourceX + (rect.x / width) * sourceWidth;
+          const sourceRectY = sourceY + (rect.y / height) * sourceHeight;
+          const sourceRectSizeX = (rect.size / width) * sourceWidth;
+          const sourceRectSizeY = (rect.size / height) * sourceHeight;
+          context.globalAlpha = rect.alpha;
+          context.drawImage(video, sourceRectX, sourceRectY, sourceRectSizeX, sourceRectSizeY, rect.x, rect.y, rect.size, rect.size);
         });
-        context.clip();
-        context.drawImage(video, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, width, height);
-        context.restore();
+        context.globalAlpha = 1;
       }
     }
 
