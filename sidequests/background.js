@@ -10,10 +10,13 @@
   const cellSize = 12;
   const brightnessFloor = 34;
   const verticalTrim = 0.12;
+  const hoverRadius = 96;
   let width = 0;
   let height = 0;
   let columns = 0;
   let rows = 0;
+  let pointer = { x: 0, y: 0, active: false };
+  let hoverAmounts = new Float32Array();
 
   function resize() {
     const ratio = Math.min(window.devicePixelRatio || 1, 2);
@@ -28,6 +31,13 @@
     context.setTransform(ratio, 0, 0, ratio, 0, 0);
     sampleCanvas.width = columns;
     sampleCanvas.height = rows;
+    hoverAmounts = new Float32Array(columns * rows);
+  }
+
+  function updateHoverAmount(index, x, y) {
+    const target = pointer.active && Math.hypot(x - pointer.x, y - pointer.y) <= hoverRadius ? 1 : 0;
+    hoverAmounts[index] += (target - hoverAmounts[index]) * 0.18;
+    return hoverAmounts[index];
   }
 
   function draw() {
@@ -52,18 +62,29 @@
       sampleContext.drawImage(video, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, columns, rows);
       const pixels = sampleContext.getImageData(0, 0, columns, rows).data;
       context.clearRect(0, 0, width, height);
-      context.fillStyle = "#ffffff";
 
       for (let row = 0; row < rows; row += 1) {
         for (let column = 0; column < columns; column += 1) {
           const index = (row * columns + column) * 4;
-          const brightness = pixels[index] * 0.299 + pixels[index + 1] * 0.587 + pixels[index + 2] * 0.114;
-          const amount = Math.max(0, (brightness - brightnessFloor) / (255 - brightnessFloor));
+          const cellIndex = row * columns + column;
+          const red = pixels[index];
+          const green = pixels[index + 1];
+          const blue = pixels[index + 2];
+          const brightness = red * 0.299 + green * 0.587 + blue * 0.114;
+          const centerX = column * cellSize + cellSize / 2;
+          const centerY = row * cellSize + cellSize / 2;
+          const hoverAmount = updateHoverAmount(cellIndex, centerX, centerY);
+          const baseAmount = Math.max(0, (brightness - brightnessFloor) / (255 - brightnessFloor));
+          const amount = baseAmount + (1 - baseAmount) * hoverAmount;
           if (amount <= 0.02) continue;
 
           const size = Math.min(cellSize, Math.round(cellSize * amount));
           const x = column * cellSize + (cellSize - size) / 2;
           const y = row * cellSize + (cellSize - size) / 2;
+          const drawRed = Math.round(255 + (red - 255) * hoverAmount);
+          const drawGreen = Math.round(255 + (green - 255) * hoverAmount);
+          const drawBlue = Math.round(255 + (blue - 255) * hoverAmount);
+          context.fillStyle = `rgb(${drawRed}, ${drawGreen}, ${drawBlue})`;
           context.fillRect(x, y, size, size);
         }
       }
@@ -74,6 +95,15 @@
 
   resize();
   window.addEventListener("resize", resize);
+  window.addEventListener("pointermove", (event) => {
+    pointer = { x: event.clientX, y: event.clientY, active: true };
+  });
+  window.addEventListener("pointerleave", () => {
+    pointer.active = false;
+  });
+  window.addEventListener("blur", () => {
+    pointer.active = false;
+  });
   video.play().catch(() => {});
   requestAnimationFrame(draw);
 })();
