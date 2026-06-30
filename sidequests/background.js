@@ -61,16 +61,15 @@
 
       sampleContext.drawImage(video, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, columns, rows);
       const pixels = sampleContext.getImageData(0, 0, columns, rows).data;
+      const maskRects = [];
       context.clearRect(0, 0, width, height);
+      context.fillStyle = "#ffffff";
 
       for (let row = 0; row < rows; row += 1) {
         for (let column = 0; column < columns; column += 1) {
           const index = (row * columns + column) * 4;
           const cellIndex = row * columns + column;
-          const red = pixels[index];
-          const green = pixels[index + 1];
-          const blue = pixels[index + 2];
-          const brightness = red * 0.299 + green * 0.587 + blue * 0.114;
+          const brightness = pixels[index] * 0.299 + pixels[index + 1] * 0.587 + pixels[index + 2] * 0.114;
           const centerX = column * cellSize + cellSize / 2;
           const centerY = row * cellSize + cellSize / 2;
           const hoverAmount = updateHoverAmount(cellIndex, centerX, centerY);
@@ -81,12 +80,23 @@
           const size = Math.min(cellSize, Math.round(cellSize * amount));
           const x = column * cellSize + (cellSize - size) / 2;
           const y = row * cellSize + (cellSize - size) / 2;
-          const drawRed = Math.round(255 + (red - 255) * hoverAmount);
-          const drawGreen = Math.round(255 + (green - 255) * hoverAmount);
-          const drawBlue = Math.round(255 + (blue - 255) * hoverAmount);
-          context.fillStyle = `rgb(${drawRed}, ${drawGreen}, ${drawBlue})`;
           context.fillRect(x, y, size, size);
+
+          if (hoverAmount > 0.02) {
+            maskRects.push({ x, y, size });
+          }
         }
+      }
+
+      if (maskRects.length) {
+        context.save();
+        context.beginPath();
+        maskRects.forEach((rect) => {
+          context.rect(rect.x, rect.y, rect.size, rect.size);
+        });
+        context.clip();
+        context.drawImage(video, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, width, height);
+        context.restore();
       }
     }
 
