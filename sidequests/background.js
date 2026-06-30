@@ -40,6 +40,14 @@
     return hoverAmounts[index];
   }
 
+  function isUiTarget(target) {
+    return Boolean(target && target.closest && target.closest(".picker, .modal"));
+  }
+
+  function deactivatePointer() {
+    pointer.active = false;
+  }
+
   function draw() {
     if (video.readyState >= 2 && columns && rows) {
       const videoRatio = video.videoWidth / video.videoHeight;
@@ -107,13 +115,16 @@
   resize();
   window.addEventListener("resize", resize);
   window.addEventListener("pointermove", (event) => {
-    pointer = { x: event.clientX, y: event.clientY, active: true };
+    pointer = {
+      x: event.clientX,
+      y: event.clientY,
+      active: !isUiTarget(event.target)
+    };
   });
-  window.addEventListener("pointerleave", () => {
-    pointer.active = false;
-  });
-  window.addEventListener("blur", () => {
-    pointer.active = false;
+  window.addEventListener("pointerleave", deactivatePointer);
+  window.addEventListener("blur", deactivatePointer);
+  document.querySelectorAll(".picker, .modal").forEach((element) => {
+    element.addEventListener("pointerenter", deactivatePointer);
   });
   video.play().catch(() => {});
   requestAnimationFrame(draw);
