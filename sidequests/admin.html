@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sidequests Admin</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html">Sidequests</a>
+      <nav class="nav">
+        <a href="index.html">Main page</a>
+      </nav>
+    </header>
+
+    <main class="admin-shell">
+      <section class="admin-heading">
+        <p class="eyebrow">Admin</p>
+        <h1>Manage the sidequest database.</h1>
+      </section>
+
+      <section class="admin-layout">
+        <section class="admin-section">
+          <div class="section-title">
+            <h2>All sidequests</h2>
+            <span id="allCount">0</span>
+          </div>
+          <div class="admin-list" id="allSidequests"></div>
+        </section>
+
+        <section class="admin-section">
+          <div class="section-title">
+            <h2>Submitted sidequests</h2>
+            <span id="submittedCount">0</span>
+          </div>
+          <div class="admin-list" id="submittedSidequests"></div>
+        </section>
+
+        <section class="admin-section">
+          <div class="section-title">
+            <h2>Reported sidequests</h2>
+            <span id="reportedCount">0</span>
+          </div>
+          <div class="admin-list" id="reportedSidequests"></div>
+        </section>
+      </section>
+    </main>
+
+    <dialog class="modal" id="editQuestDialog">
+      <form class="modal-panel" id="editQuestForm" method="dialog">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">Edit sidequest</p>
+            <h2>Update database row</h2>
+          </div>
+          <button class="icon-button" id="closeEditQuest" value="cancel" type="button" aria-label="Close">x</button>
+        </div>
+
+        <input name="id" type="hidden" />
+        <div class="form-grid">
+          <label class="span-2">
+            Title
+            <input name="title" required maxlength="80" />
+          </label>
+          <label class="span-2">
+            Description
+            <textarea name="description" required rows="4" maxlength="420"></textarea>
+          </label>
+          <label>
+            Submitter
+            <input name="submitter" required maxlength="60" />
+          </label>
+          <label>
+            Min people
+            <input name="minPeople" required type="number" min="1" max="99" />
+          </label>
+          <label>
+            Max people
+            <input name="maxPeople" required type="number" min="1" max="99" />
+          </label>
+          <label>
+            Vibe
+            <input name="vibe" required maxlength="40" />
+          </label>
+          <label>
+            Location
+            <input name="location" required maxlength="60" />
+          </label>
+          <label>
+            Price
+            <input name="price" required maxlength="40" />
+          </label>
+        </div>
+
+        <p class="form-error" id="editQuestError"></p>
+
+        <div class="modal-actions">
+          <button class="secondary-button" id="cancelEditQuest" type="button">Cancel</button>
+          <button class="primary-button" type="submit">Save changes</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="shared.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>
