@@ -7,8 +7,9 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body class="public-page">
-    <video class="background-video" autoplay muted loop playsinline aria-hidden="true">
-      <source src="assets/video-pixel.mp4" type="video/mp4" />
+    <canvas class="background-canvas" id="backgroundCanvas" aria-hidden="true"></canvas>
+    <video class="background-source" id="backgroundSource" autoplay muted loop playsinline aria-hidden="true">
+      <source src="assets/video-normal.mp4" type="video/mp4" />
     </video>
 
     <main class="shell">
@@ -121,7 +122,8 @@
       </form>
     </dialog>
 
-    <script src="shared.js?v=3"></script>
-    <script src="app.js?v=3"></script>
+    <script src="background.js?v=3"></script>
+    <script src="shared.js?v=4"></script>
+    <script src="app.js?v=4"></script>
   </body>
 </html>
