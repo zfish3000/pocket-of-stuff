@@ -105,7 +105,7 @@ describe('physics world', () => {
     world.destroy();
   });
 
-  test('compound_arch_visual_center_matches_its_layout_center', () => {
+  test('arch_visual_center_matches_its_rectangular_collision_center', () => {
     const input = fixture('arch');
     const world = createPhysicsWorld(input);
 

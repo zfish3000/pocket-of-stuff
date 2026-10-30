@@ -18,16 +18,7 @@ export function createBodyForShape(spec: BlockSpec, placement: BlockPlacement): 
   const { x, y, width, height } = placement;
   let body: Body;
 
-  if (spec.shape === 'arch') {
-    const pillarWidth = width * 0.24;
-    const beamHeight = height * 0.3;
-    const parts = [
-      Bodies.rectangle(x - width / 2 + pillarWidth / 2, y + beamHeight / 2, pillarWidth, height - beamHeight),
-      Bodies.rectangle(x + width / 2 - pillarWidth / 2, y + beamHeight / 2, pillarWidth, height - beamHeight),
-      Bodies.rectangle(x, y - height / 2 + beamHeight / 2, width, beamHeight),
-    ];
-    body = Body.create({ parts, ...BODY_OPTIONS });
-  } else if (spec.shape === 'roof') {
+  if (spec.shape === 'roof') {
     body = polygonBody(placement, [
       { x: -width / 2, y: height / 2 },
       { x: 0, y: -height / 2 },

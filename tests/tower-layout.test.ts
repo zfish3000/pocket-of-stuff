@@ -156,7 +156,11 @@ describe('tower layout', () => {
       const body = createBodyForShape(block, placement);
       expect(body.bounds.max.x - body.bounds.min.x).toBeCloseTo(block.width, 0);
       expect(body.bounds.max.y - body.bounds.min.y).toBeCloseTo(block.height, 0);
-      if (block.shape === 'arch') expect(body.parts.length).toBeGreaterThan(1);
+      if (block.shape === 'arch') {
+        expect(body.parts).toHaveLength(1);
+        expect(body.vertices).toHaveLength(4);
+        expect(body.position).toEqual({ x: placement.x, y: placement.y });
+      }
     }
   });
 });
