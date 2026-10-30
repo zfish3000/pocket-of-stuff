@@ -5,6 +5,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 import { collectBlockSpecs } from '../src/projects/blocks';
+import { updateArchOutline } from '../src/projects/arch-outline';
 
 function anchor(slug: string, title: string, shape = 'brick', color = 'coral'): string {
   return `<a class="project-block" href="/projects/${slug}.html" data-project-slug="${slug}" data-project-shape="${shape}" data-project-color="${color}"><span class="project-block__title">${title}</span></a>`;
@@ -46,6 +47,24 @@ describe('project block collection', () => {
     expect(token!.width).toBeGreaterThan(short!.width);
     expect(token!.element.style.getPropertyValue('--block-lines')).toBe('4');
     expect(token!.element.dataset.enhanced).toBe('true');
+  });
+
+  test('arch_outline_follows_the_opening_and_resizes_without_duplicates', () => {
+    const root = document.querySelector('nav')!;
+    root.innerHTML = anchor('arch', 'Arch', 'arch');
+    const [block] = collectBlockSpecs(root);
+    updateArchOutline(block!.element, 200, 100);
+    const svg = block!.element.querySelector('svg')!;
+    const path = svg.querySelector('path')!;
+
+    expect(svg.getAttribute('viewBox')).toBe('0 0 200 100');
+    expect(path.getAttribute('d')).toContain('H 142 V 96');
+    expect(path.getAttribute('d')).toContain('A 42 42');
+    expect(path.getAttribute('vector-effect')).toBe('non-scaling-stroke');
+    updateArchOutline(block!.element, 100, 50);
+    expect(svg.getAttribute('viewBox')).toBe('0 0 100 50');
+    expect(block!.element.querySelectorAll('svg')).toHaveLength(1);
+    expect(block!.element.textContent).toContain('Arch');
   });
 });
 
