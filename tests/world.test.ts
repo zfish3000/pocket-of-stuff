@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { Body } from 'matter-js';
+import { Body, Engine } from 'matter-js';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { createPhysicsWorld } from '../src/physics/world';
@@ -59,6 +59,34 @@ describe('physics world', () => {
     world.destroy();
   });
 
+  test('starting_the_world_keeps_an_untouched_tower_frozen', () => {
+    const input = fixture();
+    const world = createPhysicsWorld(input);
+
+    world.start();
+
+    expect(queuedFrame).toBeUndefined();
+    expect(world.running).toBe(false);
+    expect(world.bodies.get('alpha')!.isSleeping).toBe(true);
+    world.destroy();
+  });
+
+  test('physics_steps_stay_within_the_engine_recommended_frame_budget', () => {
+    const input = fixture();
+    const update = vi.spyOn(Engine, 'update');
+    const world = createPhysicsWorld(input);
+    world.start();
+    input.blocks[0]!.element.dispatchEvent(pointer('pointerdown', 400, 500));
+
+    const firstFrame = queuedFrame;
+    firstFrame?.(100);
+    const secondFrame = queuedFrame;
+    secondFrame?.(140);
+
+    expect(update.mock.calls.at(-1)?.[1]).toBeLessThanOrEqual(1000 / 60);
+    world.destroy();
+  });
+
   test('world_has_reachable_side_and_floor_bounds', () => {
     const input = fixture();
     const world = createPhysicsWorld(input);
@@ -87,6 +115,7 @@ describe('physics world', () => {
     const input = fixture();
     const world = createPhysicsWorld(input);
     world.start();
+    input.blocks[0]!.element.dispatchEvent(pointer('pointerdown', 400, 500));
     const scheduled = queuedFrame;
     const originalTransform = input.blocks[0]!.element.style.transform;
 

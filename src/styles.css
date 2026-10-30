@@ -158,6 +158,13 @@ a {
   will-change: transform;
 }
 
+.project-stage.is-physics-ready .project-block {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+}
+
 .project-block::before {
   position: absolute;
   top: 0.45rem;
@@ -191,14 +198,17 @@ a {
 .project-block__title {
   position: relative;
   z-index: 2;
-  display: -webkit-box;
+  display: block;
   max-width: 100%;
   overflow-wrap: anywhere;
   font-size: clamp(0.78rem, 1.25vw, 1.05rem);
   font-variation-settings: 'wght' 730, 'wdth' 88;
   letter-spacing: -0.015em;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: var(--block-lines, 3);
+}
+
+.project-block--roof .project-block__title,
+.project-block--half-round .project-block__title {
+  font-size: 0.9rem;
 }
 
 .project-block--beam {

@@ -187,7 +187,7 @@ describe('pocket app lifecycle', () => {
     app.destroy();
   });
 
-  test('visibility_change_pauses_and_resumes_once', async () => {
+  test('visibility_change_pauses_and_resumes_active_physics_once', async () => {
     appDocument();
     let hidden = false;
     Object.defineProperty(document, 'hidden', { configurable: true, get: () => hidden });
@@ -195,6 +195,7 @@ describe('pocket app lifecycle', () => {
       viewport: () => ({ width: 1200, height: 800, className: 'desktop' }),
       motionQuery: mediaQuery(false),
     });
+    document.querySelector<HTMLAnchorElement>('.project-block')!.dispatchEvent(pointer('pointerdown', 400, 500));
     const initialFrames = frameCount;
     hidden = true;
     document.dispatchEvent(new Event('visibilitychange'));

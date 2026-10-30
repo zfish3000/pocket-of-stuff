@@ -123,7 +123,7 @@ export function createPhysicsWorld(options: PhysicsWorldOptions): PhysicsControl
   function frame(time: number) {
     frameId = null;
     if (paused || destroyed) return;
-    const delta = lastFrameTime === 0 ? 1000 / 60 : Math.min(32, Math.max(8, time - lastFrameTime));
+    const delta = lastFrameTime === 0 ? 1000 / 60 : Math.min(1000 / 60, Math.max(8, time - lastFrameTime));
     lastFrameTime = time;
     Engine.update(engine, delta);
     syncElements();
@@ -232,9 +232,7 @@ export function createPhysicsWorld(options: PhysicsWorldOptions): PhysicsControl
     },
     start() {
       if (destroyed) return;
-      paused = false;
       syncElements();
-      scheduleFrame();
     },
     rebuild(nextLayout) {
       if (destroyed) return;
@@ -268,9 +266,14 @@ export function createPhysicsWorld(options: PhysicsWorldOptions): PhysicsControl
     },
     resume() {
       if (destroyed || !paused) return;
-      paused = false;
       lastFrameTime = 0;
-      scheduleFrame();
+      const hasActivePhysics = activePointer !== null || [...bodies.values()].some((body) => !body.isSleeping);
+      if (hasActivePhysics) {
+        paused = false;
+        scheduleFrame();
+      } else {
+        syncElements();
+      }
     },
     cancelActiveDrag,
     destroy() {

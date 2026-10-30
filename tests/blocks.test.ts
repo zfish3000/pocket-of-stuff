@@ -111,6 +111,27 @@ describe('toymaker surface contract', () => {
     const title = getComputedStyle(document.querySelector('.project-block__title')!);
 
     expect(title.overflowWrap).toBe('anywhere');
+    expect(title.getPropertyValue('-webkit-line-clamp')).toBe('');
     expect(css).not.toContain('text-overflow: ellipsis');
+  });
+
+  test('cap_shapes_keep_labels_compact_enough_to_remain_inside_the_block', async () => {
+    const css = await readFile(resolve('src/styles.css'), 'utf8');
+    document.head.innerHTML = `<style>${css}</style>`;
+    document.body.innerHTML = '<a class="project-block project-block--roof"><span class="project-block__title">Lilac Archive Fixture</span></a>';
+    const title = getComputedStyle(document.querySelector('.project-block__title')!);
+
+    expect(title.fontSize).toBe('0.9rem');
+  });
+
+  test('physics_ready_blocks_are_anchored_to_the_stage_origin', async () => {
+    const css = await readFile(resolve('src/styles.css'), 'utf8');
+    document.head.innerHTML = `<style>${css}</style>`;
+    document.body.innerHTML = '<nav class="project-stage is-physics-ready"><a class="project-block">Alpha</a></nav>';
+    const block = getComputedStyle(document.querySelector('.project-block')!);
+
+    expect(block.position).toBe('absolute');
+    expect(block.top).toBe('0px');
+    expect(block.left).toBe('0px');
   });
 });

@@ -21,5 +21,6 @@ function projectBlocksPlugin(): Plugin {
 }
 
 export default defineConfig({
+  publicDir: process.env.POCKET_PUBLIC_DIR || 'public',
   plugins: [projectBlocksPlugin()],
 });

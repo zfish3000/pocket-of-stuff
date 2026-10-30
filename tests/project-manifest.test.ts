@@ -1,6 +1,6 @@
-import { mkdtemp, writeFile } from 'node:fs/promises';
+import { access, mkdtemp, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { describe, expect, test } from 'vitest';
 
 import {
@@ -121,5 +121,15 @@ describe('project manifest', () => {
     expect(markup).toContain('Add an HTML file to projects');
     expect(markup).toContain('public/projects/');
     expect(markup).not.toContain('<a');
+  });
+
+  test('fixture_manifest_hrefs_resolve_to_project_files', async () => {
+    const directory = resolve('tests/fixtures/projects');
+    const projects = await discoverProjects(directory);
+
+    expect(projects).toHaveLength(8);
+    await Promise.all(
+      projects.map((project) => access(join(directory, project.href.replace('/projects/', '')))),
+    );
   });
 });
