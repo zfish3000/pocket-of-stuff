@@ -1,0 +1,168 @@
+{
+  "title": "Choose Pocket of Stuff’s visual world",
+  "question": "The physics-block mechanism stays fixed; choose the material world that should carry it.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "The Toymaker’s Assembly Mat",
+      "kicker": "THE ROLL",
+      "lineage": "screen-printed wooden toys, workshop registration marks, and color-study offcuts",
+      "thesis": "A portfolio assembled by hand from imperfect colored pieces on a quiet maker’s surface.",
+      "palette": ["#F7EBD2", "#ED6A5A", "#5BC7C4", "#E9B6D2", "#5D3D78", "#F2C94C"],
+      "materials": ["matte wood grain", "screen-printed pigment", "graphite registration marks"],
+      "viewport": "A tall block tower occupies the working surface while a compact title, one-line instruction, and reset mark sit at its edges.",
+      "risk": "It becomes childish if the grain, typography, and color wear are exaggerated.",
+      "raised": [
+        {"from": "Arcade State Law", "raise": "Hover, grab, moved, and opened states each get one unmistakable visual rule."},
+        {"from": "Night Instruments", "raise": "Physics is damped and trustworthy rather than frantic or springy."},
+        {"from": "Kinetic Sand", "raise": "Reduced motion becomes a composed static construction, not a disabled version."},
+        {"from": "Provenance Ribbon", "raise": "Every block keeps its project label attached through motion and rotation."}
+      ],
+      "wireframe": {
+        "cols": 12,
+        "rows": 10,
+        "regions": [
+          {"label": "wordmark", "x": 1, "y": 1, "w": 4, "h": 1},
+          {"label": "tower / physics field", "x": 3, "y": 1, "w": 6, "h": 8, "accent": true},
+          {"label": "drag + click instruction", "x": 1, "y": 8, "w": 3, "h": 1},
+          {"label": "reset", "x": 10, "y": 8, "w": 1, "h": 1}
+        ]
+      },
+      "comp": ".impeccable/mocks/decision/assigned.webp"
+    },
+    {
+      "id": "model-pick",
+      "label": "The Gallery Play Table",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "museum handling tables and modernist educational objects",
+      "thesis": "The projects behave like collectible design objects in a calm, editorial exhibition.",
+      "palette": ["#FFFDF7", "#D95D55", "#65B8AE", "#D7B5D8", "#47365C", "#E5BB4B"],
+      "materials": ["painted beech", "cotton paper", "small museum labels"],
+      "viewport": "A low plinth supports two balanced block clusters with generous white space and a precise exhibition caption.",
+      "risk": "This is the familiar high-design portfolio answer and may sand away the oddness that makes the idea yours.",
+      "wireframe": {
+        "cols": 12,
+        "rows": 10,
+        "regions": [
+          {"label": "small title", "x": 1, "y": 1, "w": 3, "h": 1},
+          {"label": "block cluster A", "x": 2, "y": 3, "w": 4, "h": 5, "accent": true},
+          {"label": "block cluster B", "x": 7, "y": 4, "w": 3, "h": 4, "accent": true},
+          {"label": "exhibition caption", "x": 8, "y": 1, "w": 3, "h": 1}
+        ]
+      },
+      "comp": ".impeccable/mocks/decision/model-pick.webp"
+    },
+    {
+      "id": "challenger-cloud-quarry",
+      "label": "Weather Workshop",
+      "verdict": "competitive",
+      "lineage": "temporary architecture cut from clouds and sky voids",
+      "thesis": "Each project is a soft block of weather, stacked briefly before the visitor releases it.",
+      "palette": ["#F6F3EA", "#5D9DE0", "#173C70", "#7E828B", "#D6DADE"],
+      "materials": ["chalky cloud mass", "blue cut faces", "silver construction marks"],
+      "viewport": "A pale tower is cut by deep-blue gaps, with projects identified like measured construction stock.",
+      "case": "It matches the constructive physics unusually well, but visitors identify less strongly with clouds than with the wooden-toy idea you specified.",
+      "risk": "The surreal material could make the projects feel like anonymous game pieces.",
+      "wireframe": {
+        "cols": 12,
+        "rows": 10,
+        "regions": [
+          {"label": "vertical quarry title", "x": 1, "y": 1, "w": 2, "h": 5},
+          {"label": "cloud block tower", "x": 4, "y": 1, "w": 7, "h": 8, "accent": true},
+          {"label": "measurement legend", "x": 1, "y": 7, "w": 2, "h": 2}
+        ]
+      },
+      "comp": ".impeccable/mocks/decision/challenger-cloud-quarry.webp",
+      "hero": "https://impeccable.style/worlds/cards/dream-surreal-impossible-worlds-cloud-quarry-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/dream-surreal-impossible-worlds-cloud-quarry.webp"
+    },
+    {
+      "id": "challenger-arcade",
+      "label": "Block Arcade",
+      "verdict": "declined",
+      "lineage": "integer-scaled arcade playfields",
+      "thesis": "Projects become bright tile sprites in a strict game-state grid.",
+      "palette": ["#05050A", "#39C7D8", "#F5D44A", "#D548A5", "#6E55C8"],
+      "materials": ["phosphor pixels", "scanline gaps", "tile sprites"],
+      "viewport": "A score-like header sits above a full-screen tile playfield.",
+      "case": "The state language is excellent, but the arcade costume would overwhelm the personal work and discard the wooden material.",
+      "kept": "Strict state discipline for hover, grab, moved, and opened blocks.",
+      "risk": "It reads as a game portfolio template rather than Zach’s collection.",
+      "hero": "https://impeccable.style/worlds/cards/medium-native-crt-arcade-pixel-glow-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/medium-native-crt-arcade-pixel-glow.webp"
+    },
+    {
+      "id": "challenger-instruments",
+      "label": "Night Instruments",
+      "verdict": "declined",
+      "lineage": "damped aircraft gauges and trusted mechanical readings",
+      "thesis": "Each project occupies one calm instrument whose movement exposes its state.",
+      "palette": ["#101311", "#E9EFE8", "#98CFA5", "#E3A64B", "#A64C4C"],
+      "materials": ["matte instrument panel", "luminous markings", "damped needles"],
+      "viewport": "A fixed constellation of project instruments fills the page.",
+      "case": "Its motion quality is strong, but gauges contradict the free-building interaction and personal tone.",
+      "kept": "Damped, readable motion that settles quickly and predictably.",
+      "risk": "It frames creative work as telemetry rather than objects worth exploring."
+    },
+    {
+      "id": "challenger-sand",
+      "label": "Kinetic Sand Rings",
+      "verdict": "declined",
+      "lineage": "raised relief, warm gold glyphs, and rotational selection",
+      "thesis": "Projects rise from a tactile field as the visitor turns a circular index.",
+      "palette": ["#B6783F", "#3A241B", "#171310", "#CFA34F"],
+      "materials": ["fine sand relief", "antique gold", "matte earth"],
+      "viewport": "A concentric project index rises around one central selection.",
+      "case": "It offers beautiful material motion but replaces the requested tower and makes project count harder to scan.",
+      "kept": "A deliberately composed reduced-motion state with no simulated grain animation.",
+      "risk": "The visual system carries cultural specificity unrelated to the portfolio."
+    },
+    {
+      "id": "challenger-lobes",
+      "label": "Color Lawn",
+      "verdict": "declined",
+      "lineage": "saturated fields with floating white capsules",
+      "thesis": "Blocks spill over one fearless color field while navigation floats above as detached objects.",
+      "palette": ["#82CC5C", "#FFFFFF", "#F2EFE3", "#F0574C", "#1B8FF5", "#F5D42B"],
+      "materials": ["flat saturated field", "white lozenges", "rounded slabs"],
+      "viewport": "An oversized title and block cast share a saturated stage.",
+      "case": "Its confidence is useful, but the pill language competes with the block shapes and repeats a common current-web motif.",
+      "kept": "One decisive ground color rather than a timid neutral gradient.",
+      "risk": "The interface would date faster than the projects."
+    },
+    {
+      "id": "challenger-ribbon",
+      "label": "Project Provenance",
+      "verdict": "declined",
+      "lineage": "archival custody ribbons and dated object labels",
+      "thesis": "A continuous red thread links projects through time and ownership.",
+      "palette": ["#E8DCC2", "#9D332E", "#6E6A63", "#27221D"],
+      "materials": ["archival paper", "silk ribbon", "fading stamps"],
+      "viewport": "A single project history unrolls down the page.",
+      "case": "The chronology is clear, but the linear reading order contradicts playful spatial discovery.",
+      "kept": "Labels remain attached to objects and never become detached hover tooltips.",
+      "risk": "It makes a young portfolio feel institutional and retrospective."
+    }
+  ],
+  "reroll": {"registers": ["safer", "bolder"]},
+  "buildPath": {"value": "code", "toggle": true},
+  "canon": true,
+  "canonCard": {
+    "label": "The Conventional Portfolio Grid",
+    "thesis": "A highly polished white portfolio with project thumbnails arranged in a predictable responsive grid.",
+    "palette": ["#FFFFFF", "#161616", "#E8E8E8", "#5B63E8"],
+    "materials": ["white canvas", "image cards", "hairline dividers"],
+    "viewport": "A bold name, short introduction, and immediately scannable project grid.",
+    "risk": "It is easy to browse because it abandons the idea that makes the site memorable.",
+    "wireframe": {
+      "cols": 12,
+      "rows": 10,
+      "regions": [
+        {"label": "name + intro", "x": 1, "y": 1, "w": 10, "h": 2},
+        {"label": "project grid", "x": 1, "y": 4, "w": 10, "h": 5, "accent": true}
+      ]
+    },
+    "comp": ".impeccable/mocks/decision/canon.webp"
+  },
+  "steer": true
+}
