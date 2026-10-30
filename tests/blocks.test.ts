@@ -107,21 +107,23 @@ describe('toymaker surface contract', () => {
   test('long_titles_have_wrap_not_truncation_rules', async () => {
     const css = await readFile(resolve('src/styles.css'), 'utf8');
     document.head.innerHTML = `<style>${css}</style>`;
-    document.body.innerHTML = '<span class="project-block__title">averylongtoken</span>';
-    const title = getComputedStyle(document.querySelector('.project-block__title')!);
+    document.body.innerHTML = '<div class="project-tooltip">averylongtoken</div>';
+    const title = getComputedStyle(document.querySelector('.project-tooltip')!);
 
     expect(title.overflowWrap).toBe('anywhere');
     expect(title.getPropertyValue('-webkit-line-clamp')).toBe('');
     expect(css).not.toContain('text-overflow: ellipsis');
   });
 
-  test('cap_shapes_keep_labels_compact_enough_to_remain_inside_the_block', async () => {
+  test('printed_titles_are_visually_hidden_but_remain_accessible', async () => {
     const css = await readFile(resolve('src/styles.css'), 'utf8');
     document.head.innerHTML = `<style>${css}</style>`;
     document.body.innerHTML = '<a class="project-block project-block--roof"><span class="project-block__title">Lilac Archive Fixture</span></a>';
     const title = getComputedStyle(document.querySelector('.project-block__title')!);
 
-    expect(title.fontSize).toBe('calc(0.9rem * var(--block-scale, 1))');
+    expect(title.width).toBe('1px');
+    expect(title.clipPath).toBe('inset(50%)');
+    expect(title.display).not.toBe('none');
   });
 
   test('blocks_have_flat_color_without_texture_or_shadow', async () => {

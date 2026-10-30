@@ -4,6 +4,8 @@ Zachary Fisher’s project portfolio, built as a set of clickable wooden blocks 
 
 The homepage stays inside a fixed, non-scrolling viewport. Blocks use flat colors without textures or shadows and retain their dimensions while rotating. Larger collections scale down to fit; reduced motion preserves the tower without running physics.
 
+Block faces show only their project number and dot. Project titles appear in a tooltip on hover or keyboard focus and remain available to screen readers.
+
 ## Start the site
 
 ```bash
