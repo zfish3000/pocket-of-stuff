@@ -103,21 +103,34 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
   }
 
   function stopPhysics() {
+    window.clearTimeout(rebuildTimer);
+    stage.classList.remove('is-rebuilding');
     physics?.destroy();
     physics = null;
     clearPhysicsPresentation();
   }
 
+  function startRebuiltPhysics() {
+    if (destroyed || motionQuery.matches || !physics) return;
+    physics.start();
+    if (root.hidden) physics.pause();
+  }
+
   function rebuild({ animate = true }: { animate?: boolean } = {}) {
     if (blocks.length === 0) return;
     currentViewport = viewport();
+    window.clearTimeout(rebuildTimer);
+    stage.classList.remove('is-rebuilding');
     if (physics) {
       if (animate && !motionQuery.matches) {
         stage.classList.add('is-rebuilding');
-        window.clearTimeout(rebuildTimer);
-        rebuildTimer = window.setTimeout(() => stage.classList.remove('is-rebuilding'), 460);
+        rebuildTimer = window.setTimeout(() => {
+          stage.classList.remove('is-rebuilding');
+          startRebuiltPhysics();
+        }, 460);
       }
       physics.rebuild(createTowerLayout(blocks, currentViewport));
+      if (!animate) startRebuiltPhysics();
     } else if (motionQuery.matches) {
       applyStaticTower();
     }
@@ -159,6 +172,7 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
       if (physics && (changedClass || changedHeight || changedWidth || !hasInteracted || !bodiesFit(nextViewport))) {
         currentViewport = nextViewport;
         physics.rebuild(createTowerLayout(blocks, currentViewport));
+        if (!stage.classList.contains('is-rebuilding')) startRebuiltPhysics();
       } else {
         currentViewport = nextViewport;
       }

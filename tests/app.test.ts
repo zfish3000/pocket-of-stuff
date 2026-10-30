@@ -200,6 +200,34 @@ describe('pocket app lifecycle', () => {
     app.destroy();
   });
 
+  test('animated_rebuild_restarts_physics_after_the_return_animation', async () => {
+    vi.useFakeTimers();
+    appDocument();
+    const app = await createPocketApp(document, {
+      viewport: () => ({ width: 1200, height: 800, className: 'desktop' }),
+      motionQuery: mediaQuery(false),
+    });
+    app.rebuild();
+    expect(app.physics!.running).toBe(false);
+    await vi.advanceTimersByTimeAsync(460);
+    expect(app.physics!.running).toBe(true);
+    expect(app.physics!.bodies.get('alpha')!.isSleeping).toBe(false);
+    expect(document.querySelector('.project-stage')!.classList.contains('is-rebuilding')).toBe(false);
+    app.destroy();
+  });
+
+  test('instant_rebuild_restarts_physics_immediately', async () => {
+    appDocument();
+    const app = await createPocketApp(document, {
+      viewport: () => ({ width: 1200, height: 800, className: 'desktop' }),
+      motionQuery: mediaQuery(false),
+    });
+    app.rebuild({ animate: false });
+    expect(app.physics!.running).toBe(true);
+    expect(app.physics!.bodies.get('alpha')!.isSleeping).toBe(false);
+    app.destroy();
+  });
+
   test('reduced_motion_keeps_static_clickable_links', async () => {
     appDocument();
     const anchor = document.querySelector<HTMLAnchorElement>('.project-block')!;
