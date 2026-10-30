@@ -288,8 +288,12 @@ export function createPhysicsWorld(options: PhysicsWorldOptions): PhysicsControl
       return frameId !== null && !paused;
     },
     start() {
-      if (destroyed) return;
+      if (destroyed || !paused) return;
+      for (const body of bodies.values()) Sleeping.set(body, false);
+      paused = false;
+      lastFrameTime = 0;
       syncElements();
+      scheduleFrame();
     },
     rebuild(nextLayout) {
       if (destroyed) return;

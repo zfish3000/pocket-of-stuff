@@ -59,15 +59,19 @@ describe('physics world', () => {
     world.destroy();
   });
 
-  test('starting_the_world_keeps_an_untouched_tower_frozen', () => {
+  test('starting_the_world_activates_gravity_without_pointer_input', () => {
     const input = fixture();
     const world = createPhysicsWorld(input);
 
     world.start();
 
-    expect(queuedFrame).toBeUndefined();
-    expect(world.running).toBe(false);
-    expect(world.bodies.get('alpha')!.isSleeping).toBe(true);
+    expect(queuedFrame).toBeDefined();
+    expect(world.running).toBe(true);
+    const body = world.bodies.get('alpha')!;
+    expect(body.isSleeping).toBe(false);
+    const initialY = body.position.y;
+    queuedFrame?.(100);
+    expect(body.position.y).toBeGreaterThan(initialY);
     world.destroy();
   });
 
