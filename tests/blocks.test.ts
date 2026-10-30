@@ -1,6 +1,8 @@
 // @vitest-environment jsdom
 
 import { beforeEach, describe, expect, test } from 'vitest';
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 
 import { collectBlockSpecs } from '../src/projects/blocks';
 
@@ -44,5 +46,71 @@ describe('project block collection', () => {
     expect(token!.width).toBeGreaterThan(short!.width);
     expect(token!.element.style.getPropertyValue('--block-lines')).toBe('4');
     expect(token!.element.dataset.enhanced).toBe('true');
+  });
+});
+
+describe('toymaker surface contract', () => {
+  test('homepage_uses_exact_approved_copy', async () => {
+    const html = await readFile(resolve('index.html'), 'utf8');
+    const page = new DOMParser().parseFromString(html, 'text/html');
+    const text = page.body.textContent?.replace(/\s+/g, ' ').trim();
+
+    expect(text).toContain('POCKET OF STUFF');
+    expect(text).toContain('Zachary Fisher');
+    expect(text).toContain('Drag to rearrange · Click to open');
+    expect(text).toContain('Rebuild');
+  });
+
+  test('every_palette_token_matches_the_spec', async () => {
+    const css = await readFile(resolve('src/styles.css'), 'utf8');
+    document.head.innerHTML = `<style>${css}</style>`;
+    const root = getComputedStyle(document.documentElement);
+
+    expect([
+      '--canvas: #F7EBD2',
+      '--ink: #2A2030',
+      '--coral: #E36862',
+      '--aqua: #58B9B2',
+      '--lilac: #C6A5D2',
+      '--plum: #634572',
+      '--amber: #E6B84B',
+      '--powder: #9AB7C1',
+      '--graphite: #8B796B',
+    ]).toEqual([
+      `--canvas: ${root.getPropertyValue('--canvas').trim()}`,
+      `--ink: ${root.getPropertyValue('--ink').trim()}`,
+      `--coral: ${root.getPropertyValue('--coral').trim()}`,
+      `--aqua: ${root.getPropertyValue('--aqua').trim()}`,
+      `--lilac: ${root.getPropertyValue('--lilac').trim()}`,
+      `--plum: ${root.getPropertyValue('--plum').trim()}`,
+      `--amber: ${root.getPropertyValue('--amber').trim()}`,
+      `--powder: ${root.getPropertyValue('--powder').trim()}`,
+      `--graphite: ${root.getPropertyValue('--graphite').trim()}`,
+    ]);
+  });
+
+  test('project_region_has_an_accessible_name', async () => {
+    const html = await readFile(resolve('index.html'), 'utf8');
+    const page = new DOMParser().parseFromString(html, 'text/html');
+    expect(page.querySelector('nav[aria-label="Projects"]')).not.toBeNull();
+  });
+
+  test('focus_state_is_not_hover_dependent', async () => {
+    const css = await readFile(resolve('src/styles.css'), 'utf8');
+    document.head.innerHTML = `<style>${css}</style>`;
+    const selectors = [...document.styleSheets[0]!.cssRules]
+      .map((rule) => ('selectorText' in rule ? String(rule.selectorText) : ''))
+      .filter(Boolean);
+    expect(selectors.some((selector) => selector.includes('.project-block:focus-visible'))).toBe(true);
+  });
+
+  test('long_titles_have_wrap_not_truncation_rules', async () => {
+    const css = await readFile(resolve('src/styles.css'), 'utf8');
+    document.head.innerHTML = `<style>${css}</style>`;
+    document.body.innerHTML = '<span class="project-block__title">averylongtoken</span>';
+    const title = getComputedStyle(document.querySelector('.project-block__title')!);
+
+    expect(title.overflowWrap).toBe('anywhere');
+    expect(css).not.toContain('text-overflow: ellipsis');
   });
 });
