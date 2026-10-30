@@ -156,6 +156,12 @@ describe('tower layout', () => {
       const body = createBodyForShape(block, placement);
       expect(body.bounds.max.x - body.bounds.min.x).toBeCloseTo(block.width, 0);
       expect(body.bounds.max.y - body.bounds.min.y).toBeCloseTo(block.height, 0);
+      expect(body.bounds.min.x).toBeCloseTo(placement.x - placement.width / 2, 5);
+      expect(body.bounds.max.x).toBeCloseTo(placement.x + placement.width / 2, 5);
+      expect(body.bounds.min.y).toBeCloseTo(placement.y - placement.height / 2, 5);
+      expect(body.bounds.max.y).toBeCloseTo(placement.y + placement.height / 2, 5);
+      if (block.shape === 'roof') expect(body.vertices).toHaveLength(5);
+      if (block.shape === 'half-round') expect(body.vertices.length).toBeGreaterThan(16);
       if (block.shape === 'arch') {
         expect(body.parts).toHaveLength(1);
         expect(body.vertices).toHaveLength(4);

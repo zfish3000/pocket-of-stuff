@@ -113,6 +113,22 @@ describe('physics world', () => {
     world.destroy();
   });
 
+  test.each(['roof', 'half-round'] as const)('%s_visual_base_meets_the_floor_after_settling', (shape) => {
+    const input = fixture(shape);
+    const world = createPhysicsWorld(input);
+    world.start();
+    for (let frame = 0; frame < 180; frame += 1) queuedFrame?.(100 + frame * 1000 / 60);
+
+    const body = world.bodies.get('alpha')!;
+    const transform = input.blocks[0]!.element.style.transform;
+    const coordinates = transform.match(/translate3d\(([-\d.]+)px, ([-\d.]+)px/)!;
+    const visualBottom = Number(coordinates[2]) + 60;
+    expect(body.angle).toBeCloseTo(0, 4);
+    expect(visualBottom).toBeCloseTo(body.bounds.max.y, 3);
+    expect(visualBottom).toBeCloseTo(600, 0);
+    world.destroy();
+  });
+
   test('rebuild_scales_from_canonical_dimensions_after_rotation', () => {
     const input = fixture();
     const world = createPhysicsWorld(input);

@@ -275,7 +275,7 @@ a {
 
 .project-block--half-round {
   padding-top: calc(1.15rem * var(--block-scale, 1));
-  border-radius: 999px 999px 0.55rem 0.55rem;
+  border-radius: 999px 999px 0 0;
 }
 
 .project-block:hover {
