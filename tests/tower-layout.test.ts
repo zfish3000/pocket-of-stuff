@@ -72,18 +72,56 @@ describe('tower layout', () => {
     expect(createTowerLayout(blocks(36), viewports[0]!).towerCount).toBe(1);
   });
 
-  test('grows_the_mobile_stage_for_36_projects', () => {
+  test('fits_36_projects_inside_the_fixed_mobile_stage', () => {
     const layout = createTowerLayout(blocks(36), viewports[0]!);
-    expect(layout.stageHeight).toBeGreaterThan(844);
+    expect(layout.stageHeight).toBe(844);
     expect(layout.placements).toHaveLength(36);
   });
 
-  test('keeps_every_target_at_least_44_pixels', () => {
+  test('keeps_small_collection_targets_at_least_44_pixels', () => {
     for (const viewport of viewports) {
-      const layout = createTowerLayout(blocks(36), viewport);
+      const layout = createTowerLayout(blocks(6), viewport);
       for (const placement of layout.placements) {
         expect(placement.width).toBeGreaterThanOrEqual(44);
         expect(placement.height).toBeGreaterThanOrEqual(44);
+      }
+    }
+  });
+
+  test('scales_the_desktop_construction_beyond_its_mobile_piece_sizes', () => {
+    const layout = createTowerLayout(blocks(8), viewports[2]!);
+    const beam = layout.placements.find(({ shape }) => shape === 'beam')!;
+
+    expect(beam.width).toBeGreaterThan(220);
+  });
+
+  test('desktop_construction_leads_the_central_field', () => {
+    const layout = createTowerLayout(blocks(8), viewports[2]!);
+    const left = Math.min(...layout.placements.map(({ x, width }) => x - width / 2));
+    const right = Math.max(...layout.placements.map(({ x, width }) => x + width / 2));
+    const bottom = Math.max(...layout.placements.map(({ y, height }) => y + height / 2));
+
+    expect(right - left).toBeGreaterThan(480);
+    expect(bottom).toBeLessThanOrEqual(790);
+  });
+
+  test('supports_every_block_above_the_base_on_an_overlapping_block', () => {
+    for (const viewport of viewports) {
+      const layout = createTowerLayout(blocks(18), viewport);
+      for (const placement of layout.placements.filter(({ course }) => course > 0)) {
+        const supports = layout.placements.filter(
+          (candidate) =>
+            candidate.towerIndex === placement.towerIndex &&
+            candidate.course === placement.course - 1 &&
+            Math.abs(candidate.x - placement.x) < (candidate.width + placement.width) / 2,
+        );
+        const bottom = placement.y + placement.height / 2;
+
+        expect(supports.length, `${placement.id} has no overlapping support at ${viewport.width}px`).toBeGreaterThan(0);
+        expect(
+          supports.some((support) => Math.abs(bottom - (support.y - support.height / 2)) < 0.01),
+          `${placement.id} is suspended above its support at ${viewport.width}px`,
+        ).toBe(true);
       }
     }
   });
@@ -95,7 +133,7 @@ describe('tower layout', () => {
       const roofs = tower.filter(({ shape }) => shape === 'roof' || shape === 'half-round');
       const supports = tower.filter(({ shape }) => shape !== 'roof' && shape !== 'half-round');
       if (roofs.length && supports.length) {
-        expect(Math.min(...roofs.map(({ course }) => course))).toBeGreaterThanOrEqual(
+        expect(Math.min(...roofs.map(({ course }) => course))).toBeGreaterThan(
           Math.max(...supports.map(({ course }) => course)),
         );
       }

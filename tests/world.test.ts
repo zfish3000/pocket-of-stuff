@@ -4,23 +4,23 @@ import { Body, Engine } from 'matter-js';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { createPhysicsWorld } from '../src/physics/world';
-import type { BlockSpec, TowerLayout } from '../src/projects/types';
+import type { BlockShape, BlockSpec, TowerLayout } from '../src/projects/types';
 
 let queuedFrame: FrameRequestCallback | undefined;
 
-function fixture(): { stage: HTMLElement; blocks: BlockSpec[]; layout: TowerLayout } {
+function fixture(shape: BlockShape = 'brick'): { stage: HTMLElement; blocks: BlockSpec[]; layout: TowerLayout } {
   document.body.innerHTML = '<nav class="project-stage"><a class="project-block"><span class="project-block__title">Alpha</span></a></nav>';
   const stage = document.querySelector<HTMLElement>('.project-stage')!;
   const element = stage.querySelector<HTMLAnchorElement>('a')!;
   const blocks: BlockSpec[] = [
-    { id: 'alpha', index: 0, title: 'Alpha', color: 'coral', shape: 'brick', width: 120, height: 60, element },
+    { id: 'alpha', index: 0, title: 'Alpha', color: 'coral', shape, width: 120, height: 60, element },
   ];
   const layout: TowerLayout = {
     stageWidth: 800,
     stageHeight: 600,
     towerCount: 1,
     placements: [
-      { id: 'alpha', x: 400, y: 500, angle: 0, width: 120, height: 60, towerIndex: 0, course: 0, shape: 'brick' },
+      { id: 'alpha', x: 400, y: 500, angle: 0, width: 120, height: 60, towerIndex: 0, course: 0, shape },
     ],
   };
   return { stage, blocks, layout };
@@ -87,15 +87,81 @@ describe('physics world', () => {
     world.destroy();
   });
 
+  test('rotating_a_body_does_not_stretch_its_dom_block', () => {
+    const input = fixture();
+    const world = createPhysicsWorld(input);
+    const body = world.bodies.get('alpha')!;
+    Body.setAngle(body, Math.PI / 4);
+    input.blocks[0]!.element.dispatchEvent(pointer('pointerdown', 400, 500));
+
+    queuedFrame?.(100);
+
+    expect(input.blocks[0]!.element.style.width).toBe('120px');
+    expect(input.blocks[0]!.element.style.height).toBe('60px');
+    world.destroy();
+  });
+
+  test('compound_arch_visual_center_matches_its_layout_center', () => {
+    const input = fixture('arch');
+    const world = createPhysicsWorld(input);
+
+    expect(input.blocks[0]!.element.style.transform).toContain('translate3d(340px, 470px, 0)');
+    world.destroy();
+  });
+
+  test('rebuild_scales_from_canonical_dimensions_after_rotation', () => {
+    const input = fixture();
+    const world = createPhysicsWorld(input);
+    Body.setAngle(world.bodies.get('alpha')!, Math.PI / 4);
+    const larger: TowerLayout = {
+      ...input.layout,
+      placements: [{ ...input.layout.placements[0]!, width: 240, height: 90 }],
+    };
+
+    world.rebuild(larger);
+
+    expect(input.blocks[0]!.element.style.width).toBe('240px');
+    expect(input.blocks[0]!.element.style.height).toBe('90px');
+    world.destroy();
+  });
+
   test('world_has_reachable_side_and_floor_bounds', () => {
     const input = fixture();
     const world = createPhysicsWorld(input);
     const bounds = world.engine.world.bodies.filter((body) => body.isStatic);
 
-    expect(bounds).toHaveLength(3);
+    expect(bounds).toHaveLength(4);
     expect(Math.min(...bounds.map((body) => body.bounds.min.x))).toBeLessThan(0);
     expect(Math.max(...bounds.map((body) => body.bounds.max.x))).toBeGreaterThan(800);
     expect(Math.max(...bounds.map((body) => body.bounds.max.y))).toBeGreaterThan(600);
+    world.destroy();
+  });
+
+  test('native_link_drag_is_cancelled', () => {
+    const input = fixture();
+    const world = createPhysicsWorld(input);
+    const drag = new Event('dragstart', { bubbles: true, cancelable: true });
+    input.blocks[0]!.element.dispatchEvent(drag);
+    expect(drag.defaultPrevented).toBe(true);
+    world.destroy();
+  });
+
+  test('a_falling_rotated_block_stays_inside_the_visible_floor', () => {
+    const input = fixture('arch');
+    const world = createPhysicsWorld(input);
+    const element = input.blocks[0]!.element;
+    element.dispatchEvent(pointer('pointerdown', 400, 500));
+    window.dispatchEvent(pointer('pointerup', 400, 500));
+    Body.setAngle(world.bodies.get('alpha')!, Math.PI / 4);
+    Body.setPosition(world.bodies.get('alpha')!, { x: 400, y: 650 });
+    queuedFrame?.(100);
+    const transform = element.style.transform;
+    const coordinates = transform.match(/translate3d\(([-\d.]+)px, ([-\d.]+)px/)!;
+    const visualCenterY = Number(coordinates[2]) + 30;
+    const rotatedHalfHeight = (120 + 60) / (2 * Math.sqrt(2));
+    expect(visualCenterY + rotatedHalfHeight).toBeLessThanOrEqual(600.01);
+    expect(element.style.width).toBe('120px');
+    expect(element.style.height).toBe('60px');
     world.destroy();
   });
 

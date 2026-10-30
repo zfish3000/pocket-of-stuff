@@ -121,7 +121,35 @@ describe('toymaker surface contract', () => {
     document.body.innerHTML = '<a class="project-block project-block--roof"><span class="project-block__title">Lilac Archive Fixture</span></a>';
     const title = getComputedStyle(document.querySelector('.project-block__title')!);
 
-    expect(title.fontSize).toBe('0.9rem');
+    expect(title.fontSize).toBe('calc(0.9rem * var(--block-scale, 1))');
+  });
+
+  test('blocks_have_flat_color_without_texture_or_shadow', async () => {
+    const css = await readFile(resolve('src/styles.css'), 'utf8');
+    document.head.innerHTML = `<style>${css}</style>`;
+    document.body.innerHTML = '<a class="project-block project-block--coral">Alpha</a>';
+    const block = getComputedStyle(document.querySelector('.project-block')!);
+
+    expect(block.backgroundImage).toBe('none');
+    expect(block.boxShadow).toBe('none');
+  });
+
+  test('blocks_claim_touch_dragging_without_disabling_stage_scroll', async () => {
+    const css = await readFile(resolve('src/styles.css'), 'utf8');
+    document.head.innerHTML = `<style>${css}</style>`;
+    const rules = [...document.styleSheets[0]!.cssRules].filter(
+      (rule): rule is CSSStyleRule => 'selectorText' in rule,
+    );
+    const stage = rules.find(({ selectorText }) => selectorText === '.project-stage')!;
+    const block = rules.find(({ selectorText }) => selectorText === '.project-block')!;
+
+    expect(stage.style.getPropertyValue('touch-action')).toBe('pan-y');
+    expect(block.style.getPropertyValue('touch-action')).toBe('none');
+  });
+
+  test('desktop_wordmark_scale_remains_subordinate_to_the_project_construction', async () => {
+    const css = await readFile(resolve('src/styles.css'), 'utf8');
+    expect(css).toContain('font-size: clamp(2.65rem, 4.6vw, 4.25rem)');
   });
 
   test('physics_ready_blocks_are_anchored_to_the_stage_origin', async () => {

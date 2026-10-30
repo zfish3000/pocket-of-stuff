@@ -2,6 +2,10 @@
 
 Date: 2026-10-30
 
+## Latest user revision
+
+The user's subsequent direction supersedes the material and scrolling rules below: block faces use flat color with no wood texture or drop shadow. The homepage cannot scroll. All project blocks and the physics floor stay inside the visible viewport; larger collections scale down to fit. Native link dragging is disabled, block dimensions remain rigid during rotation, and resizing rebuilds the bounds for the new screen dimensions.
+
 ## Intent
 
 Build “Pocket of Stuff,” Zachary Fisher’s personal project portfolio, as a small playable object rather than a conventional card grid. Every project is a real 2D wooden block. The homepage opens with those blocks assembled into stable tower formations; visitors can click a block to open its project or drag it to disturb the construction and let the physics system take over.

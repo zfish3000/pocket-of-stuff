@@ -45,7 +45,7 @@ describe('physics link behavior', () => {
     input.element.dispatchEvent(pointer('pointerdown', 400, 500));
     window.dispatchEvent(pointer('pointermove', 430, 500));
     window.dispatchEvent(pointer('pointerup', 430, 500));
-    const click = new MouseEvent('click', { bubbles: true, cancelable: true });
+    const click = new MouseEvent('click', { bubbles: true, cancelable: true, detail: 1 });
 
     const allowed = input.element.dispatchEvent(click);
 
@@ -98,6 +98,34 @@ function mediaQuery(matches = false): MediaQueryList {
     addListener: () => undefined,
     removeListener: () => undefined,
     dispatchEvent: () => true,
+  };
+}
+
+function controllableMediaQuery(initial = false) {
+  let matches = initial;
+  let listener: ((event: MediaQueryListEvent) => void) | undefined;
+  const query = {
+    get matches() {
+      return matches;
+    },
+    media: '(prefers-reduced-motion: reduce)',
+    onchange: null,
+    addEventListener: (_type: string, callback: (event: MediaQueryListEvent) => void) => {
+      listener = callback;
+    },
+    removeEventListener: () => {
+      listener = undefined;
+    },
+    addListener: () => undefined,
+    removeListener: () => undefined,
+    dispatchEvent: () => true,
+  } as MediaQueryList;
+  return {
+    query,
+    set(value: boolean) {
+      matches = value;
+      listener?.(new Event('change') as MediaQueryListEvent);
+    },
   };
 }
 
@@ -183,7 +211,33 @@ describe('pocket app lifecycle', () => {
     expect(app.physics).toBeNull();
     expect(anchor.getAttribute('href')).toBe('#alpha');
     expect(anchor.dataset.enhanced).toBe('true');
+    expect(document.querySelector('.project-stage')?.classList.contains('is-physics-ready')).toBe(true);
+    expect(document.querySelector('.project-stage')?.classList.contains('is-reduced-motion')).toBe(true);
+    expect(anchor.style.transform).toContain('translate3d(');
     expect(document.querySelectorAll('.project-block')).toHaveLength(1);
+    app.destroy();
+  });
+
+  test('motion_preference_change_swaps_between_physics_and_the_static_tower', async () => {
+    appDocument();
+    const motion = controllableMediaQuery(false);
+    const app = await createPocketApp(document, {
+      viewport: () => ({ width: 1200, height: 800, className: 'desktop' }),
+      motionQuery: motion.query,
+    });
+    const anchor = document.querySelector<HTMLAnchorElement>('.project-block')!;
+    expect(app.physics).not.toBeNull();
+
+    motion.set(true);
+
+    expect(app.physics).toBeNull();
+    expect(document.querySelector('.project-stage')?.classList.contains('is-reduced-motion')).toBe(true);
+    expect(anchor.style.transform).toContain('translate3d(');
+
+    motion.set(false);
+
+    expect(app.physics).not.toBeNull();
+    expect(document.querySelector('.project-stage')?.classList.contains('is-reduced-motion')).toBe(false);
     app.destroy();
   });
 
@@ -210,7 +264,7 @@ describe('pocket app lifecycle', () => {
     app.destroy();
   });
 
-  test('minor_resize_preserves_positions_after_interaction', async () => {
+  test('width_only_resize_rebuilds_the_walls_at_the_visible_edge', async () => {
     vi.useFakeTimers();
     appDocument();
     let viewport = { width: 1200, height: 800, className: 'desktop' as const };
@@ -222,12 +276,15 @@ describe('pocket app lifecycle', () => {
     window.dispatchEvent(pointer('pointerup', 430, 500));
     Sleeping.set(body, true);
     app.physics!.pause();
-    const positionAfterInteraction = body.position.x;
-    viewport = { width: 1160, height: 780, className: 'desktop' };
+    viewport = { width: 1160, height: 800, className: 'desktop' };
     window.dispatchEvent(new Event('resize'));
     await vi.advanceTimersByTimeAsync(25);
 
-    expect(body.position.x).toBe(positionAfterInteraction);
+    const rightWall = app.physics!.engine.world.bodies.find(
+      (candidate) => candidate.isStatic && candidate.bounds.min.x === 1160,
+    );
+    expect(rightWall).toBeDefined();
+    expect(body.bounds.max.x).toBeLessThanOrEqual(1160);
     app.destroy();
   });
 

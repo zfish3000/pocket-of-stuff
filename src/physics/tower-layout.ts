@@ -29,17 +29,17 @@ function groupsFor(blocks: BlockSpec[], count: number): BlockSpec[][] {
   return groups;
 }
 
-function normalized(block: BlockSpec, maximumWidth: number): SizedBlock {
-  const width = Math.max(MIN_TARGET, Math.min(block.width, maximumWidth));
+function normalized(block: BlockSpec, maximumWidth: number, scaleFactor: number): SizedBlock {
+  const width = Math.max(MIN_TARGET, Math.min(block.width * scaleFactor, maximumWidth));
   const scale = width / block.width;
   return {
     block,
     width,
-    height: Math.max(MIN_TARGET, Math.min(block.height, block.height * scale)),
+    height: Math.max(MIN_TARGET, block.height * scale),
   };
 }
 
-function makeCourses(blocks: BlockSpec[], maximumWidth: number): Course[] {
+function makeCourses(blocks: BlockSpec[], maximumWidth: number, scaleFactor: number): Course[] {
   const ordered = [...blocks].sort((left, right) => {
     const leftCap = left.shape === 'roof' || left.shape === 'half-round' ? 1 : 0;
     const rightCap = right.shape === 'roof' || right.shape === 'half-round' ? 1 : 0;
@@ -50,7 +50,20 @@ function makeCourses(blocks: BlockSpec[], maximumWidth: number): Course[] {
   let currentWidth = 0;
 
   for (const block of ordered) {
-    const sized = normalized(block, maximumWidth);
+    const sized = normalized(block, maximumWidth, scaleFactor);
+    const isCap = block.shape === 'roof' || block.shape === 'half-round';
+    const currentHasSupport = current.some(
+      ({ block: currentBlock }) => currentBlock.shape !== 'roof' && currentBlock.shape !== 'half-round',
+    );
+    if (current.length && isCap && currentHasSupport) {
+      courses.push({
+        blocks: current,
+        width: currentWidth,
+        height: Math.max(...current.map(({ height }) => height)),
+      });
+      current = [];
+      currentWidth = 0;
+    }
     const nextWidth = currentWidth + (current.length ? COURSE_GAP : 0) + sized.width;
     if (current.length && nextWidth > maximumWidth) {
       courses.push({
@@ -78,38 +91,54 @@ function makeCourses(blocks: BlockSpec[], maximumWidth: number): Course[] {
 export function createTowerLayout(blocks: BlockSpec[], viewport: ViewportSpec): TowerLayout {
   const stageWidth = Math.max(320, viewport.width);
   const sidePadding = viewport.className === 'mobile' ? 24 : 42;
-  const bottomPadding = viewport.className === 'mobile' ? 88 : 64;
+  const bottomPadding = viewport.className === 'mobile' ? 88 : viewport.className === 'desktop' ? 120 : 72;
   const topPadding = viewport.className === 'mobile' ? 118 : 104;
   const towerCount = countTowers(blocks.length, viewport);
   const regionWidth = (stageWidth - sidePadding * 2) / towerCount;
-  const courseWidth = Math.max(MIN_TARGET, Math.min(390, regionWidth - 28));
+  const courseWidthLimit = viewport.className === 'desktop' ? 600 : viewport.className === 'tablet' ? 440 : 390;
+  const scaleFactor = viewport.className === 'desktop' ? 1.45 : viewport.className === 'tablet' ? 1.12 : 1;
+  const courseWidth = Math.max(MIN_TARGET, Math.min(courseWidthLimit, regionWidth - 28));
   const groups = groupsFor(blocks, towerCount);
-  const courseGroups = groups.map((group) => makeCourses(group, courseWidth));
+  const courseGroups = groups.map((group) => makeCourses(group, courseWidth, scaleFactor));
   const requiredHeight = Math.max(
     0,
     ...courseGroups.map(
       (courses) =>
         topPadding +
         bottomPadding +
-        courses.reduce((sum, course) => sum + course.height, 0) +
-        Math.max(0, courses.length - 1) * COURSE_GAP,
+        courses.reduce((sum, course) => sum + course.height, 0),
     ),
   );
-  const stageHeight = Math.max(viewport.height, requiredHeight);
+  const stageHeight = viewport.height;
+  const constructionHeight = Math.max(0, requiredHeight - topPadding - bottomPadding);
+  const fitScale = Math.min(1, Math.max(1, stageHeight - topPadding - bottomPadding) / Math.max(1, constructionHeight));
   const placements: BlockPlacement[] = [];
 
   courseGroups.forEach((courses, towerIndex) => {
     const regionStart = sidePadding + towerIndex * regionWidth;
-    let bottom = stageHeight - bottomPadding;
+    const baseBottom = requiredHeight - bottomPadding;
 
     courses.forEach((course, courseIndex) => {
       const startX = regionStart + (regionWidth - course.width) / 2;
       let x = startX;
       for (const sized of course.blocks) {
+        const centerX = x + sized.width / 2;
+        const lowerCourse = placements.filter(
+          (placement) => placement.towerIndex === towerIndex && placement.course === courseIndex - 1,
+        );
+        const overlappingSupports = lowerCourse.filter(
+          (placement) => Math.abs(placement.x - centerX) < (placement.width + sized.width) / 2,
+        );
+        const supportTop =
+          courseIndex === 0
+            ? baseBottom
+            : Math.min(...(overlappingSupports.length ? overlappingSupports : lowerCourse).map(
+                (placement) => placement.y - placement.height / 2,
+              ));
         placements.push({
           id: sized.block.id,
-          x: x + sized.width / 2,
-          y: bottom - course.height / 2,
+          x: centerX,
+          y: supportTop - sized.height / 2,
           angle: 0,
           width: sized.width,
           height: sized.height,
@@ -119,9 +148,17 @@ export function createTowerLayout(blocks: BlockSpec[], viewport: ViewportSpec): 
         });
         x += sized.width + COURSE_GAP;
       }
-      bottom -= course.height + COURSE_GAP;
     });
   });
+
+  for (const placement of placements) {
+    placement.x = stageWidth / 2 + (placement.x - stageWidth / 2) * fitScale;
+    placement.y = stageHeight - bottomPadding - (requiredHeight - bottomPadding - placement.y) * fitScale;
+    placement.width *= fitScale;
+    placement.height *= fitScale;
+    placement.width = Math.min(placement.width, stageWidth);
+    placement.height = Math.min(placement.height, stageHeight);
+  }
 
   return { stageWidth, stageHeight, towerCount, placements };
 }

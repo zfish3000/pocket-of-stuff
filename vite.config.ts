@@ -13,7 +13,7 @@ function projectBlocksPlugin(): Plugin {
         if (!html.includes(PROJECT_MARKER)) {
           throw new Error(`index.html is missing ${PROJECT_MARKER}`);
         }
-        const partial = await readFile(resolve('src/generated/project-blocks.html'), 'utf8');
+        const partial = await readFile(resolve(process.env.POCKET_PROJECT_BLOCKS || 'src/generated/project-blocks.html'), 'utf8');
         return html.replace(PROJECT_MARKER, partial.trim());
       },
     },

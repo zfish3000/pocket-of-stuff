@@ -42,6 +42,7 @@ export function collectBlockSpecs(root: HTMLElement): BlockSpec[] {
 
     element.classList.add(`project-block--${shape}`, `project-block--${color}`);
     element.dataset.enhanced = 'true';
+    element.draggable = false;
     element.style.setProperty('--block-width', `${width}px`);
     element.style.setProperty('--block-height', `${height}px`);
     element.style.setProperty('--block-lines', String(lines));

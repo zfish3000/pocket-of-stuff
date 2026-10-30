@@ -57,20 +57,39 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
   }
 
   function clearPhysicsPresentation() {
-    stage.classList.remove('is-physics-ready');
+    stage.classList.remove('is-physics-ready', 'is-reduced-motion');
     stage.style.removeProperty('height');
     for (const block of blocks) {
       block.element.style.removeProperty('width');
       block.element.style.removeProperty('height');
       block.element.style.removeProperty('transform');
+      block.element.style.removeProperty('--block-scale');
       block.element.classList.remove('is-held', 'has-moved');
       delete block.element.dataset.sleeping;
+    }
+  }
+
+  function applyStaticTower() {
+    if (blocks.length === 0) return;
+    currentViewport = viewport();
+    const layout = createTowerLayout(blocks, currentViewport);
+    stage.classList.add('is-physics-ready', 'is-reduced-motion');
+    stage.style.height = `${layout.stageHeight}px`;
+    for (const block of blocks) {
+      const placement = layout.placements.find(({ id }) => id === block.id);
+      if (!placement) throw new Error(`Missing static placement for project block ${block.id}.`);
+      block.element.style.width = `${placement.width}px`;
+      block.element.style.height = `${placement.height}px`;
+      block.element.style.setProperty('--block-scale', String(Math.min(1, placement.width / block.width, placement.height / block.height)));
+      block.element.style.transform = `translate3d(${placement.x - placement.width / 2}px, ${placement.y - placement.height / 2}px, 0) rotate(${placement.angle}rad)`;
+      block.element.dataset.sleeping = 'true';
     }
   }
 
   function bootPhysics() {
     if (destroyed || motionQuery.matches || blocks.length === 0 || physics) return;
     currentViewport = viewport();
+    stage.classList.remove('is-reduced-motion');
     physics = createPhysicsWorld({
       stage,
       blocks,
@@ -97,6 +116,8 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
         rebuildTimer = window.setTimeout(() => stage.classList.remove('is-rebuilding'), 460);
       }
       physics.rebuild(createTowerLayout(blocks, currentViewport));
+    } else if (motionQuery.matches) {
+      applyStaticTower();
     }
     hasInteracted = false;
     if (rebuildControl) rebuildControl.hidden = true;
@@ -125,8 +146,15 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(() => {
       const nextViewport = viewport();
+      if (motionQuery.matches) {
+        currentViewport = nextViewport;
+        applyStaticTower();
+        return;
+      }
       const changedClass = nextViewport.className !== currentViewport.className;
-      if (physics && (changedClass || !hasInteracted || !bodiesFit(nextViewport))) {
+      const changedHeight = nextViewport.height !== currentViewport.height;
+      const changedWidth = nextViewport.width !== currentViewport.width;
+      if (physics && (changedClass || changedHeight || changedWidth || !hasInteracted || !bodiesFit(nextViewport))) {
         currentViewport = nextViewport;
         physics.rebuild(createTowerLayout(blocks, currentViewport));
       } else {
@@ -136,8 +164,13 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
   }
 
   function handleMotionChange() {
-    if (motionQuery.matches) stopPhysics();
-    else bootPhysics();
+    if (motionQuery.matches) {
+      stopPhysics();
+      applyStaticTower();
+    } else {
+      clearPhysicsPresentation();
+      bootPhysics();
+    }
   }
 
   function handleRebuildClick() {
@@ -149,8 +182,10 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
   window.addEventListener('resize', handleResize);
   motionQuery.addEventListener('change', handleMotionChange);
 
-  if (blocks.length > 0 && !motionQuery.matches) bootPhysics();
-  else if (motionQuery.matches) stage.classList.add('is-reduced-motion');
+  if (blocks.length > 0) {
+    if (motionQuery.matches) applyStaticTower();
+    else bootPhysics();
+  }
   root.documentElement.classList.add('pocket-ready');
 
   const app: PocketApp = {

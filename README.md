@@ -2,6 +2,8 @@
 
 Zachary Fisher’s project portfolio, built as a set of clickable wooden blocks that begin in stable towers and become draggable physics objects.
 
+The homepage stays inside a fixed, non-scrolling viewport. Blocks use flat colors without textures or shadows and retain their dimensions while rotating. Larger collections scale down to fit; reduced motion preserves the tower without running physics.
+
 ## Start the site
 
 ```bash
