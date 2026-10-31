@@ -14,7 +14,6 @@
   --plum-ink: var(--canvas);
   --amber-ink: var(--ink);
   --powder-ink: var(--ink);
-  --paper-edge: color-mix(in srgb, var(--graphite) 28%, transparent);
   color: var(--ink);
   background: var(--canvas);
   font-family: 'Archivo Variable', Archivo, sans-serif;
@@ -44,29 +43,6 @@ body {
   overflow: hidden;
   overscroll-behavior: none;
   background: var(--canvas);
-}
-
-body::before,
-body::after {
-  position: fixed;
-  z-index: 0;
-  width: 5.5rem;
-  height: 1px;
-  background: var(--paper-edge);
-  content: '';
-  pointer-events: none;
-}
-
-body::before {
-  top: 9.25rem;
-  right: 2.5rem;
-  transform: rotate(-1.5deg);
-}
-
-body::after {
-  right: 3.2rem;
-  bottom: 7.2rem;
-  transform: rotate(1deg);
 }
 
 ::selection {
