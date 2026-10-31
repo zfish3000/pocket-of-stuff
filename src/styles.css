@@ -192,9 +192,13 @@ a {
   pointer-events: none;
 }
 
-.project-block__arch-grain {
+.project-block__outline-grain {
   fill: var(--block-light);
   stroke: none;
+}
+
+.project-block__outline-edge {
+  fill: none;
 }
 
 .project-block--coral { --block-color: var(--coral); --block-ink: var(--coral-ink); }
@@ -263,11 +267,17 @@ a {
 .project-block--arch {
   align-items: start;
   padding-bottom: calc(2.5rem * var(--block-scale, 1));
-  background: transparent;
-  border: 0;
 }
 
-.project-block__arch {
+.project-block--arch,
+.project-block--roof,
+.project-block--half-round {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+.project-block__outline {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -280,13 +290,21 @@ a {
 
 .project-block--roof {
   padding-top: calc(1.8rem * var(--block-scale, 1));
-  clip-path: polygon(50% 0, 100% 46%, 100% 100%, 0 100%, 0 46%);
-  border-radius: 0.35rem;
 }
 
 .project-block--half-round {
   padding-top: calc(1.15rem * var(--block-scale, 1));
-  border-radius: 999px 999px 0 0;
+}
+
+/* These silhouettes clip the outer half of the stroke, leaving a 1px border. */
+.project-block--roof .project-block__outline,
+.project-block--half-round .project-block__outline {
+  stroke-width: 2px;
+}
+
+.project-block:focus-visible .project-block__outline > path:not(.project-block__outline-grain) {
+  stroke: var(--ink);
+  stroke-width: 3px;
 }
 
 .project-block:hover {

@@ -1,9 +1,9 @@
 export function updateArchOutline(element: HTMLAnchorElement, width: number, height: number): void {
   const document = element.ownerDocument;
-  let svg = element.querySelector<SVGSVGElement>('.project-block__arch');
+  let svg = element.querySelector<SVGSVGElement>('.project-block__outline');
   if (!svg) {
     svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.classList.add('project-block__arch');
+    svg.classList.add('project-block__outline');
     svg.setAttribute('aria-hidden', 'true');
     svg.setAttribute('focusable', 'false');
     const path = document.createElementNS(svg.namespaceURI, 'path');

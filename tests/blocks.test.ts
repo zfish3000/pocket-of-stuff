@@ -6,6 +6,7 @@ import { resolve } from 'node:path';
 
 import { collectBlockSpecs } from '../src/projects/blocks';
 import { updateArchOutline } from '../src/projects/arch-outline';
+import { updateBlockOutline } from '../src/projects/shape-outline';
 
 function anchor(slug: string, title: string, shape = 'brick', color = 'coral'): string {
   return `<a class="project-block" href="/projects/${slug}.html" data-project-slug="${slug}" data-project-shape="${shape}" data-project-color="${color}"><span class="project-block__title">${title}</span></a>`;
@@ -65,6 +66,27 @@ describe('project block collection', () => {
     expect(svg.getAttribute('viewBox')).toBe('0 0 100 50');
     expect(block!.element.querySelectorAll('svg')).toHaveLength(1);
     expect(block!.element.textContent).toContain('Arch');
+  });
+
+  test.each(['roof', 'half-round'] as const)('%s_uses_one_rounded_silhouette_for_its_border_and_clip_when_resized', (shape) => {
+    const root = document.querySelector('nav')!;
+    root.innerHTML = anchor('rounded', 'Rounded block', shape);
+    const [block] = collectBlockSpecs(root);
+    const svg = block!.element.querySelector('svg')!;
+    expect(svg).not.toBeNull();
+    const firstPath = svg.querySelector('path')!;
+    const original = firstPath.getAttribute('d');
+    expect(original).toContain('A ');
+    expect(original).toMatch(/Z$/);
+    expect(block!.element.style.clipPath).toContain(original);
+
+    updateBlockOutline(block!.element, shape, 210, 110);
+    expect(svg.getAttribute('viewBox')).toBe('0 0 210 110');
+    expect(firstPath.getAttribute('d')).not.toBe(original);
+    expect(block!.element.style.clipPath).toContain(firstPath.getAttribute('d'));
+    expect(block!.element.querySelectorAll('svg')).toHaveLength(1);
+    expect(block!.element.getAttribute('href')).toBe('/projects/rounded.html');
+    expect(block!.element.textContent).toContain('Rounded block');
   });
 });
 
