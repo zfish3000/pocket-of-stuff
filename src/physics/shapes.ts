@@ -11,7 +11,13 @@ const BODY_OPTIONS = {
 };
 
 function polygonBody(placement: BlockPlacement, vertices: { x: number; y: number }[]) {
-  const body = Bodies.fromVertices(placement.x, placement.y, [vertices], BODY_OPTIONS, true);
+  // Joined arcs may share a point. Zero-length edges create a zero collision
+  // axis when Matter recalculates axes during a rebuild's Body.scale call.
+  const outline = vertices.filter((vertex, index) => {
+    const previous = vertices[(index + vertices.length - 1) % vertices.length]!;
+    return Math.hypot(vertex.x - previous.x, vertex.y - previous.y) > 1e-6;
+  });
+  const body = Bodies.fromVertices(placement.x, placement.y, [outline], BODY_OPTIONS, true);
   // Matter centers polygons on their mass; the DOM centers on the outer box.
   Body.translate(body, {
     x: placement.x - (body.bounds.min.x + body.bounds.max.x) / 2,

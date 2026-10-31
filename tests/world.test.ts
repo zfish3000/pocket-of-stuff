@@ -1,9 +1,10 @@
 // @vitest-environment jsdom
 
-import { Body, Engine } from 'matter-js';
+import { Body, Composite, Engine } from 'matter-js';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { createPhysicsWorld } from '../src/physics/world';
+import { createBodyForShape } from '../src/physics/shapes';
 import type { BlockShape, BlockSpec, TowerLayout } from '../src/projects/types';
 
 let queuedFrame: FrameRequestCallback | undefined;
@@ -126,6 +127,26 @@ describe('physics world', () => {
     expect(body.angle).toBeCloseTo(0, 4);
     expect(visualBottom).toBeCloseTo(body.bounds.max.y, 3);
     expect(visualBottom).toBeCloseTo(600, 0);
+    world.destroy();
+  });
+
+  test('semicircle_lands_on_an_arch_after_repeated_rebuilds', () => {
+    const input = fixture('half-round');
+    const world = createPhysicsWorld(input);
+    const support = createBodyForShape({ ...input.blocks[0]!, shape: 'arch' }, {
+      ...input.layout.placements[0]!, x: 400, y: 400, width: 600, height: 40, shape: 'arch',
+    });
+    Body.setStatic(support, true);
+    Composite.add(world.engine.world, support);
+    for (let rebuild = 0; rebuild < 3; rebuild += 1) world.rebuild(input.layout);
+    const falling = world.bodies.get('alpha')!;
+    Body.setPosition(falling, { x: 400, y: 200 });
+    world.start();
+    for (let frame = 0; frame < 180; frame += 1) queuedFrame?.(100 + frame * 1000 / 60);
+
+    expect(falling.bounds.max.y).toBeGreaterThan(375);
+    expect(falling.bounds.max.y).toBeLessThan(381);
+    expect(falling.position.y).toBeLessThan(support.bounds.min.y);
     world.destroy();
   });
 

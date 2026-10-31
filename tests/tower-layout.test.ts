@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { describe, expect, test } from 'vitest';
+import { Bodies, Body, Collision } from 'matter-js';
 
 import { createBodyForShape } from '../src/physics/shapes';
 import { createTowerLayout } from '../src/physics/tower-layout';
@@ -32,6 +33,35 @@ function blocks(count: number): BlockSpec[] {
 }
 
 describe('tower layout', () => {
+  test('every_shape_detects_collision_with_an_overlapping_rectangle', () => {
+    for (const block of blocks(6)) {
+      const body = createBodyForShape(block, {
+        id: block.id, x: 100, y: 100, angle: 0, width: block.width,
+        height: block.height, towerIndex: 0, course: 0, shape: block.shape,
+      });
+      const support = Bodies.rectangle(100, 100, block.width, block.height, { isStatic: true });
+      expect(Collision.collides(body, support), `${block.shape} must collide`).not.toBeNull();
+      for (const axis of body.axes) {
+        expect(Math.hypot(axis.x, axis.y), `${block.shape} has a degenerate collision axis`).toBeCloseTo(1, 6);
+      }
+    }
+  });
+
+  test('semicircle_collisions_remain_valid_at_responsive_sizes', () => {
+    const block = blocks(6).find(({ shape }) => shape === 'half-round')!;
+    for (const width of [112, 119, 120, 124, 133.28, 172.55]) {
+      for (const height of [60, 70, 78.4, 101.5]) {
+        const body = createBodyForShape(block, {
+          id: block.id, x: 400, y: 500, angle: 0, width, height,
+          towerIndex: 0, course: 0, shape: block.shape,
+        });
+        const support = Bodies.rectangle(400, 500, width, height);
+        Body.scale(body, 1, 1);
+        expect(Collision.collides(body, support), `${width} × ${height}`).not.toBeNull();
+        expect(body.axes.every((axis) => Math.hypot(axis.x, axis.y) > 0.99), `${width} × ${height}`).toBe(true);
+      }
+    }
+  });
   test('creates_the_same_layout_for_the_same_input', () => {
     const input = blocks(18);
     const viewport = viewports[2]!;
