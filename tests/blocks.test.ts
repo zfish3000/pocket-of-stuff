@@ -86,15 +86,15 @@ describe('toymaker surface contract', () => {
     const root = getComputedStyle(document.documentElement);
 
     expect([
-      '--canvas: #F7EBD2',
-      '--ink: #2A2030',
-      '--coral: #E36862',
-      '--aqua: #58B9B2',
-      '--lilac: #C6A5D2',
-      '--plum: #634572',
-      '--amber: #E6B84B',
-      '--powder: #9AB7C1',
-      '--graphite: #8B796B',
+      '--canvas: #e2e9e9',
+      '--ink: #232221',
+      '--coral: #cb2f2c',
+      '--aqua: #1b96ba',
+      '--lilac: #f1be43',
+      '--plum: #232221',
+      '--amber: #f1be43',
+      '--powder: #1b96ba',
+      '--graphite: #232221',
     ]).toEqual([
       `--canvas: ${root.getPropertyValue('--canvas').trim()}`,
       `--ink: ${root.getPropertyValue('--ink').trim()}`,

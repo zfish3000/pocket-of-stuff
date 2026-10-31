@@ -6,7 +6,7 @@ The homepage stays inside a fixed, non-scrolling viewport. Blocks use flat color
 
 Block faces show only their project number and dot. Project titles appear in a tooltip on hover or keyboard focus and remain available to screen readers.
 
-The Palette control compares the original colors with three alternatives. It recolors the whole page without resetting the blocks and saves the selected palette in this browser.
+The site uses Palette 1 throughout: charcoal `#232221`, red `#cb2f2c`, blue `#1b96ba`, yellow `#f1be43`, and pale white `#e2e9e9`.
 
 ## Start the site
 

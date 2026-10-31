@@ -5,7 +5,6 @@ import { collectBlockSpecs } from './projects/blocks';
 import { attachProjectTitles } from './projects/titles';
 import { updateArchOutline } from './projects/arch-outline';
 import type { ViewportSpec } from './projects/types';
-import { attachPaletteSwitcher } from './palettes';
 
 export interface PocketAppOptions {
   viewport?: () => ViewportSpec;
@@ -42,7 +41,6 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
   const motionQuery = options.motionQuery ?? window.matchMedia('(prefers-reduced-motion: reduce)');
   const resizeDelay = options.resizeDelay ?? 140;
   const blocks = collectBlockSpecs(stage);
-  const removePaletteSwitcher = attachPaletteSwitcher(root);
   const removeProjectTitles = attachProjectTitles(stage, blocks);
   let physics: PhysicsController | null = null;
   let currentViewport = viewport();
@@ -224,7 +222,6 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
       motionQuery.removeEventListener('change', handleMotionChange);
       stopPhysics();
       removeProjectTitles();
-      removePaletteSwitcher();
       root.documentElement.classList.remove('pocket-ready');
     },
   };
