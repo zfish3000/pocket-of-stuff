@@ -166,6 +166,8 @@ Full width means the page's content width, with the page margins retained. Image
 
 Project pages are standalone documents and allow scrolling. The starter links to `/project-page.css` for layout, local Archivo fonts, and image styles, and `/project-page.js` for matching the page background to the block. Keep both lines in the head of each page. These shared files live in `public/`; editing the stylesheet changes every page that uses it. They do not load homepage physics or its no-scroll behavior.
 
+Clicking a homepage block fades the screen to its color over 220 ms. The project page then reveals its content over 500 ms, after its fonts are ready. Pages using the shared theme script receive this automatically; no extra markup is needed. Reduced-motion visitors see the page immediately.
+
 An older copied starter will not acquire these layouts automatically. Start a new page from the updated template, or replace its old inline styles with the two shared file links and use the classes shown above.
 
 Files in `public/` are copied to the finished site as-is. Use ordinary browser-ready HTML, CSS, and JavaScript there; TypeScript and npm imports inside project pages are not automatically compiled by Vite.

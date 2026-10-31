@@ -3,6 +3,7 @@ import { createPhysicsWorld } from './physics/world';
 import { createTowerLayout } from './physics/tower-layout';
 import { collectBlockSpecs } from './projects/blocks';
 import { attachProjectTitles } from './projects/titles';
+import { attachProjectNavigation } from './projects/navigation';
 import { updateBlockOutline } from './projects/shape-outline';
 import { attachBackgroundGrain, attachBlockGrain } from './projects/grain';
 import type { ViewportSpec } from './projects/types';
@@ -53,6 +54,7 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
   const blocks = collectBlockSpecs(stage);
   const removeBackgroundGrain = attachBackgroundGrain(root);
   const removeProjectTitles = attachProjectTitles(stage, blocks);
+  const removeProjectNavigation = attachProjectNavigation(stage, { motionQuery });
   let physics: PhysicsController | null = null;
   let currentViewport = viewport();
   let resizeTimer: number | undefined;
@@ -254,6 +256,7 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
       motionQuery.removeEventListener('change', handleMotionChange);
       stopPhysics();
       removeProjectTitles();
+      removeProjectNavigation();
       removeBackgroundGrain();
       root.documentElement.classList.remove('pocket-ready');
     },

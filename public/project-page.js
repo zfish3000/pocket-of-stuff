@@ -18,4 +18,49 @@
   document.documentElement.style.setProperty('--project-color', palette[color]);
   document.documentElement.style.setProperty('--project-ink',
     color === 'coral' || color === 'plum' ? '#ffffff' : '#232221');
+  document.documentElement.style.backgroundColor = palette[color];
+
+  if (typeof document.documentElement.animate !== 'function' ||
+    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+
+  // Set in the head, before first paint: the colored background stays visible.
+  document.documentElement.classList.add('project-entering');
+  let animation;
+  let started = false;
+  let finished = false;
+
+  function finish() {
+    if (finished) return;
+    finished = true;
+    document.documentElement.classList.remove('project-entering');
+    animation?.cancel();
+    document.removeEventListener('DOMContentLoaded', reveal);
+    window.removeEventListener('pageshow', restore);
+  }
+
+  function restore(event) {
+    if (event.persisted) finish();
+  }
+
+  async function reveal() {
+    if (started) return;
+    started = true;
+    try {
+      await document.fonts?.ready;
+      if (finished) return;
+      const page = document.querySelector('.project-page');
+      if (!page) return;
+      animation = page.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 500,
+        easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        fill: 'both',
+      });
+      await animation.finished;
+    } catch { /* Failed or cancelled animation still reveals the page. */ }
+    finally { finish(); }
+  }
+
+  window.addEventListener('pageshow', restore);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', reveal, { once: true });
+  else void reveal();
 })();

@@ -62,6 +62,12 @@ a {
   overflow: hidden;
 }
 
+.project-transition {
+  position: fixed;
+  z-index: 200;
+  inset: 0;
+}
+
 .pocket-shell::before {
   position: fixed;
   z-index: 0;

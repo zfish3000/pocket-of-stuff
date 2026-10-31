@@ -33,6 +33,8 @@ body {
   padding-block: clamp(1.5rem, 4vw, 3rem) clamp(4rem, 9vw, 8rem);
 }
 
+html.project-entering .project-page { opacity: 0; }
+
 a { color: inherit; text-underline-offset: 0.2em; }
 a:hover { text-decoration-thickness: 2px; }
 a:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }

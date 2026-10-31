@@ -10,6 +10,8 @@ Block grain is rendered at 4× resolution for a fine texture, with a subtler hig
 
 Block faces show only their project number and dot. Project titles appear in a tooltip on hover or keyboard focus and remain available to screen readers.
 
+Opening a block fades the homepage to that block's color over 220 ms, then reveals the project page over 500 ms. Dragging and modified clicks retain their usual behavior, and reduced-motion visitors navigate immediately. Project pages using the shared theme script receive the reveal automatically.
+
 The site uses Palette 1 throughout: charcoal `#232221`, red `#cb2f2c`, blue `#1b96ba`, yellow `#f1be43`, and pale white `#e2e9e9`.
 
 Project blocks use only red, blue, and yellow (plus their slightly lighter grain shade). The legacy metadata names map to those three colors: `coral`/`plum` → red, `aqua`/`powder` → blue, and `lilac`/`amber` → yellow.
