@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "generate:projects": "node scripts/generate-project-manifest.mjs",
+    "randomize:projects": "node scripts/randomize-project-blocks.mjs && npm run generate:projects",
     "dev": "npm run generate:projects && vite",
     "build": "npm run generate:projects && tsc --noEmit && vite build",
     "test": "vitest run",

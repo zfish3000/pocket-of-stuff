@@ -34,7 +34,22 @@ Keep project HTML files directly inside `public/projects/`. HTML files inside su
 
 ## 3. Edit your page
 
-Open your new HTML file in your editor. The top contains these settings:
+Open your new HTML file in your editor.
+
+Edit the **HTML source** in Codex's file editor or a code editor. Avoid editing the rendered page in TextEdit: saving formatted HTML there can remove the stylesheet and theme script, and turn the Back link into `file:///`. If you use TextEdit, enable its setting to display HTML files as HTML code instead of formatted text before reopening the file.
+
+Keep these shared file links in the head, and the homepage link in the body:
+
+```html
+<script src="/project-page.js"></script>
+<link rel="stylesheet" href="/project-page.css">
+<!-- In the body: -->
+<a class="back-link" href="/">Back to Pocket of Stuff</a>
+```
+
+Preview by opening the server's URL (for example, `http://localhost:5173/projects/my-project.html`), or by clicking its homepage block. Do not double-click the HTML file in Finder: the `/` paths expect the website's server, not a `file://` URL.
+
+The project settings near the top are:
 
 ```html
 <title>My Project</title>
@@ -186,7 +201,25 @@ The design preview used sample projects stored separately from your real project
 
 Click your new block to check that it opens the project page, hover over it to check the title, and test any images and links on the page. You can also open `/projects/my-project.html` directly on the local server.
 
-## 6. Build the finished website
+## 6. Shuffle block colors and shapes
+
+From the repository folder, run this directly in Terminal:
+
+```bash
+npm run randomize:projects
+```
+
+This goes through the HTML files directly inside `public/projects/`, assigns new colors and shapes, writes their `pocket:color` and `pocket:shape` metadata, and regenerates the homepage block list. Refresh the homepage afterward. If you are viewing a production build, rebuild it too.
+
+Assignments are shuffled while keeping the counts as even as possible across the three visible colors and six shapes. Counts differ by at most one: for 17 projects, colors have counts of 6, 6, and 5; shapes have counts of 3, 3, 3, 3, 3, and 2. Which choices get the extra block is randomized. This balances block counts, rather than total colored area.
+
+The command replaces any shape and color choices you previously set by hand. It preserves filenames, titles, descriptions, order, page text, images, and other HTML. It adds the two metadata tags if they are missing. Project page backgrounds will follow the new block colors automatically when using the starter's theme script.
+
+The results stay saved in your files until you edit them or run the command again; normal page loads and builds do not reshuffle them. Run it again whenever you want a new mix, or after adding projects to rebalance the collection. With a small collection, some choices may stay the same by chance.
+
+The command prints each project's assigned color and shape, followed by the totals. If a project has an invalid filename, missing title, or invalid metadata, it reports the error before changing any files. Fix the reported file and run it again.
+
+## 7. Build the finished website
 
 ```bash
 npm run build
@@ -221,6 +254,7 @@ Publish the **contents of `dist/`** using your chosen static hosting service. Ru
 | Generator reports a missing title | Add a non-empty `<title>` in `<head>`; an `<h1>` alone is not enough. |
 | Generator rejects a color or shape | Use an exact accepted metadata value from the tables above. |
 | Image is missing | Check the filename, capitalization, and path. Omit `public/` from URLs. |
+| Page has no styling or Back leads to `file:///` | Check that a rich text editor has not rewritten the HTML. Restore the starter's shared file links and `href="/"`, edit the source in a code editor, and view it through the local server. |
 | Changes are missing in build preview | Run `npm run build` again; `npx vite preview` serves the existing `dist/`. |
 | Terminal says `package.json` cannot be found | Run the command from the repository folder, not `public/projects/`. |
 | `/bin/mkdir: cannot execute binary file` | Run `mkdir -p public/projects` directly, without `bash` before it. Then run the `cp` command directly too. |
@@ -233,6 +267,7 @@ Publish the **contents of `dist/`** using your chosen static hosting service. Ru
 | `npm install` | Initial setup, or after dependency changes. |
 | `npm run dev` | Generate blocks and start the development server. |
 | `npm run generate:projects` | Update the project list while the server is already running. |
+| `npm run randomize:projects` | Save a balanced random mix of colors and shapes, then regenerate the blocks. |
 | `npm run build` | Generate blocks and create the finished website in `dist/`. |
 | `npx vite preview` | Serve the last finished build locally. |
 | `npm test` | Run the automated checks when changing the site's code. |

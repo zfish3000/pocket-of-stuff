@@ -1,1 +1,83 @@
-[]
+[
+  {
+    "slug": "filler-1",
+    "title": "Filler 1",
+    "description": "Just a filler to make the website look better.",
+    "color": "coral",
+    "shape": "brick",
+    "order": null,
+    "href": "/projects/filler-1.html"
+  },
+  {
+    "slug": "filler-2",
+    "title": "Filler 2",
+    "description": "Just a filler to make the website look better.",
+    "color": "amber",
+    "shape": "arch",
+    "order": null,
+    "href": "/projects/filler-2.html"
+  },
+  {
+    "slug": "filler-3",
+    "title": "Filler 3",
+    "description": "Just a filler to make the website look better.",
+    "color": "coral",
+    "shape": "square",
+    "order": null,
+    "href": "/projects/filler-3.html"
+  },
+  {
+    "slug": "filler-4",
+    "title": "Filler 4",
+    "description": "Just a filler to make the website look better.",
+    "color": "aqua",
+    "shape": "half-round",
+    "order": null,
+    "href": "/projects/filler-4.html"
+  },
+  {
+    "slug": "filler-5",
+    "title": "Filler 5",
+    "description": "Just a filler to make the website look better.",
+    "color": "coral",
+    "shape": "arch",
+    "order": null,
+    "href": "/projects/filler-5.html"
+  },
+  {
+    "slug": "filler-6",
+    "title": "Filler 6",
+    "description": "Just a filler to make the website look better.",
+    "color": "aqua",
+    "shape": "brick",
+    "order": null,
+    "href": "/projects/filler-6.html"
+  },
+  {
+    "slug": "filler-7",
+    "title": "Filler 7",
+    "description": "Just a filler to make the website look better.",
+    "color": "aqua",
+    "shape": "square",
+    "order": null,
+    "href": "/projects/filler-7.html"
+  },
+  {
+    "slug": "filler-8",
+    "title": "Filler 8",
+    "description": "Just a filler to make the website look better.",
+    "color": "amber",
+    "shape": "beam",
+    "order": null,
+    "href": "/projects/filler-8.html"
+  },
+  {
+    "slug": "this-website",
+    "title": "This Website",
+    "description": "How I made this website that you're in right now.",
+    "color": "amber",
+    "shape": "roof",
+    "order": null,
+    "href": "/projects/this-website.html"
+  }
+]

@@ -1,26 +1,34 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Description" content="Replace this with a short description of your project.">
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; color: #0000e9; -webkit-text-stroke: #0000e9}
-    p.p3 {margin: 0.0px 0.0px 12.0px 0.0px; font: 12.0px Times; -webkit-text-stroke: #000000}
-    span.s1 {text-decoration: underline ; font-kerning: none}
-    span.s2 {font-kerning: none}
-  </style>
-</head>
-<body>
-<p class="p1"><span class="s1"><a href="file:///">Back to Pocket of Stuff</a></span></p>
-<h1 style="margin: 0.0px 0.0px 16.1px 0.0px; font: 24.0px Times; -webkit-text-stroke: #000000"><span class="s2"><b>This Website</b></span></h1>
-<p class="p3"><span class="s2">Replace this with what you made and why.</span></p>
-<h2 style="margin: 0.0px 0.0px 14.9px 0.0px; font: 18.0px Times; -webkit-text-stroke: #000000"><span class="s2"><b>How it works</b></span></h2>
-<p class="p3"><span class="s2">Explain the idea, your process, and the details you want to share.</span></p>
-<h2 style="margin: 0.0px 0.0px 14.9px 0.0px; font: 18.0px Times; -webkit-text-stroke: #000000"><span class="s2"><b>What I learned</b></span></h2>
-<p class="p3"><span class="s2">Share what worked, what changed, or what you would try next.</span></p>
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>This Website</title>
+    <meta name="description" content="How I made this website that you're in right now.">
+    <meta name="pocket:color" content="amber">
+    <meta name="pocket:shape" content="roof">
+    <!-- Read the block color before the page paints. Keep these two lines. -->
+    <script src="/project-page.js"></script>
+    <link rel="stylesheet" href="/project-page.css">
+  </head>
+  <body>
+    <main class="project-page">
+      <a class="back-link" href="/">Back to Pocket of Stuff</a>
+      <article>
+        <header class="project-header">
+          <h1>This Website</h1>
+          <p class="project-intro">This website is my sorta portfolio sorta personal website just to show off stuff i've done. This is how it works.</p>
+        </header>
+        <section class="project-section project-section--text">
+          <h2>The Main Page</h2>
+          <p>The Main Page is clearly the coolest most amazing website page ever in the history of the internet. It works by turning all the projects in a projects folder into the blocks. When the website opens, it arranges the blocks, and turns on gravity. It simulates the blocks using a library called Matter.js. The rebuild button just turns off physics and resets their positions. Each of the blocks color, shape, and title, are determined by the actual projects pages from the projects folder. Speaking of the project pages...</p>
+        </section>
+
+        <section class="project-section project-section--text">
+          <h2>The Project Pages</h2>
+          <p>Each Project gets its own page. It a really simple and standard webpage. It uses simple HTML and CSS, and not much else. The only special thing about the project page is metadata. Metadata is data about data. How meta. Thats why it's called metadata. Anyway, the metadata in all websites does stuff like providing data to your browser, scaling the webpage to your screen, or the author of the page. You can also make custom metadata. In the project pages, I added custom metadata that controlls the color and the block shape. This is what the main page pulls from to make the blocks. All of the project pages are just copies of a template that I edit to add content. So yeah, that's how this website works.</p>
+        </section>
+      </article>
+    </main>
+  </body>
 </html>

@@ -80,6 +80,7 @@ An empty `public/projects/` folder is valid. The homepage then shows an honest �
 
 ## Commands
 
+- `npm run randomize:projects` — rewrite project shape/color metadata with a balanced random mix, then regenerate blocks; refresh the homepage afterward
 - `npm run dev` — regenerate projects and start Vite
 - `npm run build` — regenerate projects, type-check, and build `dist/`
 - `npm test` — run the full Vitest suite
