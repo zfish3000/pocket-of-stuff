@@ -330,9 +330,9 @@ a {
 
 .rebuild-control {
   right: clamp(1.35rem, 3.5vw, 3.5rem);
-  padding: 0.65rem 0;
+  padding: 0.65rem 0.85rem;
   color: var(--ink);
-  background: transparent;
+  background: var(--canvas);
   border: 0;
   border-bottom: 1px solid currentColor;
   border-radius: 0;
