@@ -29,6 +29,16 @@ npm run build
 
 The static site is written to `dist/`.
 
+## Deploy to GitHub Pages
+
+In the repository's **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions**. Commit and push the deployment workflow to `main`. It installs dependencies, runs tests, generates the blocks, builds the site, and publishes only `dist/`.
+
+The deployment targets the custom domain `pocketofstuff.com`, with its domain file kept in `public/CNAME` so it is included in the build. The default Vite base `/` is correct for this custom domain.
+
+Do not deploy the repository root directly using the branch-based Pages option. The source homepage contains a placeholder for generated project links and references TypeScript; it needs the Vite build step before publishing. A successful source upload can therefore show the heading with no blocks.
+
+After changing project content, push the updated project files to `main`; GitHub Actions rebuilds and deploys them automatically. You do not need to commit `dist/`. Check the repository's **Actions** tab for the deployment result.
+
 ## Add a project
 
 For a step-by-step walkthrough, see [the project page guide](docs/PROJECT-GUIDE.md). A copyable starter lives in [templates/project.html](templates/project.html).

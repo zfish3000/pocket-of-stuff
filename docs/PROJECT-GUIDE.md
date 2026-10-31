@@ -237,6 +237,20 @@ Open the Local URL it prints. This serves the last build; it does not generate b
 
 Publish the **contents of `dist/`** using your chosen static hosting service. Running a build only creates local files; it does not publish the site. The current site uses root-relative URLs such as `/projects/my-project.html`, so it expects to be hosted at a domain's root. Hosting under a subfolder needs URL changes first.
 
+### GitHub Pages for this website
+
+The repository includes `.github/workflows/deploy.yml` to build and publish the website at `pocketofstuff.com`.
+
+1. Open the GitHub repository's **Settings → Pages**.
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+3. Keep the custom domain set to `pocketofstuff.com`.
+4. Commit and push the workflow and your site changes to `main`.
+5. Open the **Actions** tab and wait for **Deploy website to GitHub Pages** to finish successfully. You can also start it manually using **Run workflow** once the workflow is on GitHub.
+
+The workflow runs the tests and `npm run build`, which generates your blocks before uploading `dist/`. Future pushes to `main` repeat this automatically. The custom-domain file in `public/CNAME` is copied into the build as well.
+
+Do not use **Deploy from a branch** to publish the repository root: that skips the build. The raw homepage has no project blocks inserted yet, and its TypeScript cannot run directly in a browser. This can leave only the heading visible even when GitHub reports a successful deployment.
+
 ## Updating or removing a project
 
 - To change the content, edit its HTML file. Refresh that project page locally; run a new build before publishing.
@@ -259,6 +273,7 @@ Publish the **contents of `dist/`** using your chosen static hosting service. Ru
 | Terminal says `package.json` cannot be found | Run the command from the repository folder, not `public/projects/`. |
 | `/bin/mkdir: cannot execute binary file` | Run `mkdir -p public/projects` directly, without `bash` before it. Then run the `cp` command directly too. |
 | Homepage shows the empty-state message | There are no project HTML files in the scanned folder. Add your first page and regenerate. |
+| GitHub Pages shows only the heading and no blocks | Set Pages Source to GitHub Actions and use the included build-and-deploy workflow so Pages receives `dist/`, not the source repository. |
 
 ## Command reference
 
