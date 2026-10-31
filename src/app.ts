@@ -36,7 +36,6 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
   const stage: HTMLElement = stageElement;
   const rebuildControl = root.querySelector<HTMLButtonElement>('.rebuild-control');
   const status = root.querySelector<HTMLElement>('.sr-status');
-  const hint = root.querySelector<HTMLElement>('.interaction-hint');
   const viewport = options.viewport ?? browserViewport;
   const motionQuery = options.motionQuery ?? window.matchMedia('(prefers-reduced-motion: reduce)');
   const resizeDelay = options.resizeDelay ?? 140;
@@ -56,7 +55,6 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
   function revealRebuild() {
     hasInteracted = true;
     if (rebuildControl) rebuildControl.hidden = false;
-    hint?.classList.add('is-quiet');
   }
 
   function clearPhysicsPresentation() {
@@ -138,7 +136,6 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
     }
     hasInteracted = false;
     if (rebuildControl) rebuildControl.hidden = true;
-    hint?.classList.remove('is-quiet');
     announce('Tower rebuilt');
   }
 

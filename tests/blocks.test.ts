@@ -76,7 +76,7 @@ describe('toymaker surface contract', () => {
 
     expect(text).toContain('POCKET OF STUFF');
     expect(text).toContain('Zachary Fisher');
-    expect(text).toContain('Drag to rearrange · Click to open');
+    expect(text).not.toContain('Drag to rearrange · Click to open');
     expect(text).toContain('Rebuild');
   });
 

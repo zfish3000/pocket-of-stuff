@@ -317,7 +317,6 @@ a {
   font-weight: 500;
 }
 
-.interaction-hint,
 .rebuild-control {
   position: fixed;
   z-index: 80;
@@ -327,17 +326,6 @@ a {
   font-size: 0.68rem;
   font-weight: 500;
   letter-spacing: 0.04em;
-}
-
-.interaction-hint {
-  left: clamp(1.35rem, 3.5vw, 3.5rem);
-  color: color-mix(in srgb, var(--ink) 67%, var(--canvas));
-  pointer-events: none;
-  transition: opacity 220ms ease-out;
-}
-
-.interaction-hint.is-quiet {
-  opacity: 0.42;
 }
 
 .rebuild-control {
@@ -387,10 +375,6 @@ a {
     padding: 10.5rem 1.35rem 6rem;
   }
 
-  .interaction-hint {
-    max-width: 18rem;
-    font-size: 0.62rem;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
