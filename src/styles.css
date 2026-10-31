@@ -62,6 +62,18 @@ a {
   overflow: hidden;
 }
 
+.pocket-shell::before {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  background: color-mix(in srgb, var(--canvas) 75%, white);
+  mask-image: var(--canvas-grain, none);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  content: '';
+  pointer-events: none;
+}
+
 .site-mark {
   position: absolute;
   z-index: 40;

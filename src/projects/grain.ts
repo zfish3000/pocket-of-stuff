@@ -27,20 +27,48 @@ export function createGrainMask(id: string, width: number, height: number): Uint
   return pixels;
 }
 
-export function attachBlockGrain(element: HTMLAnchorElement, id: string, width: number, height: number): void {
-  // Generate once per block, never during the physics render loop.
-  if (element.querySelector('.project-block__grain, .project-block__arch-grain')) return;
-  if (typeof CanvasRenderingContext2D === 'undefined') return;
-  const document = element.ownerDocument;
+function maskUrl(document: Document, id: string, width: number, height: number): string | null {
+  if (typeof CanvasRenderingContext2D === 'undefined') return null;
   const canvas = document.createElement('canvas');
   canvas.width = Math.ceil(width);
   canvas.height = Math.ceil(height);
   const context = canvas.getContext('2d');
-  if (!context) return;
+  if (!context) return null;
   const bitmap = context.createImageData(canvas.width, canvas.height);
   bitmap.data.set(createGrainMask(id, canvas.width, canvas.height));
   context.putImageData(bitmap, 0, 0);
-  const url = canvas.toDataURL('image/png');
+  return canvas.toDataURL('image/png');
+}
+
+export function attachBackgroundGrain(document: Document): () => void {
+  const window = document.defaultView;
+  if (!window || typeof CanvasRenderingContext2D === 'undefined') return () => undefined;
+  let timer: number | undefined;
+  function render() {
+    const density = Math.max(2, Math.min(3, window!.devicePixelRatio || 1));
+    const url = maskUrl(document, 'assembly-mat', window!.innerWidth * density, window!.innerHeight * density);
+    if (url) document.documentElement.style.setProperty('--canvas-grain', `url("${url}")`);
+  }
+  function resize() {
+    window!.clearTimeout(timer);
+    timer = window!.setTimeout(render, 180);
+  }
+  render();
+  window.addEventListener('resize', resize);
+  return () => {
+    window.clearTimeout(timer);
+    window.removeEventListener('resize', resize);
+    document.documentElement.style.removeProperty('--canvas-grain');
+  };
+}
+
+export function attachBlockGrain(element: HTMLAnchorElement, id: string, width: number, height: number): void {
+  // Supersample at 4x so enlarged and rotated blocks retain fine grain.
+  // Generate once per block, never during the physics render loop.
+  if (element.querySelector('.project-block__grain, .project-block__arch-grain')) return;
+  const document = element.ownerDocument;
+  const url = maskUrl(document, id, width * 4, height * 4);
+  if (!url) return;
   const svg = element.querySelector<SVGSVGElement>('.project-block__arch');
   if (svg) {
     const namespace = svg.namespaceURI;

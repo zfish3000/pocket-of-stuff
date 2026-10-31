@@ -4,6 +4,8 @@ Zachary Fisher’s project portfolio, built as a set of clickable wooden blocks 
 
 The homepage stays inside a fixed, non-scrolling viewport. Blocks use two-tone dithered gradients without shadows and retain their dimensions while rotating. Each project has a stable random grain pattern and angle. Larger collections scale down to fit; reduced motion preserves the tower without running physics.
 
+Block grain is rendered at 4× resolution for a fine texture, with a subtler high-resolution version across the background. Textures are generated once and the background refreshes only after a viewport resize.
+
 Block faces show only their project number and dot. Project titles appear in a tooltip on hover or keyboard focus and remain available to screen readers.
 
 The site uses Palette 1 throughout: charcoal `#232221`, red `#cb2f2c`, blue `#1b96ba`, yellow `#f1be43`, and pale white `#e2e9e9`.
