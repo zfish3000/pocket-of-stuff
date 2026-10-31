@@ -29,13 +29,11 @@ function groupsFor(blocks: BlockSpec[], count: number): BlockSpec[][] {
   return groups;
 }
 
-function normalized(block: BlockSpec, maximumWidth: number, scaleFactor: number): SizedBlock {
-  const width = Math.max(MIN_TARGET, Math.min(block.width * scaleFactor, maximumWidth));
-  const scale = width / block.width;
+function normalized(block: BlockSpec, scaleFactor: number): SizedBlock {
   return {
     block,
-    width,
-    height: Math.max(MIN_TARGET, block.height * scale),
+    width: block.width * scaleFactor,
+    height: block.height * scaleFactor,
   };
 }
 
@@ -50,7 +48,7 @@ function makeCourses(blocks: BlockSpec[], maximumWidth: number, scaleFactor: num
   let currentWidth = 0;
 
   for (const block of ordered) {
-    const sized = normalized(block, maximumWidth, scaleFactor);
+    const sized = normalized(block, scaleFactor);
     const isCap = block.shape === 'roof' || block.shape === 'half-round';
     const currentHasSupport = current.some(
       ({ block: currentBlock }) => currentBlock.shape !== 'roof' && currentBlock.shape !== 'half-round',
@@ -65,7 +63,11 @@ function makeCourses(blocks: BlockSpec[], maximumWidth: number, scaleFactor: num
       currentWidth = 0;
     }
     const nextWidth = currentWidth + (current.length ? COURSE_GAP : 0) + sized.width;
-    if (current.length && nextWidth > maximumWidth) {
+    const previousCourse = courses.at(-1);
+    const supportedWidth = previousCourse
+      ? Math.min(maximumWidth, previousCourse.width + Math.min(sized.width, ...current.map(({ width }) => width)) + COURSE_GAP)
+      : maximumWidth;
+    if (current.length && nextWidth > supportedWidth) {
       courses.push({
         blocks: current,
         width: currentWidth,
@@ -88,6 +90,31 @@ function makeCourses(blocks: BlockSpec[], maximumWidth: number, scaleFactor: num
   return courses;
 }
 
+function collectionScale(groups: BlockSpec[][], courseWidth: number, availableWidth: number, availableHeight: number, shortestSide: number): number {
+  const blocks = groups.flat();
+  if (!blocks.length) return 1;
+  const totalArea = blocks.reduce((sum, block) => sum + block.width * block.height, 0);
+  // Allocate a consistent visual area to the collection, rather than to each piece.
+  const areaScale = Math.sqrt(availableWidth * availableHeight * 0.42 / totalArea);
+  const widthScale = courseWidth / Math.max(...blocks.map(({ width }) => width));
+  const rotationScale = Math.max(1, shortestSide - 24) / Math.max(...blocks.map(({ width, height }) => Math.hypot(width, height)));
+  const preferred = Math.min(areaScale, widthScale, rotationScale);
+  function fits(scale: number) {
+    return groups.every((group) =>
+      makeCourses(group, courseWidth, scale).reduce((sum, course) => sum + course.height, 0) <= availableHeight,
+    );
+  }
+  if (fits(preferred)) return preferred;
+  let low = 0;
+  let high = preferred;
+  for (let iteration = 0; iteration < 24; iteration += 1) {
+    const middle = (low + high) / 2;
+    if (fits(middle)) low = middle;
+    else high = middle;
+  }
+  return low;
+}
+
 export function createTowerLayout(blocks: BlockSpec[], viewport: ViewportSpec): TowerLayout {
   const stageWidth = Math.max(320, viewport.width);
   const sidePadding = viewport.className === 'mobile' ? 24 : 42;
@@ -95,10 +122,14 @@ export function createTowerLayout(blocks: BlockSpec[], viewport: ViewportSpec): 
   const topPadding = viewport.className === 'mobile' ? 118 : 104;
   const towerCount = countTowers(blocks.length, viewport);
   const regionWidth = (stageWidth - sidePadding * 2) / towerCount;
-  const courseWidthLimit = viewport.className === 'desktop' ? 600 : viewport.className === 'tablet' ? 440 : 390;
-  const scaleFactor = viewport.className === 'desktop' ? 1.45 : viewport.className === 'tablet' ? 1.12 : 1;
+  const courseWidthLimit = viewport.className === 'mobile' ? regionWidth : stageWidth * 0.52;
   const courseWidth = Math.max(MIN_TARGET, Math.min(courseWidthLimit, regionWidth - 28));
   const groups = groupsFor(blocks, towerCount);
+  const scaleFactor = collectionScale(
+    groups, courseWidth, stageWidth - sidePadding * 2,
+    Math.max(1, viewport.height - topPadding - bottomPadding),
+    Math.min(stageWidth, viewport.height),
+  );
   const courseGroups = groups.map((group) => makeCourses(group, courseWidth, scaleFactor));
   const requiredHeight = Math.max(
     0,

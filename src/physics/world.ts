@@ -4,6 +4,7 @@ import type { BlockSpec, Point, TowerLayout } from '../projects/types';
 import { classifyGesture } from './gesture';
 import { createBodyForShape } from './shapes';
 import { updateArchOutline } from '../projects/arch-outline';
+import { attachBlockGrain } from '../projects/grain';
 
 export interface PhysicsWorldOptions {
   stage: HTMLElement;
@@ -132,6 +133,7 @@ export function createPhysicsWorld(options: PhysicsWorldOptions): PhysicsControl
       block.element.style.width = `${visual.width}px`;
       block.element.style.height = `${visual.height}px`;
       if (block.shape === 'arch') updateArchOutline(block.element, visual.width, visual.height);
+      attachBlockGrain(block.element, block.id, visual.width, visual.height);
       block.element.style.setProperty('--block-scale', String(Math.min(1, visual.width / block.width, visual.height / block.height)));
       block.element.style.transform = `translate3d(${visualCenterX - visual.width / 2}px, ${visualCenterY - visual.height / 2}px, 0) rotate(${body.angle}rad)`;
       block.element.dataset.sleeping = String(body.isSleeping);

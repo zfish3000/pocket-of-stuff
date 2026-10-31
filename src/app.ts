@@ -4,7 +4,7 @@ import { createTowerLayout } from './physics/tower-layout';
 import { collectBlockSpecs } from './projects/blocks';
 import { attachProjectTitles } from './projects/titles';
 import { updateArchOutline } from './projects/arch-outline';
-import { attachBackgroundGrain } from './projects/grain';
+import { attachBackgroundGrain, attachBlockGrain } from './projects/grain';
 import type { ViewportSpec } from './projects/types';
 
 export interface PocketAppOptions {
@@ -84,6 +84,7 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
       block.element.style.width = `${placement.width}px`;
       block.element.style.height = `${placement.height}px`;
       if (block.shape === 'arch') updateArchOutline(block.element, placement.width, placement.height);
+      attachBlockGrain(block.element, block.id, placement.width, placement.height);
       block.element.style.setProperty('--block-scale', String(Math.min(1, placement.width / block.width, placement.height / block.height)));
       block.element.style.transform = `translate3d(${placement.x - placement.width / 2}px, ${placement.y - placement.height / 2}px, 0) rotate(${placement.angle}rad)`;
       block.element.dataset.sleeping = 'true';

@@ -4,7 +4,9 @@ Zachary Fisher’s project portfolio, built as a set of clickable wooden blocks 
 
 The homepage stays inside a fixed, non-scrolling viewport. Blocks use two-tone dithered gradients without shadows and retain their dimensions while rotating. Each project has a stable random grain pattern and angle. Larger collections scale down to fit; reduced motion preserves the tower without running physics.
 
-Block grain is rendered at 4× resolution for a fine texture, with a subtler high-resolution version across the background. Textures are generated once and the background refreshes only after a viewport resize.
+Block sizes respond to both project count and viewport space: small collections use larger pieces, and larger collections use smaller pieces. The layout preserves aspect ratios, fits within the screen, and updates collision bodies to match.
+
+Block grain is rendered at 4× resolution for a fine texture, with a subtler high-resolution version across the background. Block textures are reused during motion and regenerated only when enlarged layouts need more resolution; the background refreshes only after a viewport resize.
 
 Block faces show only their project number and dot. Project titles appear in a tooltip on hover or keyboard focus and remain available to screen readers.
 

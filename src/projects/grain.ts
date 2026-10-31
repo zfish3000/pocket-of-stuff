@@ -64,11 +64,23 @@ export function attachBackgroundGrain(document: Document): () => void {
 
 export function attachBlockGrain(element: HTMLAnchorElement, id: string, width: number, height: number): void {
   // Supersample at 4x so enlarged and rotated blocks retain fine grain.
-  // Generate once per block, never during the physics render loop.
-  if (element.querySelector('.project-block__grain, .project-block__arch-grain')) return;
+  // Reuse the mask during motion; regenerate only when layout needs more pixels.
+  const existing = element.querySelector<HTMLElement | SVGPathElement>('.project-block__grain, .project-block__arch-grain');
+  if (existing && Number(element.dataset.grainWidth) >= Math.ceil(width * 4)
+    && Number(element.dataset.grainHeight) >= Math.ceil(height * 4)) return;
   const document = element.ownerDocument;
   const url = maskUrl(document, id, width * 4, height * 4);
   if (!url) return;
+  element.dataset.grainWidth = String(Math.ceil(width * 4));
+  element.dataset.grainHeight = String(Math.ceil(height * 4));
+  if (existing) {
+    if (existing.classList.contains('project-block__arch-grain')) {
+      element.querySelector('.project-block__arch mask image')?.setAttribute('href', url);
+    } else {
+      (existing as HTMLElement).style.maskImage = `url("${url}")`;
+    }
+    return;
+  }
   const svg = element.querySelector<SVGSVGElement>('.project-block__arch');
   if (svg) {
     const namespace = svg.namespaceURI;

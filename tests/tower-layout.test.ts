@@ -33,6 +33,34 @@ function blocks(count: number): BlockSpec[] {
 }
 
 describe('tower layout', () => {
+  test('uses_larger_blocks_for_smaller_collections', () => {
+    for (const viewport of viewports) {
+      const sizes = [1, 6, 18, 36].map((count) => {
+        const input = blocks(count).map((block) => ({ ...block, shape: 'brick' as const, width: 124, height: 68 }));
+        return createTowerLayout(input, viewport).placements[0]!.width;
+      });
+      expect(sizes[0]).toBeGreaterThan(sizes[1]!);
+      expect(sizes[1]).toBeGreaterThan(sizes[2]!);
+      expect(sizes[2]).toBeGreaterThan(sizes[3]!);
+    }
+  });
+
+  test('a_small_collection_uses_a_meaningful_amount_of_the_screen', () => {
+    for (const viewport of viewports) {
+      const layout = createTowerLayout(blocks(1), viewport);
+      expect(layout.placements[0]!.width).toBeGreaterThan(viewport.width * 0.3);
+    }
+  });
+
+  test('scales_all_shapes_uniformly_without_changing_aspect_ratios', () => {
+    for (const viewport of viewports) {
+      const input = blocks(36);
+      for (const placement of createTowerLayout(input, viewport).placements) {
+        const original = input.find(({ id }) => id === placement.id)!;
+        expect(placement.width / placement.height).toBeCloseTo(original.width / original.height, 6);
+      }
+    }
+  });
   test('every_shape_detects_collision_with_an_overlapping_rectangle', () => {
     for (const block of blocks(6)) {
       const body = createBodyForShape(block, {
