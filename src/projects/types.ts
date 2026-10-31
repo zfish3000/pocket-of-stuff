@@ -34,6 +34,7 @@ export interface BlockPlacement {
 export interface TowerLayout {
   stageWidth: number;
   stageHeight: number;
+  floorY?: number;
   towerCount: number;
   placements: BlockPlacement[];
 }

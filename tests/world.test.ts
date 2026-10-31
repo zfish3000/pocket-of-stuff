@@ -178,6 +178,17 @@ describe('physics world', () => {
     world.destroy();
   });
 
+  test('blocks_settle_on_the_raised_floor_instead_of_the_screen_bottom', () => {
+    const input = fixture();
+    input.layout.floorY = 450;
+    input.layout.placements[0]!.y = 200;
+    const world = createPhysicsWorld(input);
+    world.start();
+    for (let frame = 0; frame < 180; frame += 1) queuedFrame?.(100 + frame * 1000 / 60);
+    expect(world.bodies.get('alpha')!.bounds.max.y).toBeCloseTo(450, 0);
+    world.destroy();
+  });
+
   test('native_link_drag_is_cancelled', () => {
     const input = fixture();
     const world = createPhysicsWorld(input);

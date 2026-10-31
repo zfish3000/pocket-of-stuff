@@ -33,6 +33,16 @@ function blocks(count: number): BlockSpec[] {
 }
 
 describe('tower layout', () => {
+  test('centers_the_tower_vertically_on_a_raised_physics_floor', () => {
+    for (const viewport of viewports) {
+      const layout = createTowerLayout(blocks(8), viewport);
+      const top = Math.min(...layout.placements.map(({ y, height }) => y - height / 2));
+      const bottom = Math.max(...layout.placements.map(({ y, height }) => y + height / 2));
+      expect((top + bottom) / 2).toBeCloseTo(viewport.height / 2, 3);
+      expect(layout.floorY).toBeCloseTo(bottom, 3);
+      expect(layout.floorY).toBeLessThan(viewport.height - 32);
+    }
+  });
   test('every_shape_detects_collision_with_an_overlapping_rectangle', () => {
     for (const block of blocks(6)) {
       const body = createBodyForShape(block, {

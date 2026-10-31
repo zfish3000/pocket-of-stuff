@@ -160,5 +160,11 @@ export function createTowerLayout(blocks: BlockSpec[], viewport: ViewportSpec): 
     placement.height = Math.min(placement.height, stageHeight);
   }
 
-  return { stageWidth, stageHeight, towerCount, placements };
+  const top = Math.min(...placements.map(({ y, height }) => y - height / 2));
+  const bottom = Math.max(...placements.map(({ y, height }) => y + height / 2));
+  const towerHeight = placements.length ? bottom - top : 0;
+  const floorY = Math.min(stageHeight - 32, (stageHeight + towerHeight) / 2);
+  for (const placement of placements) placement.y += floorY - bottom;
+
+  return { stageWidth, stageHeight, floorY, towerCount, placements };
 }
