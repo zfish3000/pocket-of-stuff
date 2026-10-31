@@ -57,7 +57,6 @@ function eventPoint(event: MouseEvent, stage: HTMLElement): Point {
 
 function boundaries(layout: TowerLayout): Body[] {
   const options = { isStatic: true, friction: 0.8, restitution: 0.03, label: 'world-boundary' };
-  const floorY = layout.floorY ?? layout.stageHeight;
   return [
     Bodies.rectangle(layout.stageWidth / 2, -BOUNDARY_THICKNESS / 2, layout.stageWidth, BOUNDARY_THICKNESS, options),
     Bodies.rectangle(-BOUNDARY_THICKNESS / 2, layout.stageHeight / 2, BOUNDARY_THICKNESS, layout.stageHeight * 2, options),
@@ -70,7 +69,7 @@ function boundaries(layout: TowerLayout): Body[] {
     ),
     Bodies.rectangle(
       layout.stageWidth / 2,
-      floorY + BOUNDARY_THICKNESS / 2,
+      layout.stageHeight + BOUNDARY_THICKNESS / 2,
       layout.stageWidth + BOUNDARY_THICKNESS * 2,
       BOUNDARY_THICKNESS,
       options,
@@ -152,7 +151,7 @@ export function createPhysicsWorld(options: PhysicsWorldOptions): PhysicsControl
       const centerX = body.position.x + offsetX;
       const centerY = body.position.y + offsetY;
       const clampedX = Math.max(halfWidth, Math.min(layout.stageWidth - halfWidth, centerX));
-      const clampedY = Math.max(halfHeight, Math.min((layout.floorY ?? layout.stageHeight) - halfHeight, centerY));
+      const clampedY = Math.max(halfHeight, Math.min(layout.stageHeight - halfHeight, centerY));
       if (clampedX !== centerX || clampedY !== centerY) {
         Body.translate(body, { x: clampedX - centerX, y: clampedY - centerY });
         Body.setVelocity(body, {
