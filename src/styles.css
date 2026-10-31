@@ -361,10 +361,20 @@ a {
   color: var(--ink);
   background: var(--canvas);
   border: 0;
-  border-bottom: 1px solid currentColor;
   border-radius: 0.62rem;
   text-underline-offset: 0.2em;
   cursor: pointer;
+}
+
+.rebuild-control::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: currentColor;
+  content: '';
+  pointer-events: none;
 }
 
 .rebuild-control:hover {
