@@ -25,7 +25,7 @@ export function updateArchOutline(element: HTMLAnchorElement, width: number, hei
   const shoulder = height * 0.54 + openingRadius;
   const top = height * 0.54;
   // One closed silhouette: the bottom edge climbs around the opening.
-  svg.querySelector('path')!.setAttribute('d', [
+  const outline = [
     `M ${corner} ${edge}`,
     `H ${width - corner} Q ${right} ${edge} ${right} ${corner}`,
     `V ${height - corner} Q ${right} ${bottom} ${width - corner} ${bottom}`,
@@ -36,5 +36,6 @@ export function updateArchOutline(element: HTMLAnchorElement, width: number, hei
     `V ${bottom} H ${corner}`,
     `Q ${edge} ${bottom} ${edge} ${height - corner}`,
     `V ${corner} Q ${edge} ${edge} ${corner} ${edge} Z`,
-  ].join(' '));
+  ].join(' ');
+  for (const path of svg.querySelectorAll('path')) path.setAttribute('d', outline);
 }

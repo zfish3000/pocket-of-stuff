@@ -1,5 +1,6 @@
 import type { BlockColor, BlockShape, BlockSpec } from './types';
 import { updateArchOutline } from './arch-outline';
+import { attachBlockGrain } from './grain';
 
 const SHAPES: BlockShape[] = ['brick', 'square', 'beam', 'arch', 'roof', 'half-round'];
 const COLORS: BlockColor[] = ['coral', 'aqua', 'lilac', 'plum', 'amber', 'powder'];
@@ -48,6 +49,7 @@ export function collectBlockSpecs(root: HTMLElement): BlockSpec[] {
     element.style.setProperty('--block-height', `${height}px`);
     element.style.setProperty('--block-lines', String(lines));
     if (shape === 'arch') updateArchOutline(element, width, height);
+    attachBlockGrain(element, id, width, height);
 
     return { id, index, title, color, shape, width, height, element };
   });

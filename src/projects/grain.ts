@@ -1,0 +1,76 @@
+function seedFor(id: string): number {
+  let seed = 2166136261;
+  for (const character of id) seed = Math.imul(seed ^ character.charCodeAt(0), 16777619);
+  return seed >>> 0;
+}
+
+export function createGrainMask(id: string, width: number, height: number): Uint8ClampedArray {
+  let seed = seedFor(id);
+  const angle = (seed % 360) * Math.PI / 180;
+  const dx = Math.cos(angle);
+  const dy = Math.sin(angle);
+  const reach = Math.abs(dx) * width / 2 + Math.abs(dy) * height / 2;
+  const pixels = new Uint8ClampedArray(width * height * 4);
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      seed ^= seed << 13;
+      seed ^= seed >>> 17;
+      seed ^= seed << 5;
+      const random = (seed >>> 0) / 4294967296;
+      const projection = ((x - width / 2) * dx + (y - height / 2) * dy) / reach;
+      const probability = Math.max(0, Math.min(1, 0.5 + projection * 0.8));
+      const index = (y * width + x) * 4;
+      pixels[index] = pixels[index + 1] = pixels[index + 2] = 255;
+      pixels[index + 3] = random < probability ? 255 : 0;
+    }
+  }
+  return pixels;
+}
+
+export function attachBlockGrain(element: HTMLAnchorElement, id: string, width: number, height: number): void {
+  // Generate once per block, never during the physics render loop.
+  if (element.querySelector('.project-block__grain, .project-block__arch-grain')) return;
+  if (typeof CanvasRenderingContext2D === 'undefined') return;
+  const document = element.ownerDocument;
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.ceil(width);
+  canvas.height = Math.ceil(height);
+  const context = canvas.getContext('2d');
+  if (!context) return;
+  const bitmap = context.createImageData(canvas.width, canvas.height);
+  bitmap.data.set(createGrainMask(id, canvas.width, canvas.height));
+  context.putImageData(bitmap, 0, 0);
+  const url = canvas.toDataURL('image/png');
+  const svg = element.querySelector<SVGSVGElement>('.project-block__arch');
+  if (svg) {
+    const namespace = svg.namespaceURI;
+    const defs = document.createElementNS(namespace, 'defs');
+    const mask = document.createElementNS(namespace, 'mask');
+    const maskId = `block-grain-${id}`;
+    mask.setAttribute('id', maskId);
+    mask.setAttribute('maskUnits', 'userSpaceOnUse');
+    mask.setAttribute('x', '0');
+    mask.setAttribute('y', '0');
+    mask.setAttribute('width', '100%');
+    mask.setAttribute('height', '100%');
+    const image = document.createElementNS(namespace, 'image');
+    image.setAttribute('href', url);
+    image.setAttribute('width', '100%');
+    image.setAttribute('height', '100%');
+    image.setAttribute('preserveAspectRatio', 'none');
+    mask.append(image);
+    defs.append(mask);
+    const grain = document.createElementNS(namespace, 'path');
+    grain.classList.add('project-block__arch-grain');
+    grain.setAttribute('d', svg.querySelector('path')!.getAttribute('d')!);
+    grain.setAttribute('mask', `url(#${maskId})`);
+    svg.prepend(defs);
+    svg.append(grain);
+  } else {
+    const grain = document.createElement('span');
+    grain.className = 'project-block__grain';
+    grain.setAttribute('aria-hidden', 'true');
+    grain.style.maskImage = `url("${url}")`;
+    element.prepend(grain);
+  }
+}

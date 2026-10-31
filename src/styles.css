@@ -118,6 +118,7 @@ a {
 
 .project-block {
   --block-color: var(--coral);
+  --block-light: color-mix(in srgb, var(--block-color) 82%, white);
   --block-ink: var(--ink);
   position: relative;
   display: grid;
@@ -168,6 +169,20 @@ a {
   border-radius: 50%;
   content: '';
   opacity: 0.17;
+}
+
+.project-block__grain {
+  position: absolute;
+  inset: 0;
+  background: var(--block-light);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.project-block__arch-grain {
+  fill: var(--block-light);
+  stroke: none;
 }
 
 .project-block--coral { --block-color: var(--coral); --block-ink: var(--coral-ink); }
