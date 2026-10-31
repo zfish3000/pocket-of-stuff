@@ -31,7 +31,13 @@ The static site is written to `dist/`.
 
 ## Add a project
 
+For a step-by-step walkthrough, see [the project page guide](docs/PROJECT-GUIDE.md). A copyable starter lives in [templates/project.html](templates/project.html).
+
+The starter matches its page background to the block color, uses a large title, and includes left, right, and full-width image examples. Its shared styles and theme script live in `public/project-page.css` and `public/project-page.js`.
+
 Add one standalone HTML file directly inside `public/projects/`, then run the development server or build again. The build discovers the file automatically; there is no separate project list to update.
+
+If the development server is already running, run `npm run generate:projects` and refresh the homepage after adding a file or changing its metadata. The on-screen Rebuild button only restacks blocks; it does not scan the folder.
 
 Filenames must use lowercase ASCII kebab-case:
 

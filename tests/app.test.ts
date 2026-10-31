@@ -144,6 +144,85 @@ describe('pocket app lifecycle', () => {
   afterEach(() => {
     vi.useRealTimers();
     vi.unstubAllGlobals();
+    Reflect.deleteProperty(HTMLElement.prototype, 'animate');
+  });
+
+  function pendingReveal() {
+    let finish!: () => void;
+    const finished = new Promise<void>((resolve) => { finish = resolve; });
+    Object.defineProperty(HTMLElement.prototype, 'animate', {
+      configurable: true,
+      value: () => ({ finished, cancel() {} }),
+    });
+    return finish;
+  }
+
+  test('holds_physics_until_the_initial_reveal_finishes_even_after_resize_or_visibility_changes', async () => {
+    vi.useFakeTimers();
+    appDocument();
+    const finish = pendingReveal();
+    const app = await createPocketApp(document, {
+      viewport: () => ({ width: 1200, height: 800, className: 'desktop' }),
+      motionQuery: mediaQuery(false),
+    });
+    expect(app.physics!.running).toBe(false);
+    window.dispatchEvent(new Event('resize'));
+    document.dispatchEvent(new Event('visibilitychange'));
+    await vi.advanceTimersByTimeAsync(150);
+    expect(app.physics!.running).toBe(false);
+
+    finish();
+    await Promise.resolve();
+
+    expect(app.physics!.running).toBe(true);
+    expect(document.querySelector('.load-reveal')).toBeNull();
+    app.destroy();
+  });
+
+  test('destroy_during_reveal_never_starts_physics', async () => {
+    appDocument();
+    const finish = pendingReveal();
+    const app = await createPocketApp(document, {
+      viewport: () => ({ width: 1200, height: 800, className: 'desktop' }),
+      motionQuery: mediaQuery(false),
+    });
+    const world = app.physics!;
+    app.destroy();
+    finish();
+    await Promise.resolve();
+    expect(world.running).toBe(false);
+    expect(document.querySelector('.load-reveal')).toBeNull();
+  });
+
+  test('reduced_motion_skips_the_loading_reveal', async () => {
+    appDocument();
+    document.body.insertAdjacentHTML('afterbegin', '<div class="load-reveal" aria-hidden="true"></div>');
+    pendingReveal();
+    const app = await createPocketApp(document, {
+      viewport: () => ({ width: 1200, height: 800, className: 'desktop' }),
+      motionQuery: mediaQuery(true),
+    });
+    expect(document.querySelector('.load-reveal')).toBeNull();
+    expect(app.physics).toBeNull();
+    app.destroy();
+  });
+
+  test('reuses_the_first_paint_cover_and_removes_it_after_the_fade', async () => {
+    appDocument();
+    document.body.insertAdjacentHTML('afterbegin', '<div class="load-reveal" aria-hidden="true"></div>');
+    const cover = document.querySelector('.load-reveal');
+    const finish = pendingReveal();
+    const app = await createPocketApp(document, {
+      viewport: () => ({ width: 1200, height: 800, className: 'desktop' }),
+      motionQuery: mediaQuery(false),
+    });
+    expect(document.querySelectorAll('.load-reveal')).toHaveLength(1);
+    expect(document.querySelector('.load-reveal')).toBe(cover);
+    finish();
+    await Promise.resolve();
+    expect(document.querySelector('.load-reveal')).toBeNull();
+    expect(app.physics!.running).toBe(true);
+    app.destroy();
   });
 
   test('boots_by_enhancing_existing_anchors', async () => {

@@ -30,15 +30,25 @@ function browserViewport(): ViewportSpec {
 }
 
 export async function createPocketApp(root: Document, options: PocketAppOptions = {}): Promise<PocketApp> {
+  const motionQuery = options.motionQuery ?? window.matchMedia('(prefers-reduced-motion: reduce)');
+  const reveal = root.querySelector<HTMLElement>('.load-reveal') ??
+    (!motionQuery.matches && typeof root.body.animate === 'function' ? root.createElement('div') : null);
+  if (reveal && !reveal.isConnected) {
+    reveal.className = 'load-reveal';
+    reveal.setAttribute('aria-hidden', 'true');
+    root.body.append(reveal);
+  }
   await root.fonts?.ready;
 
   const stageElement = root.querySelector<HTMLElement>('.project-stage');
-  if (!stageElement) throw new Error('Pocket of Stuff requires a .project-stage element.');
+  if (!stageElement) {
+    reveal?.remove();
+    throw new Error('Pocket of Stuff requires a .project-stage element.');
+  }
   const stage: HTMLElement = stageElement;
   const rebuildControl = root.querySelector<HTMLButtonElement>('.rebuild-control');
   const status = root.querySelector<HTMLElement>('.sr-status');
   const viewport = options.viewport ?? browserViewport;
-  const motionQuery = options.motionQuery ?? window.matchMedia('(prefers-reduced-motion: reduce)');
   const resizeDelay = options.resizeDelay ?? 140;
   const blocks = collectBlockSpecs(stage);
   const removeBackgroundGrain = attachBackgroundGrain(root);
@@ -49,6 +59,8 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
   let rebuildTimer: number | undefined;
   let hasInteracted = false;
   let destroyed = false;
+  let entranceComplete = !reveal;
+  let revealAnimation: Animation | undefined;
 
   function announce(message: string) {
     if (status) status.textContent = message;
@@ -102,7 +114,7 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
       dragThreshold: currentViewport.className === 'mobile' ? 9 : 7,
       onFirstMove: revealRebuild,
     });
-    physics.start();
+    if (entranceComplete && !root.hidden) physics.start();
   }
 
   function stopPhysics() {
@@ -114,7 +126,7 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
   }
 
   function startRebuiltPhysics() {
-    if (destroyed || motionQuery.matches || !physics) return;
+    if (destroyed || !entranceComplete || motionQuery.matches || !physics) return;
     physics.start();
     if (root.hidden) physics.pause();
   }
@@ -145,7 +157,7 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
   function handleVisibility() {
     if (!physics) return;
     if (root.hidden) physics.pause();
-    else physics.resume();
+    else if (entranceComplete) physics.resume();
   }
 
   function bodiesFit(viewportSpec: ViewportSpec) {
@@ -182,12 +194,23 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
   }
 
   function handleMotionChange() {
+    if (motionQuery.matches) finishEntrance();
     if (motionQuery.matches) {
       stopPhysics();
       applyStaticTower();
     } else {
       clearPhysicsPresentation();
       bootPhysics();
+    }
+  }
+
+  function finishEntrance() {
+    if (entranceComplete) return;
+    entranceComplete = true;
+    reveal?.remove();
+    revealAnimation?.cancel();
+    if (!destroyed && !motionQuery.matches && !stage.classList.contains('is-rebuilding')) {
+      startRebuiltPhysics();
     }
   }
 
@@ -205,6 +228,14 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
     else bootPhysics();
   }
   root.documentElement.classList.add('pocket-ready');
+  if (reveal && !motionQuery.matches && typeof reveal.animate === 'function') {
+    revealAnimation = reveal.animate([{ opacity: 1 }, { opacity: 0 }], {
+      duration: 500,
+      easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+      fill: 'forwards',
+    });
+    void revealAnimation.finished.then(finishEntrance, finishEntrance);
+  } else finishEntrance();
 
   const app: PocketApp = {
     get physics() {
@@ -214,6 +245,7 @@ export async function createPocketApp(root: Document, options: PocketAppOptions 
     destroy() {
       if (destroyed) return;
       destroyed = true;
+      finishEntrance();
       window.clearTimeout(resizeTimer);
       window.clearTimeout(rebuildTimer);
       rebuildControl?.removeEventListener('click', handleRebuildClick);
