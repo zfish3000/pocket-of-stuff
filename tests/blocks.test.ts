@@ -91,7 +91,7 @@ describe('toymaker surface contract', () => {
       '--coral: #cb2f2c',
       '--aqua: #1b96ba',
       '--lilac: #f1be43',
-      '--plum: #232221',
+      '--plum: #cb2f2c',
       '--amber: #f1be43',
       '--powder: #1b96ba',
       '--graphite: #232221',

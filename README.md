@@ -12,6 +12,8 @@ Block faces show only their project number and dot. Project titles appear in a t
 
 The site uses Palette 1 throughout: charcoal `#232221`, red `#cb2f2c`, blue `#1b96ba`, yellow `#f1be43`, and pale white `#e2e9e9`.
 
+Project blocks use only red, blue, and yellow (plus their slightly lighter grain shade). The legacy metadata names map to those three colors: `coral`/`plum` → red, `aqua`/`powder` → blue, and `lilac`/`amber` → yellow.
+
 ## Start the site
 
 ```bash
