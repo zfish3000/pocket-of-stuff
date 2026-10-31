@@ -22,7 +22,8 @@
   text-rendering: optimizeLegibility;
 }
 
-:root[data-palette='palette-1'] {
+:root[data-palette='palette-1'],
+:root[data-palette='palette-1-5'] {
   --canvas: #e2e9e9;
   --ink: #232221;
   --coral: #cb2f2c;
@@ -33,6 +34,11 @@
   --powder: #1b96ba;
   --graphite: #232221;
   --coral-ink: #e2e9e9;
+}
+
+:root[data-palette='palette-1-5'] {
+  --canvas: #F7EBD2;
+  --coral-ink: #F7EBD2;
 }
 
 :root[data-palette='palette-2'] {

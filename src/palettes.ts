@@ -1,6 +1,7 @@
 export const PALETTES = [
   { id: 'original', name: 'Original', colors: ['#F7EBD2', '#E36862', '#58B9B2', '#C6A5D2', '#634572', '#E6B84B', '#9AB7C1'] },
   { id: 'palette-1', name: 'Palette 1', colors: ['#232221', '#cb2f2c', '#1b96ba', '#f1be43', '#e2e9e9'] },
+  { id: 'palette-1-5', name: 'Palette 1.5', colors: ['#232221', '#cb2f2c', '#1b96ba', '#f1be43', '#F7EBD2'] },
   { id: 'palette-2', name: 'Palette 2', colors: ['#ffffff', '#f42e1f', '#2f256b', '#060608'] },
   { id: 'palette-3', name: 'Palette 3', colors: ['#0d0a19', '#ed2443', '#58b6ef', '#f3ecdd'] },
 ] as const;

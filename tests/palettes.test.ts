@@ -17,10 +17,10 @@ afterEach(() => {
   delete document.documentElement.dataset.palette;
 });
 
-test('offers_the_original_and_all_three_alternative_palettes', () => {
+test('offers_the_original_and_all_alternative_palettes', () => {
   cleanup = attachPaletteSwitcher(document);
   expect([...document.querySelectorAll('button')].map((button) => button.textContent)).toEqual([
-    'Original', 'Palette 1', 'Palette 2', 'Palette 3',
+    'Original', 'Palette 1', 'Palette 1.5', 'Palette 2', 'Palette 3',
   ]);
   expect(document.querySelector('[aria-pressed="true"]')?.textContent).toBe('Original');
 });
@@ -45,7 +45,7 @@ test('restores_a_saved_palette_and_falls_back_for_an_unknown_one', () => {
   localStorage.setItem('pocket:palette', 'unknown');
   cleanup = attachPaletteSwitcher(document);
   expect(document.documentElement.dataset.palette).toBe('original');
-  expect(document.querySelectorAll('button')).toHaveLength(4);
+  expect(document.querySelectorAll('button')).toHaveLength(5);
 });
 
 test('escape_closes_the_chooser_and_returns_focus_to_its_summary', () => {
