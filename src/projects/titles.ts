@@ -8,6 +8,12 @@ export function attachProjectTitles(stage: HTMLElement, blocks: BlockSpec[]): ()
   tooltip.hidden = true;
   document.body.append(tooltip);
   const projects = new Map(blocks.map((block) => [block.element, block.title]));
+  const window = document.defaultView!;
+  let held: { element: HTMLAnchorElement; pointerId: number } | null = null;
+
+  function pointerId(event: Event): number {
+    return 'pointerId' in event ? Number(event.pointerId) : 1;
+  }
 
   function project(target: EventTarget | null): HTMLAnchorElement | null {
     return target instanceof Element ? target.closest<HTMLAnchorElement>('.project-block') : null;
@@ -19,20 +25,55 @@ export function attachProjectTitles(stage: HTMLElement, blocks: BlockSpec[]): ()
 
   function show(element: HTMLAnchorElement, x: number, y: number) {
     const title = projects.get(element);
-    if (!title || element.classList.contains('is-held')) return hide();
+    if (!title) return hide();
     tooltip.textContent = title;
     tooltip.hidden = false;
     const bounds = tooltip.getBoundingClientRect();
-    const window = document.defaultView!;
     tooltip.style.left = `${Math.max(12, Math.min(x + 14, window.innerWidth - bounds.width - 12))}px`;
     tooltip.style.top = `${Math.max(12, Math.min(y + 18, window.innerHeight - bounds.height - 12))}px`;
   }
 
   function hover(event: Event) {
+    if (held) return;
     const element = project(event.target);
     if (!element || ('pointerType' in event && event.pointerType === 'touch')) return;
     const pointer = event as PointerEvent;
     show(element, pointer.clientX, pointer.clientY);
+  }
+
+  function startDrag(event: Event) {
+    if (held || (event as MouseEvent).button !== 0) return;
+    const element = project(event.target);
+    if (!element || !projects.has(element)) return;
+    held = { element, pointerId: pointerId(event) };
+    const pointer = event as PointerEvent;
+    show(element, pointer.clientX, pointer.clientY);
+  }
+
+  function drag(event: Event) {
+    if (!held || held.pointerId !== pointerId(event)) return;
+    const pointer = event as PointerEvent;
+    show(held.element, pointer.clientX, pointer.clientY);
+  }
+
+  function stopDrag(event: Event) {
+    if (!held || held.pointerId !== pointerId(event)) return;
+    const element = held.element;
+    held = null;
+    if (event.type === 'pointerup' && project(event.target) === element &&
+      !('pointerType' in event && event.pointerType === 'touch')) {
+      const pointer = event as PointerEvent;
+      show(element, pointer.clientX, pointer.clientY);
+    } else hide();
+  }
+
+  function leave() {
+    if (!held) hide();
+  }
+
+  function blur() {
+    held = null;
+    hide();
   }
 
   function focus(event: Event) {
@@ -48,19 +89,27 @@ export function attachProjectTitles(stage: HTMLElement, blocks: BlockSpec[]): ()
 
   stage.addEventListener('pointerover', hover);
   stage.addEventListener('pointermove', hover);
-  stage.addEventListener('pointerout', hide);
-  stage.addEventListener('pointerdown', hide);
+  stage.addEventListener('pointerout', leave);
+  stage.addEventListener('pointerdown', startDrag);
   stage.addEventListener('focusin', focus);
-  stage.addEventListener('focusout', hide);
+  stage.addEventListener('focusout', leave);
+  window.addEventListener('pointermove', drag);
+  window.addEventListener('pointerup', stopDrag);
+  window.addEventListener('pointercancel', stopDrag);
+  window.addEventListener('blur', blur);
   document.addEventListener('keydown', escape);
 
   return () => {
     stage.removeEventListener('pointerover', hover);
     stage.removeEventListener('pointermove', hover);
-    stage.removeEventListener('pointerout', hide);
-    stage.removeEventListener('pointerdown', hide);
+    stage.removeEventListener('pointerout', leave);
+    stage.removeEventListener('pointerdown', startDrag);
     stage.removeEventListener('focusin', focus);
-    stage.removeEventListener('focusout', hide);
+    stage.removeEventListener('focusout', leave);
+    window.removeEventListener('pointermove', drag);
+    window.removeEventListener('pointerup', stopDrag);
+    window.removeEventListener('pointercancel', stopDrag);
+    window.removeEventListener('blur', blur);
     document.removeEventListener('keydown', escape);
     tooltip.remove();
   };

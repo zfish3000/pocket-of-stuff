@@ -33,7 +33,9 @@ function openProject(filename: string, color?: string) {
   style.textContent = readFileSync(resolve('public/project-page.css'), 'utf8');
   document.head.append(style);
   for (const script of document.querySelectorAll<HTMLScriptElement>('script[src]')) {
-    const source = readFileSync(resolve('public', script.getAttribute('src')!.replace(/^\//, '')), 'utf8');
+    const scriptPath = script.getAttribute('src')!;
+    if (!scriptPath.startsWith('/')) continue;
+    const source = readFileSync(resolve('public', scriptPath.replace(/^\//, '')), 'utf8');
     new Function('document', 'location', source)(document, { pathname: `/projects/${filename}` });
   }
   return parseProjectDocument(html, filename);
