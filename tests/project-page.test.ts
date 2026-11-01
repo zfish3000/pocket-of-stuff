@@ -56,6 +56,15 @@ test.each(['my-project.html', 'camera.html', 'weather-radio.html', 'project-2.ht
   },
 );
 
+test('text_sections_use_a_centered_reading_column_with_left_aligned_copy', () => {
+  openProject('example.html', 'aqua');
+  const textSection = document.querySelector<HTMLElement>('.project-section--text')!;
+  const paragraph = textSection.querySelector('p')!;
+
+  expect(getComputedStyle(textSection).marginInline).toBe('auto');
+  expect(getComputedStyle(paragraph).textAlign).not.toBe('center');
+});
+
 test('project_content_stays_covered_until_fonts_are_ready_and_the_reveal_finishes', async () => {
   let ready!: () => void;
   let complete!: () => void;
