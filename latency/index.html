@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Latency Threshold</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main>
+      <section id="welcomeScreen" class="screen narrow" hidden>
+        <div class="masthead">
+          <p class="eyebrow">Science fair experiment</p>
+          <h1 id="welcomeTitle">The Latency Threshold</h1>
+        </div>
+
+        <div id="closedNotice" class="notice" hidden>
+          <strong>This study is not accepting participants right now.</strong>
+          <p>Thank you for your interest.</p>
+        </div>
+
+
+        <div id="blockingNotice" class="notice" hidden>
+          <strong>This computer cannot run the study.</strong>
+          <ul id="blockingList"></ul>
+        </div>
+
+        <div id="welcomeResume" class="notice" hidden>
+          <strong>You have an unfinished session on this computer.</strong>
+          <p>You can continue where you stopped.</p>
+          <div class="button-row">
+            <button id="welcomeResumeButton" class="primary" type="button">Continue my session</button>
+          </div>
+        </div>
+
+        <form id="welcomeForm" class="setup-grid" onsubmit="return false;">
+          <p id="consentText" class="consent-text"></p>
+
+          <div class="checklist">
+            <strong>Before you start</strong>
+            <ul>
+              <li>Use a mouse or trackpad. If you use a mouse, put it on a desk or table.</li>
+              <li>Sit somewhere quiet where you can work for <span id="estimatedMinutes">10</span> minutes without interruptions.</li>
+              <li>Close other programs and browser tabs.</li>
+              <li>Turn your sound on. A short beep marks the start of each trial.</li>
+              <li>The experiment fills the screen. Press Escape at any time to pause.</li>
+            </ul>
+          </div>
+
+          <fieldset class="choice-group">
+            <legend>What will you use to move the pointer?</legend>
+            <label class="toggle"><input type="radio" name="inputDevice" value="mouse-or-trackpad"> Mouse or trackpad</label>
+            <label class="toggle"><input type="radio" name="inputDevice" value="other"> Something else</label>
+          </fieldset>
+          <p id="deviceWarning" class="field-warning" hidden>This study needs a mouse or trackpad. Please use one of these to take part.</p>
+
+          <div class="button-row">
+            <button id="soundTestButton" type="button">Play test beep</button>
+          </div>
+
+          <label>
+            Participant code (only if you were given one)
+            <input id="welcomeParticipantId" autocomplete="off" maxlength="24" placeholder="Example: P014">
+          </label>
+
+          <div id="completedNotice" class="notice" hidden>
+            <strong>Someone has already taken part on this computer.</strong>
+            <p>Each person may take part only once. Someone else in your home is welcome to take part on this computer.</p>
+            <label class="toggle consent-check">
+              <input id="differentPersonCheckbox" type="checkbox">
+              I am a different person, and I have not taken part in this study before.
+            </label>
+          </div>
+
+          <label class="toggle consent-check">
+            <input id="consentCheckbox" type="checkbox">
+            <span id="consentCheckboxText"></span>
+          </label>
+
+          <div class="button-row">
+            <button id="welcomeStartButton" class="primary" type="button" disabled>Continue to instructions</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="setupScreen" class="screen setup-panel" hidden>
+        <div class="masthead">
+          <p class="eyebrow">Admin</p>
+          <h1>The Latency Threshold</h1>
+          <p>Sessions started on this page are saved as test data. To run a real participant, open the <a id="participantLink" href="./">participant page</a>.</p>
+        </div>
+
+        <div class="admin-columns">
+          <form class="setup-grid" onsubmit="return false;">
+            <label>
+              Participant ID
+              <input id="participantId" autocomplete="off" placeholder="Example: TEST01">
+            </label>
+
+            <div class="session-box">
+              <span>Session ID</span>
+              <strong id="sessionPreview"></strong>
+            </div>
+
+            <label>
+              Interface version
+              <select id="interfaceVersion"></select>
+            </label>
+
+            <fieldset id="versionSettings" class="version-settings" hidden>
+              <legend>Test settings</legend>
+              <label>
+                Corridor width (× normal)
+                <input id="corridorWidthScale" type="number" min="1" max="2" step="0.25">
+              </label>
+              <label>
+                Bend amount (× normal)
+                <input id="bendScale" type="number" min="3" max="5" step="0.1">
+              </label>
+              <label>
+                Fill color
+                <select id="fillColoring">
+                  <option value="distance">By distance from center (green = center, red = wall)</option>
+                  <option value="solid">Solid blue</option>
+                </select>
+              </label>
+              <label>
+                Push strength (speed added per pixel of mouse movement)
+                <input id="gain" type="number" min="0.5" max="20" step="0.5">
+              </label>
+              <label>
+                Drag (higher stops the ball sooner)
+                <input id="drag" type="number" min="0" max="10" step="0.1">
+              </label>
+              <label>
+                Top speed (pixels per second)
+                <input id="maxSpeed" type="number" min="100" max="3000" step="50">
+              </label>
+            </fieldset>
+
+            <label class="toggle">
+              <input id="developerMode" type="checkbox">
+              Developer/testing mode
+            </label>
+
+            <label>
+              Jump to latency
+              <select id="jumpCondition">
+                <option value="">No jump</option>
+                <option value="0">0 ms</option>
+                <option value="50">50 ms</option>
+                <option value="100">100 ms</option>
+                <option value="150">150 ms</option>
+                <option value="200">200 ms</option>
+                <option value="300">300 ms</option>
+                <option value="400">400 ms</option>
+                <option value="600">600 ms</option>
+                <option value="800">800 ms</option>
+                <option value="1000">1000 ms</option>
+              </select>
+            </label>
+
+            <div class="button-row">
+              <button id="fullscreenButton" type="button">Fullscreen</button>
+              <button id="resumeButton" type="button">Resume interrupted session</button>
+              <button id="startButton" class="primary" type="button">Start test session</button>
+            </div>
+          </form>
+
+          <div class="setup-grid admin-tools">
+            <section>
+              <h3>Data upload</h3>
+              <p id="uploadStatus"></p>
+              <div class="button-row">
+                <button id="testUploadButton" type="button">Send test upload</button>
+              </div>
+              <p id="testUploadResult" class="status-line"></p>
+            </section>
+
+            <section>
+              <h3>Waiting to upload</h3>
+              <p id="pendingSummary"></p>
+              <ul id="pendingList" class="pending-list"></ul>
+              <div class="button-row">
+                <button id="retryPendingButton" type="button">Retry all uploads</button>
+              </div>
+            </section>
+
+            <section>
+              <h3>Unfinished session</h3>
+              <p id="savedSessionSummary"></p>
+              <div class="button-row">
+                <button id="discardSessionButton" type="button">Discard unfinished session</button>
+              </div>
+            </section>
+
+            <section>
+              <h3>This computer</h3>
+              <label class="toggle">
+                <input id="sharedComputerToggle" type="checkbox">
+                Shared lab computer (skip the "different person" question for each new participant)
+              </label>
+              <p id="completedSummary"></p>
+              <div class="button-row">
+                <button id="clearCompletedButton" type="button">Reset the finished-session count</button>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section id="instructionsScreen" class="screen narrow" hidden>
+        <p class="eyebrow">Instructions</p>
+        <h2>Steer the ball from Start to Finish</h2>
+        <div id="goalNote" class="goal-note" hidden>
+          <p class="goal-title">Your goal: <span id="goalText"></span>.</p>
+          <ul>
+            <li>The dashed line down the middle of the path is the center line.</li>
+            <li>You are scored on how close the ball stays to the center line, the whole way from Start to Finish.</li>
+            <li>Staying off the walls is not enough. Stay as close to the center as you can.</li>
+            <li>Move at a steady, comfortable pace. Speed is not scored, so take your time.</li>
+          </ul>
+        </div>
+        <p id="instructionText"></p>
+        <div id="practiceNote" class="practice-note" hidden>
+          <strong>You will start with <span id="practiceCount">2</span> practice trials.</strong>
+          <p>Practice trials are not scored. Use them to learn how the ball speeds up, glides, and stops. A yellow PRACTICE label appears at the top of the screen during practice. When practice ends, the app tells you before the scored experiment begins.</p>
+        </div>
+        <p>Your participant code is <strong id="instructionParticipant"></strong>. Session <span id="instructionSession"></span>.</p>
+        <div class="button-row">
+          <button id="beginTrialsButton" class="primary">Begin practice trial</button>
+          <button class="stop-button" type="button">Stop and withdraw</button>
+        </div>
+      </section>
+
+      <section id="trialScreen" class="trial-screen" hidden>
+        <canvas id="experimentCanvas" aria-label="Path tracing experiment canvas"></canvas>
+        <div id="pauseOverlay" class="pause-overlay" hidden>
+          <div class="pause-panel">
+            <h2>Paused</h2>
+            <p>This trial will start again from the beginning.</p>
+            <div class="button-row">
+              <button id="pauseContinueButton" class="primary" type="button">Continue</button>
+              <button class="stop-button" type="button">Stop and withdraw</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="intertrialScreen" class="screen neutral" hidden>
+        <div id="intertrialProgress" class="progress" aria-hidden="true"><span></span></div>
+        <h2 id="trialCompleteText">Trial complete.</h2>
+        <p id="intertrialText">Press Space or click to continue.</p>
+        <p id="goalReminder" class="goal-reminder" hidden></p>
+        <div class="button-row">
+          <button id="continueButton" class="primary">Continue</button>
+          <button id="practiceAgainButton" type="button" hidden>Practice again</button>
+        </div>
+        <button class="stop-button text-button" type="button">Stop and withdraw</button>
+      </section>
+
+      <section id="completeScreen" class="screen results" hidden>
+        <div>
+          <p class="eyebrow" id="completeEyebrow">Experimenter results</p>
+          <h2 id="completeHeading">Session complete</h2>
+          <p id="completeText"></p>
+          <p id="uploadMessage" class="status-line" hidden></p>
+          <div id="participantSaveControls" class="button-row" hidden>
+            <button id="retryUploadButton" class="primary" type="button">Try again</button>
+            <button id="downloadResultsButton" type="button">Download results</button>
+          </div>
+          <div id="experimenterControls" class="button-row">
+            <button id="summaryButton" class="primary">Download trial_summary.csv</button>
+            <button id="motionButton">Download motion_data.csv (progress trace)</button>
+            <button id="jsonButton">Download full_session.json</button>
+          </div>
+          <div id="nextParticipantControls" class="button-row" hidden>
+            <button id="nextParticipantButton" type="button">Start the next participant</button>
+          </div>
+        </div>
+        <canvas id="resultsChart" aria-label="Normalized error by latency"></canvas>
+      </section>
+
+      <section id="withdrawnScreen" class="screen narrow neutral" hidden>
+        <h2>You have stopped the study</h2>
+        <p>Your results from this session were deleted from this computer and were not sent anywhere. Thank you for your time.</p>
+        <div class="button-row">
+          <button id="withdrawnHomeButton" type="button">Return to the start page</button>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="stopDialog" class="stop-dialog">
+      <h2>Stop the study?</h2>
+      <p>Your results from this session will be deleted and not sent anywhere. You cannot continue this session afterward.</p>
+      <div class="button-row">
+        <button id="stopConfirmButton" class="primary" type="button">Stop and delete my results</button>
+        <button id="stopCancelButton" type="button">Keep going</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
