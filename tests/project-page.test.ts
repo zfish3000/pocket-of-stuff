@@ -56,11 +56,17 @@ test.each(['my-project.html', 'camera.html', 'weather-radio.html', 'project-2.ht
   },
 );
 
-test('text_sections_use_a_centered_reading_column_with_left_aligned_copy', () => {
+test('project_copy_uses_centered_reading_columns_with_left_aligned_text', () => {
   openProject('example.html', 'aqua');
+  const header = document.querySelector<HTMLElement>('.project-header')!;
+  const title = header.querySelector('h1')!;
+  const intro = header.querySelector<HTMLElement>('.project-intro')!;
   const textSection = document.querySelector<HTMLElement>('.project-section--text')!;
   const paragraph = textSection.querySelector('p')!;
 
+  expect(getComputedStyle(header).marginInline).toBe('auto');
+  expect(getComputedStyle(title).textAlign).not.toBe('center');
+  expect(getComputedStyle(intro).textAlign).not.toBe('center');
   expect(getComputedStyle(textSection).marginInline).toBe('auto');
   expect(getComputedStyle(paragraph).textAlign).not.toBe('center');
 });

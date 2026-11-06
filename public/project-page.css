@@ -40,7 +40,11 @@ a:hover { text-decoration-thickness: 2px; }
 a:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
 .back-link { display: inline-flex; align-items: center; min-height: 44px; }
 
-.project-header { margin-block: clamp(2rem, 6vw, 5rem) clamp(3rem, 7vw, 6rem); }
+.project-header {
+  max-width: 70ch;
+  margin-block: clamp(2rem, 6vw, 5rem) clamp(3rem, 7vw, 6rem);
+  margin-inline: auto;
+}
 
 h1 {
   max-width: 18ch;
